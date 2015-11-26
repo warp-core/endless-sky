@@ -28,6 +28,8 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include "Screen.h"
 #include "UI.h"
 
+#include "ListenServer.h"
+
 #include "gl_header.h"
 #include <SDL2/SDL.h>
 
@@ -188,9 +190,10 @@ int main(int argc, char *argv[])
 		GameData::LoadShaders();
 		
 		
+		ListenServer *server = nullptr;
 		UI gamePanels;
 		UI menuPanels;
-		menuPanels.Push(new MenuPanel(player, gamePanels));
+		menuPanels.Push(new MenuPanel(player, gamePanels, server));
 		if(!conversation.IsEmpty())
 			menuPanels.Push(new ConversationPanel(player, conversation));
 		
@@ -241,7 +244,7 @@ int main(int argc, char *argv[])
 						&& !gamePanels.IsEmpty() && gamePanels.Top()->IsInterruptible())
 				{
 					menuPanels.Push(shared_ptr<Panel>(
-						new MenuPanel(player, gamePanels)));
+						new MenuPanel(player, gamePanels, server)));
 				}
 				else if(event.type == SDL_QUIT)
 				{
@@ -307,6 +310,10 @@ int main(int argc, char *argv[])
 			(menuPanels.IsEmpty() ? gamePanels : menuPanels).DrawAll();
 			
 			SDL_GL_SwapWindow(window);
+
+			if(server!=nullptr)
+				server->Step();
+			
 			timer.Wait();
 		}
 		
@@ -451,4 +458,3 @@ Conversation LoadConversation()
 	};
 	return conversation.Substitute(subs);
 }
-

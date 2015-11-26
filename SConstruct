@@ -17,6 +17,7 @@ if 'SCHROOT_CHROOT_NAME' in os.environ and 'steamrt' in os.environ['SCHROOT_CHRO
 env.Append(CCFLAGS = ["-std=c++0x", "-O3", "-Wall"])
 env.Append(LIBS = [
 	"SDL2",
+	"SDL2_net",
 	"png",
 	"jpeg",
 	"GL",

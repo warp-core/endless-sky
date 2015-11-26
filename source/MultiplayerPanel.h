@@ -1,5 +1,5 @@
-/* MenuPanel.h
-Copyright (c) 2014 by Michael Zahniser
+/* MultiplayerPanel.h
+Copyright (c) 2015 by Zach Anderson
 
 Endless Sky is free software: you can redistribute it and/or modify it under the
 terms of the GNU General Public License as published by the Free Software
@@ -10,47 +10,49 @@ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 */
 
-#ifndef MENU_PANEL_H_
-#define MENU_PANEL_H_
+#ifndef MULTIPLAYER_PANEL_H_
+#define MULTIPLAYER_PANEL_H_
 
 #include "Panel.h"
+
+#include "ClickZone.h"
 
 #include <string>
 #include <vector>
 
 class ListenServer;
 class PlayerInfo;
+class Server;
 
 
 
-// Class representing the main menu, which is shown before you enter a game or
-// when you hit "escape" to return here. This includes a scrolling list of
-// credits and basic information on the currently loaded player.
-class MenuPanel : public Panel {
+// UI panel for managing and connecting to servers
+class MultiplayerPanel : public Panel {
 public:
-	MenuPanel(PlayerInfo &player, UI &mainUI, ListenServer*& serverPointer);
-	
-	virtual void Step() override;
+	MultiplayerPanel(PlayerInfo &player, UI &mainUI, ListenServer*& server);
+
 	virtual void Draw() const override;
 	
-	// New player "conversation" callback.
-	void OnCallback(int value);
-	
-	
+	void AddServer(const std::string &value);
+	void CreateServer(const std::string &value);
+	void CancelConnection();
+
+
 protected:
-	// Only override the ones you need; the default action is to return false.
 	virtual bool KeyDown(SDL_Keycode key, Uint16 mod, const Command &command) override;
 	virtual bool Click(int x, int y) override;
-	
-	
+	virtual bool Hover(int x, int y) override;
+
 private:
 	PlayerInfo &player;
 	UI &gamePanels;
+	ListenServer *&serverPointer;
 	
-	std::vector<std::string> credits;
-	unsigned scroll;
-
-	ListenServer*& serverPointer;
+    unsigned int hovered = -1u;
+    unsigned int selected = -1u;
+	
+	mutable std::vector<ClickZone<std::string>> zones;
+	std::vector<Server> servers;
 };
 
 

@@ -36,6 +36,7 @@ interface "main menu"
 	sprite "_menu/oberon" 140 180
 	sprite "_menu/side panel" -360 0
 	sprite "_menu/side panel" 360 0
+	sprite "_menu/button" 0 155
 	outline "ship sprite" 360 -90 dynamic
 		size 120 120
 	label "pilot:" 250 -15
@@ -123,6 +124,44 @@ interface "main menu"
 		size 14
 		color bright
 		align center
+
+	button m 0 155
+		size 120 30
+	label "Multiplayer" 0 148
+		size 14
+		color bright
+		align center
+
+interface "multiplayer"
+	sprite "_menu/compass" 0 0
+	sprite "_menu/side panel" 0 0
+	sprite "_menu/g0" 0 -280
+	sprite "_menu/forest2" 0 280
+	sprite "_menu/oberon" 140 180
+	button b -60 155
+		size 120 30
+	label "Back" -65 148
+		size 14
+		color bright
+		align center
+	button j 60 155
+		size 90 30
+	label "Join Game" 75 148
+		size 14
+		color bright
+		align center
+	label "[Add Server]" -70 110
+		size 14
+		color bright
+		align center
+	button a -70 110
+		size 80 30
+	label "[Create Server]" 60 110
+		size 14
+		color bright
+		align center
+	button c 60 110
+		size 90 30
 
 interface "load menu"
 	sprite "_menu/g0" 0 -280
@@ -1035,4 +1074,3 @@ interface "hail panel"
 		align center
 	button d 250 115
 		size 80 30
-

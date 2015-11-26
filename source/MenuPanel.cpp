@@ -23,6 +23,7 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include "Information.h"
 #include "LoadPanel.h"
 #include "MainPanel.h"
+#include "MultiplayerPanel.h"
 #include "Planet.h"
 #include "PlayerInfo.h"
 #include "Point.h"
@@ -44,8 +45,8 @@ namespace {
 
 
 
-MenuPanel::MenuPanel(PlayerInfo &player, UI &gamePanels)
-	: player(player), gamePanels(gamePanels), scroll(0)
+MenuPanel::MenuPanel(PlayerInfo &player, UI &gamePanels, ListenServer*& serverPointer)
+	: player(player), gamePanels(gamePanels), scroll(0), serverPointer(serverPointer)
 {
 	SetIsFullScreen(true);
 	
@@ -179,6 +180,8 @@ bool MenuPanel::KeyDown(SDL_Keycode key, Uint16 mod, const Command &command)
 		GetUI()->Push(new PreferencesPanel());
 	else if(key == 'l')
 		GetUI()->Push(new LoadPanel(player, gamePanels));
+	else if(key == 'm')
+		GetUI()->Push(new MultiplayerPanel(player, gamePanels, serverPointer));
 	else if(key == 'n' || key == 'e')
 	{
 		// The "New Pilot" and "Enter Ship" buttons are in the same place.

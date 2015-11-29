@@ -14,7 +14,7 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 #include "DataFile.h"
 #include "DataNode.h"
-#include "DataWriter.h"
+#include "FileWriter.h"
 
 #include <SDL2/SDL.h>
 
@@ -121,7 +121,7 @@ void Command::LoadSettings(const string &path)
 
 void Command::SaveSettings(const string &path)
 {
-	DataWriter out(path);
+	FileWriter out(path);
 	
 	for(const auto &it : commandForKeycode)
 	{

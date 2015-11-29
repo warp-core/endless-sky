@@ -14,7 +14,7 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 #include "DataFile.h"
 #include "DataNode.h"
-#include "DataWriter.h"
+#include "FileWriter.h"
 #include "ServerInfo.h"
 #include "Files.h"
 
@@ -38,7 +38,7 @@ void Server::LoadServerList(vector<Server> &list)
 
 void Server::SaveServerList(const vector<Server> &list)
 {
-    DataWriter out(Files::Config() + "servers.txt");
+    FileWriter out(Files::Config() + "servers.txt");
 	
     for(unsigned int i = 0; i < list.size(); i++)
 	   out.Write(list[i].host, list[i].port);

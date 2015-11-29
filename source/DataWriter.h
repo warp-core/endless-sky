@@ -27,9 +27,6 @@ class DataNode;
 // automatically adds quotation marks around strings if they contain whitespace.
 class DataWriter {
 public:
-	DataWriter(const std::string &path);
-	~DataWriter();
-	
   template <class ...B>
 	void Write(const char *a, B... others);
   template <class ...B>
@@ -37,24 +34,21 @@ public:
   template <class A, class ...B>
 	void Write(const A &a, B... others);
 	void Write(const DataNode &node);
-	void Write();
 	
-	void BeginChild();
-	void EndChild();
+	virtual void Write() = 0;
 	
-	void WriteComment(const std::string &str);
+	virtual void BeginChild() = 0;
+	virtual void EndChild() = 0;
+	
+	virtual void WriteComment(const std::string &str) = 0;
+	
+	
+protected:
+	virtual void AppendToken(const char *a) = 0;
 	
 	
 private:
 	void WriteToken(const char *a);
-	
-	
-private:
-	std::string path;
-	std::string indent;
-	static const std::string space;
-	const std::string *before;
-	std::ostringstream out;
 };
 
 
@@ -81,11 +75,10 @@ void DataWriter::Write(const A &a, B... others)
 {
 	static_assert(std::is_arithmetic<A>::value,
 		"DataWriter cannot output anything but strings and arithmetic types.");
-	
-	out << *before << a;
-	before = &space;
-	
-	Write(others...);
+		
+	std::ostringstream out;
+	out << a;
+	Write(out.str().c_str(), others...);
 }
 
 

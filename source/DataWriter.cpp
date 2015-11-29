@@ -19,25 +19,6 @@ using namespace std;
 
 
 
-const string DataWriter::space = " ";
-
-
-
-DataWriter::DataWriter(const string &path)
-	: path(path), before(&indent)
-{
-	out.precision(8);
-}
-
-
-
-DataWriter::~DataWriter()
-{
-	Files::Write(path, out.str());
-}
-
-
-
 void DataWriter::Write(const DataNode &node)
 {
 	for(int i = 0; i < node.Size(); ++i)
@@ -57,35 +38,6 @@ void DataWriter::Write(const DataNode &node)
 
 
 
-void DataWriter::Write()
-{
-	out << '\n';
-	before = &indent;
-}
-
-
-
-void DataWriter::BeginChild()
-{
-	indent += '\t';
-}
-
-
-
-void DataWriter::EndChild()
-{
-	indent.erase(indent.length() - 1);
-}
-
-
-
-void DataWriter::WriteComment(const string &str)
-{
-	out << indent << "# " << str << '\n';
-}
-
-
-
 void DataWriter::WriteToken(const char *a)
 {
 	bool hasSpace = !*a;
@@ -96,12 +48,12 @@ void DataWriter::WriteToken(const char *a)
 		hasQuote |= (*it == '"');
 	}
 	
-	out << *before;
+	ostringstream out;
 	if(hasSpace && hasQuote)
 		out << '`' << a << '`';
 	else if(hasSpace)
 		out << '"' << a << '"';
 	else
 		out << a;
-	before = &space;
+	AppendToken(out.str().c_str());
 }

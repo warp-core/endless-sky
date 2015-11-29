@@ -15,7 +15,7 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include "Audio.h"
 #include "DataFile.h"
 #include "DataNode.h"
-#include "DataWriter.h"
+#include "FileWriter.h"
 #include "Files.h"
 #include "Screen.h"
 
@@ -52,7 +52,7 @@ void Preferences::Load()
 
 void Preferences::Save()
 {
-	DataWriter out(Files::Config() + "preferences.txt");
+	FileWriter out(Files::Config() + "preferences.txt");
 	
 	out.Write("volume", Audio::Volume());
 	out.Write("window size", Screen::RawWidth(), Screen::RawHeight());

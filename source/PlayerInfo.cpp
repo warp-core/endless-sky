@@ -15,7 +15,7 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include "ConversationPanel.h"
 #include "DataFile.h"
 #include "DataNode.h"
-#include "DataWriter.h"
+#include "FileWriter.h"
 #include "Dialog.h"
 #include "Files.h"
 #include "GameData.h"
@@ -1537,7 +1537,7 @@ void PlayerInfo::Autosave() const
 
 void PlayerInfo::Save(const string &path) const
 {
-	DataWriter out(path);
+	FileWriter out(path);
 	
 	out.Write("pilot", firstName, lastName);
 	out.Write("date", date.Day(), date.Month(), date.Year());

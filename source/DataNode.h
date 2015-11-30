@@ -43,6 +43,7 @@ private:
 	std::vector<std::string> tokens;
 	
 	friend class DataFile;
+	friend class PacketReader;
 };
 
 

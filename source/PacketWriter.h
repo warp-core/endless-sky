@@ -20,6 +20,11 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 
 // Class for writing DataFile data over network packets, should be used as a DataWriter
+// Structure Codes:
+// 0x1C -- Start of Child
+// 0x1D -- End of Child
+// 0x1E -- Seperates Lines
+// 0x1F -- Seperates Tokens
 class PacketWriter : public DataWriter {
 public:
     PacketWriter(UDPpacket* &packet, char prefix);

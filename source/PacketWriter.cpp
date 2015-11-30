@@ -52,7 +52,7 @@ void PacketWriter::Write()
 
 void PacketWriter::BeginChild()
 {
-    out << '(';
+    out << '\x1C';
     needsDelineator = false;
     cueWrite = false;
 }
@@ -61,7 +61,7 @@ void PacketWriter::BeginChild()
 
 void PacketWriter::EndChild()
 {
-    out << ')';
+    out << '\x1D';
     needsDelineator = false;
     cueWrite = false;
 }
@@ -78,9 +78,9 @@ void PacketWriter::WriteComment(const string &str)
 void PacketWriter::AppendToken(const char *a)
 {
     if(cueWrite)
-        out << '|';
+        out << '\x1E';
     if(needsDelineator)
-        out << ':';
+        out << '\x1F';
     out << a;
     
     cueWrite = false;

@@ -39,7 +39,7 @@ public:
     void WriteComment(const std::string &str) override;
     
 protected:
-    void AppendToken(const char *a) override;
+    void WriteToken(const char *a) override;
     
 private:
     UDPpacket *&packet;

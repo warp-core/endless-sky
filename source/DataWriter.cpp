@@ -35,25 +35,3 @@ void DataWriter::Write(const DataNode &node)
 		EndChild();
 	}
 }
-
-
-
-void DataWriter::WriteToken(const char *a)
-{
-	bool hasSpace = !*a;
-	bool hasQuote = false;
-	for(const char *it = a; *it; ++it)
-	{
-		hasSpace |= (*it <= ' ');
-		hasQuote |= (*it == '"');
-	}
-	
-	ostringstream out;
-	if(hasSpace && hasQuote)
-		out << '`' << a << '`';
-	else if(hasSpace)
-		out << '"' << a << '"';
-	else
-		out << a;
-	AppendToken(out.str().c_str());
-}

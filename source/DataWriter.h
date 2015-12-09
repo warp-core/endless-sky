@@ -44,11 +44,9 @@ public:
 	
 	
 protected:
-	virtual void AppendToken(const char *a) = 0;
+	virtual void WriteToken(const char *a) = 0;
 	
 	
-private:
-	void WriteToken(const char *a);
 };
 
 

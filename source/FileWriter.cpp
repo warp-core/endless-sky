@@ -66,7 +66,22 @@ void FileWriter::WriteComment(const string &str)
 
 
 
-void FileWriter::AppendToken(const char *a) {
-    out << *before << a;
+void FileWriter::WriteToken(const char *a) 
+{
+	bool hasSpace = !*a;
+	bool hasQuote = false;
+	for(const char *it = a; *it; ++it)
+	{
+		hasSpace |= (*it <= ' ');
+		hasQuote |= (*it == '"');
+	}
+	
+	out << *before;
+	if(hasSpace && hasQuote)
+		out << '`' << a << '`';
+	else if(hasSpace)
+		out << '"' << a << '"';
+	else
+		out << a;
     before = &space;
 }

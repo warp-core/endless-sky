@@ -75,7 +75,7 @@ void PacketWriter::WriteComment(const string &str)
 
 
 
-void PacketWriter::AppendToken(const char *a)
+void PacketWriter::WriteToken(const char *a)
 {
     if(cueWrite)
         out << '\x1E';

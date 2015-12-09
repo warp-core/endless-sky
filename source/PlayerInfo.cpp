@@ -14,6 +14,7 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 #include "ConversationPanel.h"
 #include "DataFile.h"
+#include "DataReader.h"
 #include "DataNode.h"
 #include "FileWriter.h"
 #include "Dialog.h"
@@ -23,6 +24,7 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include "Messages.h"
 #include "Mission.h"
 #include "Outfit.h"
+#include "PacketWriter.h"
 #include "Person.h"
 #include "Planet.h"
 #include "Politics.h"
@@ -89,14 +91,22 @@ void PlayerInfo::New()
 // Load player information from a saved game file.
 void PlayerInfo::Load(const string &path)
 {
-	// Make sure any previously loaded data is cleared.
-	Clear();
-	
 	filePath = path;
 	DataFile file(path);
 	
+	Load(file);
+}
+
+
+
+// Load player information from a DataReader.
+void PlayerInfo::Load(const DataReader &reader)
+{
+	// Make sure any previously loaded data is cleared.
+	Clear();
+	
 	hasFullClearance = false;
-	for(const DataNode &child : file)
+	for(const DataNode &child : reader)
 	{
 		if(child.Token(0) == "pilot" && child.Size() >= 3)
 		{
@@ -236,9 +246,19 @@ void PlayerInfo::Save() const
 	// Remember that this was the most recently saved player.
 	Files::Write(Files::Config() + "recent.txt", filePath + '\n');
 	
-	Save(filePath);
+	FileWriter writer(filePath);
+	Save(writer);
 }
 
+
+void PlayerInfo::Save(PacketWriter &packet) const
+{
+	if(isDead)
+		return;
+
+	DataWriter &writer = packet;
+	Save(writer);
+}
 
 
 // Get the base file name for the player, without the ".txt" extension. This
@@ -1530,15 +1550,14 @@ void PlayerInfo::Autosave() const
 		return;
 	
 	string path = filePath.substr(0, filePath.length() - 4) + "~autosave.txt";
-	Save(path);
+	FileWriter writer(path);
+	Save(writer);
 }
 
 
 
-void PlayerInfo::Save(const string &path) const
+void PlayerInfo::Save(DataWriter &out) const
 {
-	FileWriter out(path);
-	
 	out.Write("pilot", firstName, lastName);
 	out.Write("date", date.Day(), date.Month(), date.Year());
 	if(system)

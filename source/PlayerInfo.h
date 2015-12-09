@@ -27,8 +27,10 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include <string>
 
 class DataNode;
+class DataReader;
 class Government;
 class Outfit;
+class PacketWriter;
 class Person;
 class Planet;
 class Ship;
@@ -55,12 +57,21 @@ public:
 	bool IsLoaded() const;
 	// Make a new player.
 	void New();
-	// Load an existing player.
+
+	// TODO these can be condensed into one 'Load(const DataReader &)' but would
+	// require a large refactoring.
+	// Load an existing player from the specified file.
 	void Load(const std::string &path);
+	// Load a player from a network packet.
+	void Load(const DataReader &reader);
 	// Load the most recently saved player.
 	void LoadRecent();
 	// Save this player (using the Identifier() as the file name).
 	void Save() const;
+	
+	// TODO this and the private 'Save(DataWriter &)' can be condensed into one method.
+	// Write this player to a network
+	void Save(PacketWriter &writer) const;
 	
 	// Get the root filename used for this player's saved game files. (If there
 	// are multiple pilots with the same name it may have a digit appended.)
@@ -193,7 +204,7 @@ private:
 	void UpdateAutoConditions();
 	void CreateMissions();
 	void Autosave() const;
-	void Save(const std::string &path) const;
+	void Save(DataWriter &out) const;
 	
 	
 private:

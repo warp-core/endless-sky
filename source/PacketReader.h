@@ -13,24 +13,24 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #ifndef PACKET_READER_H_
 #define PACKET_READER_H_
 
+#include "DataReader.h"
+
 #include "DataNode.h"
 
 #include <SDL2/SDL_net.h>
 
-#include <list>
-
 
 
 // Network packet analog for `DataFile`. Reads data from a UDPpacket into a DataNode.
-class PacketReader {
+class PacketReader : public DataReader {
 public:
 	PacketReader() = default;
 	PacketReader(const UDPpacket &packet);
 	
     void Read(const UDPpacket &packet);
 	
-	std::list<DataNode>::const_iterator begin() const;
-	std::list<DataNode>::const_iterator end() const;
+	std::list<DataNode>::const_iterator begin() const override;
+	std::list<DataNode>::const_iterator end() const override;
 	
 	
 private:

@@ -13,10 +13,11 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #ifndef DATA_FILE_H_
 #define DATA_FILE_H_
 
+#include "DataReader.h"
+
 #include "DataNode.h"
 
 #include <istream>
-#include <list>
 
 
 
@@ -26,7 +27,7 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 // it, it is a "child" of that node. Otherwise, it is a "sibling." Each node is
 // just a collection of one or more tokens that can be interpreted either as
 // strings or as floating point values; see DataNode for more information.
-class DataFile {
+class DataFile : public DataReader {
 public:
 	DataFile() = default;
 	DataFile(const std::string &path);
@@ -35,8 +36,8 @@ public:
 	void Load(const std::string &path);
 	void Load(std::istream &in);
 	
-	std::list<DataNode>::const_iterator begin() const;
-	std::list<DataNode>::const_iterator end() const;
+	std::list<DataNode>::const_iterator begin() const override;
+	std::list<DataNode>::const_iterator end() const override;
 	
 	
 private:

@@ -63,7 +63,7 @@ void PacketReader::Load(const char *it, const char *end)
 	vector<DataNode *> parents(1, &root);
 	DataNode *lastAdded = &root;
 	
-	while(it != end)
+	while(it <= end)
 	{
         if(*it == '\x1C')
         {
@@ -85,14 +85,14 @@ void PacketReader::Load(const char *it, const char *end)
 		lastAdded = &node;
 	    
 		// Tokenize the line (Lines can be delineated by any of those three chars)
-		while(*it != '\x1C' && *it != '\x1D' && *it != '\x1E')
+		while(it <= end && *it != '\x1C' && *it != '\x1D' && *it != '\x1E')
 		{
 			const char *start = it;
 	        
 			// Find the end of this token. All structure marks are control codes which are less than space
-			while(*it >= ' ')
+			while(*it >= ' ' && it <= end)
 				it++;
-	            
+			  
 			// Add a node to hold the token
 			if(start == it)
 				node.tokens.emplace_back();

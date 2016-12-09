@@ -18,20 +18,23 @@ using namespace std;
 
 
 
-PacketReader::PacketReader(const UDPpacket &packet)
+PacketReader::PacketReader(const UDPpacket &packet, unsigned int burn)
 {
-    Read(packet);
+	Read(packet, burn);
 }
 
-
-
 void PacketReader::Read(const UDPpacket &packet)
+{
+	Read(packet, 1);
+}
+
+void PacketReader::Read(const UDPpacket &packet, unsigned int burn)
 {
     // Cast is safe because we are only using ascii chars, therefore a signed
     // and unsiged char have the same value
     
-    // The first byte is always the datatype, so skip it
-    const char *start = reinterpret_cast<char *>(packet.data + 1);
+	// Skip the first burn bytes
+    const char *start = reinterpret_cast<char *>(packet.data + burn);
     const char *end   = reinterpret_cast<char *>(packet.data + packet.len - 1);
 
 	Load(start, end);

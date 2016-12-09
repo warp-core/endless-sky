@@ -21,6 +21,7 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include <string>
 #include <vector>
 
+class AbstractServer;
 class PlayerInfo;
 
 
@@ -31,6 +32,7 @@ class PlayerInfo;
 class LoadPanel : public Panel {
 public:
 	LoadPanel(PlayerInfo &player, UI &gamePanels);
+	LoadPanel(PlayerInfo &player, UI &gamePanels, AbstractServer *server);
 	
 	virtual void Draw() const override;
 	
@@ -59,6 +61,7 @@ private:
 	PlayerInfo &player;
 	SavedGame loadedInfo;
 	UI &gamePanels;
+	AbstractServer *server;
 	
 	std::map<std::string, std::vector<std::string>> files;
 	std::string selectedPilot;

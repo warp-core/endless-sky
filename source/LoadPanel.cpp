@@ -37,9 +37,15 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 using namespace std;
 
 
-
 LoadPanel::LoadPanel(PlayerInfo &player, UI &gamePanels)
-	: player(player), gamePanels(gamePanels), selectedPilot(player.Identifier())
+	: LoadPanel(player, gamePanels, nullptr)
+{
+}
+
+
+
+LoadPanel::LoadPanel(PlayerInfo &player, UI &gamePanels, AbstractServer *server)
+	: player(player), gamePanels(gamePanels), server(server), selectedPilot(player.Identifier())
 {
 	// If you have a player loaded, and the player is on a planet, makes sure
 	// the player is saved so that any snapshot you create will be of the
@@ -225,7 +231,7 @@ bool LoadPanel::KeyDown(SDL_Keycode key, Uint16 mod, const Command &command)
 		Messages::Reset();
 		GetUI()->Pop(this);
 		GetUI()->Pop(GetUI()->Root().get());
-		gamePanels.Push(new MainPanel(player));
+		gamePanels.Push(new MainPanel(player, server));
 	}
 	else if(key == 'b' || command.Has(Command::MENU) || (key == 'w' && (mod & (KMOD_CTRL | KMOD_GUI))))
 		GetUI()->Pop(this);

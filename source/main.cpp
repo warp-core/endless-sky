@@ -21,14 +21,13 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include "Dialog.h"
 #include "FrameTimer.h"
 #include "GameData.h"
+#include "Host.h"
 #include "MenuPanel.h"
 #include "Panel.h"
 #include "PlayerInfo.h"
 #include "Preferences.h"
 #include "Screen.h"
 #include "UI.h"
-
-#include "ListenServer.h"
 
 #include "gl_header.h"
 #include <SDL2/SDL.h>
@@ -190,7 +189,7 @@ int main(int argc, char *argv[])
 		GameData::LoadShaders();
 		
 		
-		ListenServer *server = nullptr;
+		AbstractServer *server = nullptr;
 		UI gamePanels;
 		UI menuPanels;
 		menuPanels.Push(new MenuPanel(player, gamePanels, server));
@@ -311,8 +310,9 @@ int main(int argc, char *argv[])
 			
 			SDL_GL_SwapWindow(window);
 
-			if(server!=nullptr)
-				server->Step();
+			if(Host::IsActive()) {
+				Host::GetInstance().Step();
+			}
 			
 			timer.Wait();
 		}

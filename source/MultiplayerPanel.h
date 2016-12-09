@@ -20,7 +20,7 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include <string>
 #include <vector>
 
-class ListenServer;
+class AbstractServer;
 class PlayerInfo;
 class Server;
 
@@ -29,13 +29,15 @@ class Server;
 // UI panel for managing and connecting to servers
 class MultiplayerPanel : public Panel {
 public:
-	MultiplayerPanel(PlayerInfo &player, UI &mainUI, ListenServer*& server);
+	MultiplayerPanel(PlayerInfo &player, UI &mainUI, AbstractServer*& server);
 
 	virtual void Draw() const override;
+	virtual void Step() override;
 	
 	void AddServer(const std::string &value);
 	void CreateServer(const std::string &value);
 	void CancelConnection();
+	void JoinGame(int value);
 
 
 protected:
@@ -46,13 +48,13 @@ protected:
 private:
 	PlayerInfo &player;
 	UI &gamePanels;
-	ListenServer *&serverPointer;
+	AbstractServer *&serverPointer;
 	
     unsigned int hovered = -1u;
     unsigned int selected = -1u;
 	
 	mutable std::vector<ClickZone<std::string>> zones;
-	std::vector<Server> servers;
+	std::vector<Server *> servers;
 };
 
 

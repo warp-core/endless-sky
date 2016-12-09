@@ -34,6 +34,7 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 class Government;
 class Outfit;
 class PlayerInfo;
+class AbstractServer;
 
 
 
@@ -47,6 +48,7 @@ class PlayerInfo;
 class Engine {
 public:
 	Engine(PlayerInfo &player);
+	Engine(PlayerInfo &player, AbstractServer *server);
 	~Engine();
 	
 	// Place all the player's ships, and "enter" the system the player is in.
@@ -102,6 +104,7 @@ private:
 	
 private:
 	PlayerInfo &player;
+	AbstractServer *server;
 	
 	AI ai;
 	

@@ -67,6 +67,13 @@ Angle::Angle(double degrees)
 
 
 
+double Angle::Get() const
+{
+	return (angle - 0.5) / DEG_TO_STEP;
+}
+
+
+
 Angle Angle::operator+(const Angle &other) const
 {
 	Angle result = *this;

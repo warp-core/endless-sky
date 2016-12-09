@@ -424,6 +424,7 @@ void AI::Step(const list<shared_ptr<Ship>> &ships, const PlayerInfo &player)
 		// Force ships that are overlapping each other to "scatter":
 		DoScatter(*it, command, ships);
 		
+		// TODO somewhere in the above method, something happens that causes ships to jump in
 		it->SetCommands(command);
 	}
 }

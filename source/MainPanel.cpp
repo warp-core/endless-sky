@@ -41,7 +41,14 @@ using namespace std;
 
 
 MainPanel::MainPanel(PlayerInfo &player)
-	: player(player), engine(player), load(0.), loadSum(0.), loadCount(0)
+	: MainPanel(player, nullptr)
+{
+}
+
+
+
+MainPanel::MainPanel(PlayerInfo &player, AbstractServer *server)
+	: player(player), engine(player, server), load(0.), loadSum(0.), loadCount(0)
 {
 	SetIsFullScreen(true);
 }

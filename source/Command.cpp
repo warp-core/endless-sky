@@ -286,13 +286,28 @@ Command Command::operator|(const Command &command) const
 }
 
 
-
 Command &Command::operator|=(const Command &command)
 {
 	state |= command.state;
 	if(command.turn)
 		turn = command.turn;
 	return *this;
+}
+
+
+unsigned int Command::Serialize() const
+{
+	const double conversion = (2.0 / ((1 << 16) - 1));
+	unsigned int value = static_cast<unsigned int>((turn + 1) / conversion + 0.5);
+	unsigned int out = value << 16 | state;
+	return out;
+}
+
+
+void Command::UnSerialize(unsigned int commands, double t)
+{
+	state = commands;
+	turn = t;
 }
 
 

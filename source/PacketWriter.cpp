@@ -16,28 +16,34 @@ using namespace std;
 
 
 
-PacketWriter::PacketWriter(UDPpacket* &packet, char prefix)
-    :packet(packet), prefix(prefix)
+PacketWriter::PacketWriter(char prefix)
 {
-    
+	out << string(1, prefix);
+}
+
+
+PacketWriter::PacketWriter(string prefix)
+{
+	out << prefix;
 }
 
 
 
-PacketWriter::~PacketWriter()
+UDPpacket *PacketWriter::Flush()
 {
     const string str =  out.str();
-    const unsigned int length = str.size() + 1;
+    const unsigned int length = str.size();
     const char *string = str.c_str();
     
-    packet = SDLNet_AllocPacket(length);
-    packet->len = length;
-    packet->data = new unsigned char[length];
+    UDPpacket *packet = SDLNet_AllocPacket(length);
+	
+	packet->len = length;
     
-    packet->data[0] = prefix;
-    for(unsigned int i = 1; i < length; i++) {
-        packet->data[i] = string[i - 1];
+    for(unsigned int i = 0; i < length; i++) {
+        packet->data[i] = string[i];
     }
+
+	return packet;
 }
 
 

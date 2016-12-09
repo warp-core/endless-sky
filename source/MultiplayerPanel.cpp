@@ -12,33 +12,38 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 #include "MultiplayerPanel.h"
 
+#include "ConversationPanel.h"
 #include "Dialog.h"
-
 #include "Format.h"
 #include "GameData.h"
+#include "Host.h"
 #include "Information.h"
 #include "Interface.h"
-#include "ListenServer.h"
 #include "LoadPanel.h"
+#include "LocalServerConnector.h"
+#include "MainPanel.h"
+#include "Messages.h"
 #include "PlayerInfo.h"
-#include "Point.h"
+#include "Point.h" 
 #include "Server.h"
 #include "ServerInfo.h"
+#include "ShipyardPanel.h"
 #include "StarField.h"
 #include "Table.h"
 #include "UI.h"
 
 #include <iostream>
+#include <functional>
 
 using namespace std;
 
 
 
-MultiplayerPanel::MultiplayerPanel(PlayerInfo &player, UI &gamePanels, ListenServer*& server)
+MultiplayerPanel::MultiplayerPanel(PlayerInfo &player, UI &gamePanels, AbstractServer*& server)
 	: player(player), gamePanels(gamePanels), serverPointer(server)
 {
 	servers.reserve(10);
-	Server::LoadServerList(servers);
+	Server::LoadServerList(servers, player);
 }
 
 
@@ -76,7 +81,7 @@ void MultiplayerPanel::Draw() const
 	
     for(unsigned int i = 0; i < servers.size(); i++)
 	{
-		ServerInfo info = servers[i].GetStatus();
+		ServerInfo info = servers[i]->GetStatus();
         zones.emplace_back(table.GetCenterPoint(), table.GetRowSize(), info.name);
 		
         if(i == selected)
@@ -99,6 +104,16 @@ void MultiplayerPanel::Draw() const
 
 
 
+void MultiplayerPanel::Step()
+{
+	for(unsigned int i = 0; i < servers.size(); i++)
+	{
+		servers[i]->Step();
+	}
+}
+
+
+
 bool MultiplayerPanel::KeyDown(SDL_Keycode key, Uint16 mod, const Command &command)
 {
 	if(key == 'b')
@@ -112,9 +127,33 @@ bool MultiplayerPanel::KeyDown(SDL_Keycode key, Uint16 mod, const Command &comma
 		if(selected != -1u)
 		{
         	cout << "Joining server " << zones[selected].Value() << endl;
-			GetUI()->Push(new Dialog(this, &MultiplayerPanel::CancelConnection,
-				"Connecting to " + zones[selected].Value() + ". Please wait... Press OK to Cancel"));
-			// TODO Actually connect
+			
+			// GetUI()->Push(new Dialog(this, &MultiplayerPanel::CancelConnection,
+			// 	"Connecting to " + zones[selected].Value() + ". Please wait... Press OK to Cancel"));
+			// vector<Ships> = servers[selected].RequestSystemData();
+			
+			// Request the server info, this is executed when the request is filled
+			servers[selected]->RequestPlayerInfo(player,[this](bool hasSave){
+				// Server had a save for this player
+				if(hasSave) {
+                			gamePanels.Reset();
+               				GameData::Revert();
+                			Messages::Reset();
+					
+					GetUI()->Pop(this);
+					GetUI()->Pop(GetUI()->Root().get());
+					gamePanels.Push(new MainPanel(player, servers[selected]));
+				// Server did not have a save for this player
+				} else {
+					GameData::Revert();
+					player.New();
+					
+					ConversationPanel *panel = new ConversationPanel(
+						player, *GameData::Conversations().Get("intro"));
+					GetUI()->Push(panel);
+					panel->SetCallback(this, &MultiplayerPanel::JoinGame);
+				}
+			});
 		}
 	}
     else if(key == 'c')
@@ -145,15 +184,36 @@ void MultiplayerPanel::CancelConnection() {
 
 void MultiplayerPanel::CreateServer(const string &value) {
 	cout << "Created new server: " << value << endl;
-	serverPointer = new ListenServer(value);
+	Host::Start(value, 7895, 32);
+	serverPointer = Host::GetConnector();
 	GetUI()->Pop(this);
-	GetUI()->Push(new LoadPanel(player, gamePanels));
+	GetUI()->Push(new LoadPanel(player, gamePanels, serverPointer));
 }
 
 
 
+void MultiplayerPanel::JoinGame(int value)
+{
+	// GetUI()->Pop(this);
+	// GetUI()->Pop(GetUI()->Root().get());
+	//
+	// serverPointer = servers[selected];
+	//
+	// gamePanels.Reset();
+	//
+	// Panel *panel = new MainPanel(player);
+	// gamePanels.Push(panel);
+	//
+	// // Tell the main panel to re-draw itself (and pop up the planet panel).
+	// panel->Step();
+	// gamePanels.Push(new ShipyardPanel(player));
+}
+
+
+
+
 void MultiplayerPanel::AddServer(const string &value) {
-	servers.emplace_back(value, 7895);
+	servers.emplace_back(new Server(value, 7895, player));
 }
 
 

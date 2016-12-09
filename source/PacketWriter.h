@@ -17,6 +17,8 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 #include <SDL2/SDL_net.h>
 
+#include <string>
+
 
 
 // Class for writing DataFile data over network packets, should be used as a DataWriter
@@ -27,9 +29,11 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 // 0x1F -- Seperates Tokens
 class PacketWriter : public DataWriter {
 public:
-    PacketWriter(UDPpacket* &packet, char prefix);
-    ~PacketWriter();
+	PacketWriter(char prefix);
+	PacketWriter(std::string prefix);
     
+	UDPpacket *Flush();
+
     void Write() override;
     using DataWriter::Write;
     
@@ -42,8 +46,8 @@ protected:
     void WriteToken(const char *a) override;
     
 private:
-    UDPpacket *&packet;
-    char prefix;
+    std::string prefix;
+
  	std::ostringstream out;
     bool needsDelineator = false;
     bool cueWrite = false;

@@ -12,6 +12,7 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 #include "Engine.h"
 
+#include "AbstractServer.h"
 #include "Audio.h"
 #include "Effect.h"
 #include "FillShader.h"
@@ -40,12 +41,24 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 #include <cmath>
 
+#include "Point.h"
+
 using namespace std;
 
 
-
+// TODO
+// 1) Engine needs to have access to the server, both host and client
+// 2) Engine needs to be able to get a list of remote ships from the server
+// 3) Engine needs to be able to add ships to the servers remote ship list
 Engine::Engine(PlayerInfo &player)
-	: player(player),
+	: Engine(player, nullptr)
+{
+}
+
+
+
+Engine::Engine(PlayerInfo &player, AbstractServer *server = nullptr)
+	: player(player), server(server),
 	calcTickTock(false), drawTickTock(false), terminate(false), step(0),
 	flash(0.), doFlash(false), wasLeavingHyperspace(false),
 	load(0.), loadCount(0), loadSum(0.)
@@ -100,6 +113,8 @@ Engine::Engine(PlayerInfo &player)
 
 
 
+
+
 Engine::~Engine()
 {
 	{
@@ -111,7 +126,8 @@ Engine::~Engine()
 }
 
 
-
+#include <iostream>
+// TODO Ship entry point
 void Engine::Place()
 {
 	ships.clear();
@@ -144,6 +160,8 @@ void Engine::Place()
 					pos += object.Position();
 		}
 		ship->Place(pos, angle.Unit(), angle);
+		// TODO This is where we need to send a status report to the server stating that it needs to
+		// place us in the remote system
 	}
 	shared_ptr<Ship> flagship;
 	if(!player.Ships().empty())
@@ -232,6 +250,9 @@ void Engine::Place()
 				ship->Place(pos, angle.Unit(), angle);
 			}
 		}
+	
+	if(server != nullptr && !server->IsHost())
+		server->EnterSystem(*(player.GetSystem()));
 	
 	player.SetPlanet(nullptr);
 }
@@ -462,6 +483,8 @@ void Engine::Step(bool isActive)
 			info.SetBar("target hull", 0.);
 		}
 	}
+	if(server != nullptr)
+		server->Step();
 }
 
 
@@ -641,29 +664,41 @@ void Engine::EnterSystem()
 	for(const System::Asteroid &a : system->Asteroids())
 		asteroids.Add(a.Name(), a.Count(), a.Energy());
 	
-	// Place five seconds worth of fleets.
-	for(int i = 0; i < 5; ++i)
-		for(const System::FleetProbability &fleet : system->Fleets())
-			if(Random::Int(fleet.Period()) < 60)
-				fleet.Get()->Place(*system, ships);
-	// Find out how attractive the player's fleet is to pirates. Aside from a
-	// heavy freighter, no single ship should attract extra pirate attention.
-	unsigned attraction = 0;
-	for(const shared_ptr<Ship> &ship : player.Ships())
-	{
-		if(ship->IsParked())
-			continue;
-		
-		const string &category = ship->Attributes().Category();
-		if(category == "Light Freighter")
-			attraction += 1;
-		if(category == "Heavy Freighter")
-			attraction += 2;
+	// TODO If we are operating in client mode, we should not add fleets or calculate pirates
+	// instead we should poll the remote server for the fleets currently in this system.
+
+	if(server == nullptr) {
+		// Place five seconds worth of fleets.
+		for(int i = 0; i < 5; ++i)
+			for(const System::FleetProbability &fleet : system->Fleets())
+				if(Random::Int(fleet.Period()) < 60)
+					fleet.Get()->Place(*system, ships);
+		// Find out how attractive the player's fleet is to pirates. Aside from a
+		// heavy freighter, no single ship should attract extra pirate attention.
+		unsigned attraction = 0;
+		for(const shared_ptr<Ship> &ship : player.Ships())
+		{
+			if(ship->IsParked())
+				continue;
+			
+			const string &category = ship->Attributes().Category();
+			if(category == "Light Freighter")
+				attraction += 1;
+			if(category == "Heavy Freighter")
+				attraction += 2;
+		}
+		if(attraction > 2)
+			for(int i = 0; i < 10; ++i)
+				if(Random::Int(200) + 1 < attraction)
+					GameData::Fleets().Get("pirate raid")->Place(*system, ships);
+	} else {
+		cout << "Player is entering " << player.GetSystem()->Name() << " system" << endl;
+
+		vector<shared_ptr<Ship>> ss = server->GetNewShips();
+		for(const shared_ptr<Ship> &ship : ss)
+			ships.push_front(ship);
 	}
-	if(attraction > 2)
-		for(int i = 0; i < 10; ++i)
-			if(Random::Int(200) + 1 < attraction)
-				GameData::Fleets().Get("pirate raid")->Place(*system, ships);
+	// End of TODO
 	
 	projectiles.clear();
 	effects.clear();
@@ -725,7 +760,7 @@ void Engine::CalculateStep()
 		return;
 	
 	// Now, all the ships must decide what they are doing next.
-	ai.Step(ships, player);
+	//ai.Step(ships, player);
 	const Ship *flagship = player.Flagship();
 	bool wasHyperspacing = (flagship && flagship->IsEnteringHyperspace());
 	
@@ -1096,8 +1131,13 @@ void Engine::CalculateStep()
 			++it;
 	}
 	
+	// TODO If we are operating in client mode, we should not generate new fleets
+	// instead we should poll the remote server to see if there are new fleets to add
+	// If in client mode, we should send out an update if we generate a new fleet in a system
 	// Add incoming ships.
-	for(const System::FleetProbability &fleet : player.GetSystem()->Fleets())
+	if(server == nullptr || server->IsHost())
+	{
+	/*for(const System::FleetProbability &fleet : player.GetSystem()->Fleets())
 		if(!Random::Int(fleet.Period()))
 		{
 			const Government *gov = fleet.Get()->GetGovernment();
@@ -1148,8 +1188,17 @@ void Engine::CalculateStep()
 				}
 			}
 		}
+	}*/
 	}
+
+	if(server != nullptr) {
+		vector<shared_ptr<Ship>> ss = server->GetNewShips();
+		for(const shared_ptr<Ship> &ship : ss)
+			ships.push_front(ship);
+	}
+	// End TODO
 	
+	// TODO Could be managed by remote server, but not neccessary
 	// Occasionally have some ship hail you.
 	if(!Random::Int(600) && !ships.empty())
 	{

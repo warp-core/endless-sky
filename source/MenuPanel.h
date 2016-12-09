@@ -18,7 +18,7 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include <string>
 #include <vector>
 
-class ListenServer;
+class AbstractServer;
 class PlayerInfo;
 
 
@@ -28,7 +28,7 @@ class PlayerInfo;
 // credits and basic information on the currently loaded player.
 class MenuPanel : public Panel {
 public:
-	MenuPanel(PlayerInfo &player, UI &mainUI, ListenServer*& serverPointer);
+	MenuPanel(PlayerInfo &player, UI &mainUI, AbstractServer*& serverPointer);
 	
 	virtual void Step() override;
 	virtual void Draw() const override;
@@ -50,7 +50,7 @@ private:
 	std::vector<std::string> credits;
 	unsigned scroll;
 
-	ListenServer*& serverPointer;
+	AbstractServer*& serverPointer;
 };
 
 

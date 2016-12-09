@@ -45,6 +45,8 @@ public:
 	// Return a point rotated by this angle around (0, 0).
 	Point Rotate(const Point &point) const;
 	
+	double Get() const;
+	
 	
 private:
 	Angle(int32_t angle);

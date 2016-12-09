@@ -19,6 +19,7 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include "Engine.h"
 
 class PlayerInfo;
+class AbstractServer;
 class ShipEvent;
 
 
@@ -30,6 +31,7 @@ class ShipEvent;
 class MainPanel : public Panel {
 public:
 	MainPanel(PlayerInfo &player);
+	MainPanel(PlayerInfo &player, AbstractServer *server);
 	
 	virtual void Step() override;
 	virtual void Draw() const override;
@@ -50,9 +52,9 @@ private:
 	
 	
 private:
-	PlayerInfo &player;
-	
 	Engine engine;
+
+	PlayerInfo &player;
 	
 	Command show;
 	

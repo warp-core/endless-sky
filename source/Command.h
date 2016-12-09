@@ -94,6 +94,8 @@ public:
 	Command operator|(const Command &command) const;
 	Command &operator|=(const Command &command);
 	
+	unsigned int Serialize() const;
+	void UnSerialize(unsigned int commands, double t);
 	
 private:
 	Command(uint64_t state);

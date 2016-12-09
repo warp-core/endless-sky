@@ -23,6 +23,7 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include "Government.h"
 #include "Messages.h"
 #include "Mission.h"
+#include "NetworkShip.h"
 #include "Outfit.h"
 #include "PacketWriter.h"
 #include "Person.h"
@@ -99,8 +100,14 @@ void PlayerInfo::Load(const string &path)
 
 
 
+void PlayerInfo::Load(const DataNode &node)
+{
+}
+
+
+
 // Load player information from a DataReader.
-void PlayerInfo::Load(const DataReader &reader)
+void PlayerInfo::Load(const DataReader &reader, bool network)
 {
 	// Make sure any previously loaded data is cleared.
 	Clear();
@@ -177,6 +184,7 @@ void PlayerInfo::Load(const DataReader &reader)
 		}
 		else if(child.Token(0) == "clearance")
 			hasFullClearance = true;
+		// If this is a network player, the server will handle ship allocation
 		else if(child.Token(0) == "ship")
 		{
 			// Ships owned by the player have various special characteristics:
@@ -857,6 +865,7 @@ void PlayerInfo::Land(UI *ui)
 		}
 		else
 			ui->Push(new Dialog(message));
+
 	}
 }
 

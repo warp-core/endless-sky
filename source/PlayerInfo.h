@@ -63,7 +63,9 @@ public:
 	// Load an existing player from the specified file.
 	void Load(const std::string &path);
 	// Load a player from a network packet.
-	void Load(const DataReader &reader);
+	void Load(const DataReader &reader, bool network = false);
+	
+	void Load(const DataNode &node);
 	// Load the most recently saved player.
 	void LoadRecent();
 	// Save this player (using the Identifier() as the file name).

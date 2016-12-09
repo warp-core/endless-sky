@@ -459,6 +459,7 @@ void Ship::SetName(const string &name)
 
 
 
+#include <iostream>
 // Set which system this ship is in.
 void Ship::SetSystem(const System *system)
 {
@@ -562,10 +563,13 @@ string Ship::GetHail() const
 
 
 
+#include <bitset>
+#include <iostream>
 // Set the commands for this ship to follow this timestep.
 void Ship::SetCommands(const Command &command)
 {
 	commands = command;
+	//cout << name <<": " << bitset<32>(command.Serialize()) << endl;
 }
 
 
@@ -753,6 +757,14 @@ bool Ship::Move(list<Effect> &effects)
 		static const double HYPER_D = 1000.;
 		bool hasJumpDrive = (hyperspaceType == 200);
 		
+		// If we have finished our jump but the server isn't ready yet
+		// All other server communication is handled in NetworkShip
+		if(hyperspaceCount >= HYPER_C && !getHSPermission())
+		{
+			hyperspaceCount = HYPER_C - 1;
+			fuel += (hyperspaceSystem != nullptr);
+		}
+		
 		// Create the particle effects for the jump drive. This may create 100
 		// or more particles per ship per turn at the peak of the jump.
 		if(hasJumpDrive && !forget)
@@ -814,6 +826,10 @@ bool Ship::Move(list<Effect> &effects)
 			// traveling in, so that when you decelerate there will not be a
 			// sudden shift in direction at the end.
 			velocity = velocity.Length() * angle.Unit();
+			
+			cout << "Transitioned into system" << endl;
+			cout << Position().X() << ", " << Position().Y() << endl;
+			enterSystem();
 		}
 		if(!hasJumpDrive)
 		{
@@ -839,6 +855,7 @@ bool Ship::Move(list<Effect> &effects)
 				}
 				if(velocity.Length() <= exitV)
 				{
+					cout << "Dropping out of hyperspace" << endl;
 					velocity = angle.Unit() * exitV;
 					hyperspaceCount = 0;
 				}
@@ -861,6 +878,7 @@ bool Ship::Move(list<Effect> &effects)
 		// just slowly refuel.
 		if(landingPlanet && zoom)
 		{
+			//cout << "Landing" << endl;
 			// Move the ship toward the center of the planet while landing.
 			if(GetTargetPlanet())
 				position = .97 * position + .03 * GetTargetPlanet()->Position();
@@ -889,16 +907,18 @@ bool Ship::Move(list<Effect> &effects)
 		else if(fuel == attributes.Get("fuel capacity")
 				|| !landingPlanet || !landingPlanet->HasSpaceport())
 		{
+			//cout << "Departing" << endl;
 			zoom = min(1., zoom + .02);
 			landingPlanet = nullptr;
 		}
 		else
+		{
+			//cout << "Refueling" << endl;
 			fuel = min(fuel + 1., attributes.Get("fuel capacity"));
-		
+		}
 		// Move the ship at the velocity it had when it began landing, but
 		// scaled based on how small it is now.
 		position += velocity * zoom;
-		
 		return true;
 	}
 	if(commands.Has(Command::LAND) && CanLand())

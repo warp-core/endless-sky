@@ -1,0 +1,19 @@
+--- Sent by Client ---
+P - Ping
+Q - Query
+C - Command
+I - Request UUID
+U - Join Game
+N - New Player
+6 - Ship Info request
+0x0A - System Info request
+0x0C - Enter System
+R - Arrival (deprecated)
+5 - Update a client (deprecated)
+
+--- Sent by Host ---
+
+H - System Status
+0x0B - Ship Info
+L - Player Info
+

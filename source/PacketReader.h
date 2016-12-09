@@ -25,9 +25,10 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 class PacketReader : public DataReader {
 public:
 	PacketReader() = default;
-	PacketReader(const UDPpacket &packet);
+	PacketReader(const UDPpacket &packet, unsigned int burn = 1);
 	
     void Read(const UDPpacket &packet);
+    void Read(const UDPpacket &packet, unsigned int burn);
 	
 	std::list<DataNode>::const_iterator begin() const override;
 	std::list<DataNode>::const_iterator end() const override;

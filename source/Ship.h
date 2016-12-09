@@ -30,6 +30,7 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 class DataNode;
 class DataWriter;
 class Government;
+class NetworkShip;
 class Phrase;
 class Planet;
 class Projectile;
@@ -272,6 +273,9 @@ public:
 	const std::vector<std::weak_ptr<const Ship>> &GetEscorts() const;
 	
 	
+protected:
+
+
 private:
 	// Add or remove a ship from this ship's list of escorts.
 	void AddEscort(const Ship &ship);
@@ -390,6 +394,11 @@ private:
 	// Links between escorts and parents.
 	std::vector<std::weak_ptr<const Ship>> escorts;
 	std::weak_ptr<Ship> parent;
+
+	// Fake virtual functions, see NetworkShip::NetworkShip()
+	std::function<bool()>getHSPermission = [](){return true;};
+	std::function<void()>enterSystem = [](){};
+	friend NetworkShip;
 };
 
 

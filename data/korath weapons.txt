@@ -221,7 +221,7 @@ outfit "Korath Repeater Turret"
 		"shield damage" 26
 		"hull damage" 22
 		"heat damage" 33
-	description "Korath repeaters fire compact bolts of superheated plasma at their targets. For every one of these turrets installed on a ship, an auxiliary cooling system is typically required to cope with its heat output."
+	description "Korath Repeaters fire compact bolts of superheated plasma at their targets. For every one of these turrets installed on a ship, an auxiliary cooling system is typically required to cope with its heat output."
 
 
 outfit "Korath Piercer"
@@ -565,7 +565,7 @@ outfit "Korath Slicer Turret"
 		"firing heat" 17.8
 		"shield damage" 6.3
 		"hull damage" 16.7
-	description "This turret fires a tightly focused energy beam that is particularly effective against hull armor. When paired with a disruptor turret, it is a deadly combination."
+	description "This turret fires a tightly focused energy beam that is particularly effective against hull armor. When paired with a Korath Disruptor, it is a deadly combination."
 
 effect "slicer impact"
 	sprite "effect/slicer impact"

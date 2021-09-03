@@ -138,12 +138,16 @@ TEST_CASE( "Format::Number", "[Format][Number]") {
 		CHECK( Format::Number(0.56) == "0.56" );
 		CHECK( Format::Number(0.871) == "0.87" );
 		CHECK( Format::Number(0.072) == "0.07" );
+		CHECK( Format::Number(0.068) == "0.07" );
+		CHECK( Format::Number(0.995) == "1" );
+		CHECK( Format::Number(0.097) == "0.1" );
 	}
 	SECTION( "Decimals between 10 and 100" ) {
 		CHECK( Format::Number(44.1234) == "44.12" );
 		CHECK( Format::Number(94.5) == "94.5" );
 		CHECK( Format::Number(10.1) == "10.1" );
 		CHECK( Format::Number(10.01) == "10.01" );
+		CHECK( Format::Number(64.995) == "65" );
 		CHECK( Format::Number(-12.41) == "-12.41" );
 	}
 	SECTION( "Decimals between 100 and 1000" ) {

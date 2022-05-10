@@ -279,7 +279,7 @@ void Conversation::Save(DataWriter &out) const
 					{
 						out.BeginChild();
 						{
-							out.Write("to", "show");
+							out.Write("to", "display");
 							out.BeginChild();
 							{
 								it.conditions.Save(out);
@@ -527,7 +527,7 @@ bool Conversation::LoadGotos(const DataNode &node)
 				hasGoto = true;
 			}
 		}
-		else if(child.Size() == 2 && child.Token(0) == "to" && child.Token(1) == "show")
+		else if(child.Size() == 2 && child.Token(0) == "to" && child.Token(1) == "display")
 		{
 			// Each choice can only have one condition
 			if(hasCondition)
@@ -564,7 +564,7 @@ bool Conversation::LoadGotos(const DataNode &node)
 bool Conversation::HasCondition(const DataNode &node)
 {
 	for(const DataNode &child : node)
-		if(child.Size() == 2 && child.Token(0) == "to" && child.Token(1) == "show")
+		if(child.Size() == 2 && child.Token(0) == "to" && child.Token(1) == "display")
 			return true;
 
 	return false;

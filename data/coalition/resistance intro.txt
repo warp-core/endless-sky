@@ -17,6 +17,31 @@ mission "Lunarium Initial Log"
 		log "Factions" "Lunarium Redoubt" "The Lunarium Redoubt is a resistance movement, opposed to the Heliarchs, within the Coalition, aiming to free it from their rule.
 		fail
 
+mission "Lunarium Charity Unknown Log 1"
+	invisible
+	landing
+	to offer
+		or
+			has "Resistance: Smuggling: Charity 1: active"
+			has "Resistance: Smuggling: Charity 1: done"
+		not "Resistance: Questions: Done"
+	on offer
+		log "Agreed to help a Kimek charity by transporting some supplies to one of their poorer worlds."
+			fail
+
+mission "Lunarium Charity Known Log 1"
+	invisible
+	landing
+	to offer
+		or
+			has "Resistance: Smuggling: Charity 1: active"
+			has "Resistance: Smuggling: Charity 1: done"
+		has "Resistance: Questions: Done"
+	on offer
+		log "People" "Chiree" "One of the things Chiree does for the Lunarium is maintain and operate a 'charity' in Kimek space, to help the less fortunate of the Coalition there, and also to help obfuscate the Lunarium's activities from the Heliarchs and their agents."
+		log "Agreed to help a Kimek charity, actually a front, run by Chiree, for the Lunarium, by transporting some supplies to one of their poorer worlds."
+			fail
+
 mission "Resistance: Smuggling: Charity 1"
 	name "Charity Delivery"
 	description "Deliver a care package of <cargo> to <destination>, as part of a charity initiative."
@@ -50,8 +75,6 @@ mission "Resistance: Smuggling: Charity 1"
 			`	She signals to some workers with similar uniforms, and in a few minutes they bring the cargo crates to your ship. More colleagues are already on <planet> working with more captains, she explains, and suggests to look for them when you arrive. She thanks you again, and wishes you a good trip to <planet>.`
 				accept
 			label metchiree
-			action
-				log "People" "Chiree" "One of the things Chiree does for the Lunarium is maintain and operate a 'charity' in Kimek space, to help the less fortunate of the Coalition there, and also to help obfuscate the Lunarium's activities from the Heliarchs and their agents."
 			`A Kimek in a blue uniform approaches you, and you recognize her as Chiree, the Lunarium leader you met when joining them. She asks to speak in private, and you two go inside your ship. "Much better," she says once the hatch is closed. "Easier to explain to you the job, it will be, if speak freely and truly of it, I can.`
 			`	"A 'charity' of sorts in Kimek space, me and other members maintain. True and honest, the donations we receive are, and glad to help those in need within our region, we are. But, also a great cover for certain Lunarium cargo transfers, it is. Wish to enlist your help in that, we do."`
 			choice
@@ -65,8 +88,6 @@ mission "Resistance: Smuggling: Charity 1"
 					decline
 			`	Her mouth produces something of a chirping, clicking sound, "Good. Very good. Have the goods brought in shortly, I will." She leaves your ship, and signals to some workers with similar uniforms, and in a few minutes they bring the cargo crates to your ship. More members are already on <planet> working with more captains, she explains, and suggests to look for them when you arrive. She thanks you again, and wishes you a good trip to <planet>.`
 				accept
-	on accept
-		log "Agreed to help a Kimek charity by transporting some supplies to one of their poorer worlds."
 	on visit
 		dialog `You land on <planet>, but realize that your escort carrying the charity supplies hasn't entered this system yet. Better depart and wait for it.`
 	on complete
@@ -181,12 +202,15 @@ mission "Resistance: Smuggling: Grenades"
 		has "Resistance: Smuggling: Charity 3: done"
 		not "Heliarch License: done"
 	on offer
-		log "Been providing transport services for a charity that is actually the Lunarium, a resistance group within the Coalition aiming to free it from the Heliarchs' rule. Some of the work was genuinely charity, apparently, but some was to support the resistance."
 		set "Lunarium introduced"
 		conversation
 			`You drop off the crates full of charity goods, and the spaceport workers start getting them up on vehicles to transport them to the poor. One of the workers transfers 261,000 credits to your account, thanking you for the help.`
 			branch metchiree
 				has "Resistance: Questions: done"
+			action
+				log "Been providing transport services for a charity that is actually the Lunarium, a resistance group within the Coalition aiming to free it from the Heliarchs' rule. Some of the work was genuinely charity, apparently, but some was to support the resistance."
+				log "People" "Chiree" "Chiree, a Kimek, is a leader in the Lunarium. She has been opposing the Heliarchs for many years, and has lost more than one leg for the cause."
+				log "People" "Chiree" "One of the things Chiree does for the Lunarium is maintain and operate a 'charity' in Kimek space, to help the less fortunate of the Coalition there, and also to help obfuscate the Lunarium's activities from the Heliarchs and their agents."
 			`	As they move the last few crates, you hear a rapid tapping approaching from behind, and when you turn to investigate a Kimek tackles you. Some more join in, covering your head with some dark sack, and start shoving you around once they restrain you. You call out for help, but nobody comes. The Kimek keep pushing and tugging at you as they bring you around the city. After many minutes, you hear some doors close behind you, and your captors force you into some cramped room or compartment. You try to stand up straight, but hit your head against the ceiling. It feels as if the room was tugged down in a moment, and when it stops, you're walked around for a while longer. Finally, the Kimek seat you and remove the sack from your head.`
 			`	Though you're underground, the insides remind you of an office building or call center; several Kimek are working in cubicles, most examining computer screens while others speak into communicators. You look back to where you reckon you came from, seeing the entrance to a short elevator by the end of a hallway. Coming around the corner, a Kimek you recognize approaches to sit opposite to you - the Kimek who first contacted you about the charity missions. A group of the blue uniformed Kimek follow after her as they bring a crate: one of the crates you transported here. "Forgive us for the discomfort you must, Captain," she says, as the workers open up the crate, revealing several Heliarch guns stuffed inside. "Wished to speak away from prying eyes, I did. Rest easy, you may, harm you, we will not."`
 			choice
@@ -314,7 +338,7 @@ mission "Resistance: Smuggling: Torpedoes"
 			`	The interface pops out, and the round drive stops beeping as your monitor returns to normal.`
 				accept
 	on accept
-		log "Agreed to provide the Lunarium with some torpedo and typhoon launchers. The lack of anti-missile systems on Heliarch ships means missile technology will be highly beneficial for the Lunarium."
+		log "Agreed to provide the Lunarium with some torpedo and typhoon launchers. The lack of anti-missile systems on Heliarch ships means missile technology will be highly useful to the Lunarium."
 	on visit
 		dialog `You've arrived on <planet>, but the ship carrying the launchers and their ammo hasn't arrived in this system yet. Better depart and wait for it.`
 	on complete
@@ -416,7 +440,7 @@ mission "Resistance: Smuggling: Reactors"
 			`	She signs off, the beeping stops, and your monitor returns to normal.`
 				accept
 	on accept
-		log "The Lunarium will need more power than the Coalition solar panels can provide to take on the Heliarchs. Agreed to provide them samples of human shipboard nuclear reactors to reproduce to this end."
+		log "The Lunarium will need more power than the Coalition solar panels can provide if they wish to take on the Heliarchs. Agreed to provide them samples of human shipboard nuclear reactors for reproduction to this end."
 	on visit
 		dialog `You land on <planet>, but don't receive any instructions from the local Lunarium members. Either one or more of the reactors aren't with you in the system, or you're past the delivery window. You should prepare to bring in the three reactors before the fifth day of the month, and try again.`
 	to complete
@@ -428,6 +452,7 @@ mission "Resistance: Smuggling: Reactors"
 		payment 33000000
 		"assisted resistance" ++
 		log "After delivering some nuclear reactors, Chiree says she won't make further contact via the usual communicator, but others of the Lunarium on Coalition worlds may offer similar work."
+		set "Lunarium some Arack houses unhappy"
 		log "Factions" "Lunarium Redoubt" "Apparently, some Arach houses are not entirely happy with the status of the Coalition under the Heliarchs, and so they help fund the Lunarium."
 		conversation
 			`When you come in to land, the local Lunarium contacts direct you to a site far away from any of the cities. You are led close to a gigantic cave entrance, on a valley already blanketed by the planet's typical heavy downpours. Dozens of Arachi and Kimek are waiting for you, and once you do they use hulking cargo loaders to carefully take each reactor from your ship, slowly bringing them inside the cave. They repeat this slow, arduous process with each reactor that you were tasked to bring to them.`

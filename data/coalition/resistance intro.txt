@@ -25,6 +25,7 @@ mission "Lunarium Charity Unknown Log 1"
 			has "Resistance: Smuggling: Charity 1: active"
 			has "Resistance: Smuggling: Charity 1: done"
 		not "Resistance: Questions: Done"
+		not "Lunarium Charity Known Log 1: offered"
 	on offer
 		log "Agreed to help a Kimek charity by transporting some supplies to one of their poorer worlds."
 			fail
@@ -37,6 +38,7 @@ mission "Lunarium Charity Known Log 1"
 			has "Resistance: Smuggling: Charity 1: active"
 			has "Resistance: Smuggling: Charity 1: done"
 		has "Resistance: Questions: Done"
+		not "Lunarium Charity Unknown Log 1: offered"
 	on offer
 		log "People" "Chiree" "One of the things Chiree does for the Lunarium is maintain and operate a 'charity' in Kimek space, to help the less fortunate of the Coalition there, and also to help obfuscate the Lunarium's activities from the Heliarchs and their agents."
 		log "Agreed to help a Kimek charity, actually a front, run by Chiree, for the Lunarium, by transporting some supplies to one of their poorer worlds."
@@ -632,8 +634,9 @@ mission "House Bebliss 3-FW"
 	source "Pugglemug"
 	destination "Bourne"
 	on offer
+		log "Brought Freya the offer from House Bebliss. She is interested in the knowledge they've offered to share, but remains wary of them, and has suggested warning the Free Worlds about the Coalition, since they are right next door."
 		conversation
-			`You look around for Freya, asking the local dock workers where the people researching the Pug tech left on the planet are. They direct you to a quieter, less crowded place, where some warehouse complexes have been set up. Some are painted in the usual Syndicate colors, some are guarded by a few Navy troops, and a Free Worlds flag flies by the entrance of the one you enter. Inside, you see groups of people surrounding the various artifacts the Pug left behind. Some of them are running complicated looking tests, but it seems that they are mostly discussing what to do with the artifacts next. One of the graviton transmitters sits opposite to the entrance, half intact, half dismantled, with an array of scientists poking and prodding the inside machinery.`
+			`You look around for Freya, asking the local dock workers where the people researching the Pug tech left on the planet are. They direct you to a quieter, less crowded place, where some warehouse complexes have been set up. Some are painted in the usual Syndicate colors, some are guarded by a few Navy troops, and a Free Worlds flag flies by the entrance of the one you enter. Inside, you see groups of people surrounding the various artifacts the Pug left behind. Some of them are running complicated looking tests, but it seems that they are mostly discussing what to do with the artifacts next. One of the graviton transmitters sits opposite the entrance, half intact, half dismantled, with an array of scientists poking and prodding the machinery inside.`
 			branch resistance
 				has "Resistance: Questions: done"
 			`	Freya is atop a ladder near the transmitter when she sees you. She quickly hops down from her perch and runs towards you. "<first>! It's nice to see you again. What brings you here?" You tell her you have some important matters to discuss, and she whistles to the teams, dismissing them for lunch. When you're alone, you give her a rundown of the Coalition, explaining about the three species, the Heliarchs and their fight against the Quarg, and about who House Bebliss is, handing her the suitcase when you're done.`
@@ -650,7 +653,7 @@ mission "House Bebliss 3-FW"
 				`	"So you're fine with letting them study the Pug artifacts with you?"`
 				`	"I can go back and tell them you've agreed then?"`
 			`	"Have you told the others about this?" Freya asks, and you tell her you haven't. "Alondo, Katya... they need to know about this 'Coalition,'" continues Freya, "even if they've no intention of invading us. I'll send word to them that you'll be heading to <planet>. You can tell them all the details there, however I'm sure they'll have lots of questions and some inevitable suggestions. When you're done, you can go pick up these Arachi and bring them here. It'll give me some more time to look at what they've sent me." She finishes her instructions by grabbing some sort of schematic from the suitcase you brought.`
-			`	You say your goodbyes, and you head back to your ship.`
+			`	You say your goodbyes, and head back to your ship.`
 				accept
 
 mission "House Bebliss 4-FW"
@@ -663,7 +666,7 @@ mission "House Bebliss 4-FW"
 	destination "Factory of Eblumab"
 	on offer
 		conversation
-			`JJ is waiting for you when you land, wearing a uniform with various medals and honors on his chest. "It was nice to hear from Freya that you'd be stopping to pay us a visit. Well, until she started going on about how you had some 'critical' information, that is," he says as he shakes your hand, sighing gently. "So much for taking a break from managing fleets,"`
+			`JJ is waiting for you when you land, wearing a uniform with various medals and honors on his chest. "It was nice to hear from Freya that you'd be stopping by to pay us a visit. Well, until she started going on about how you had some 'critical' information, that is," he says as he shakes your hand, sighing gently. "So much for taking a break from managing fleets,"`
 			choice
 				`	"Sorry about that. It's nice to see you too, JJ. Are the others here yet?"`
 					goto others
@@ -671,15 +674,17 @@ mission "House Bebliss 4-FW"
 			`	"Hopefully?" He gives you a mix between a worried look and a stern face. "Let's just go meet up with the others, that way you don't need to repeat what I'm guessing is a long story."`
 			label others
 			`	He beckons you to follow him to a traffic shuttle. "I brought Katya and Ijs here once we got Freya's message. They were visiting Zug for a presentation about the Conservatory, and that's where I happened to be during my break. Alondo's made some time for us, so I'll bring you to his office. You can tell us the details there."`
-			`	You get in the shuttle, which eventually brings you to a towering government building. As you get closer, you notice the main courtyard is home to a multitude of different colored flags, all of them situated around the Free Worlds' own. "Planetary flags," JJ says as you both get out of the shuttle. "Some of our planets created their own recently, and some of the more diplomatic folks decided to set them up around the major government buildings." Leaving the flags waving in the breeze, the two of you head inside the building and go up an elevator, arriving on a floor with a couple rooms to the side and a larger one opposite the elevator. You enter the larger room and see Alondo seated behind a nice wooden desk, Ijs walking around, and Katya sitting on a sofa.`
+			`	You get in the shuttle, which eventually brings you to a towering government building. As you get closer, you notice the main courtyard is home to a multitude of different colored flags, all of them situated around the Free Worlds' own. "Planetary flags," JJ says as you both get out of the shuttle. "Some of our planets created their own recently, and some of the more diplomatic folks decided to set them up around the major government buildings." Leaving the flags waving in the breeze, the two of you head inside the building and go up an elevator, arriving on a floor with a couple of rooms to the side and a larger one opposite the elevator. You enter the larger room and see Alondo seated behind a nice wooden desk, Ijs walking around, and Katya sitting on a sofa.`
 			`	"How are you, <first>?" Katya gets up to greet you. "We came as soon as we got Freya's message, but I was still a bit surprised to get here before you, given the new toys you must have by now. You and Freya have gotten Ijs all worried and theorizing there," she says as she points to him.`
-			`	"Well, one minute I'm speaking on a panel, the other I get word we need to come to <origin> because <first> has something 'critical' to tell all of us. Of course I'll be worried," he stops, and comes to greet you. "Sorry. It's good to see you again <first>, I just... got a bit carried away thinking about Freya's message."`
+			`	"Well, one minute I'm speaking on a panel, the next I get word we need to come to <origin> because <first> has something 'critical' to tell all of us. Of course I'll be worried," he stops, and comes to greet you. "Sorry. It's good to see you again <first>, I just... got a bit carried away thinking about Freya's message."`
 			`	Alondo also stands up and comes to greet you. "Maybe you worry too much, maybe we don't worry enough, let's decide after <first> tells us all about... what was it again?"`
 			choice
 				`	"Some more aliens."`
 				`	"I hope none of you are afraid of spiders."`
 			branch resistance
 				has "Resistance: Questions: done"
+			action
+				log "Informed Alondo, JJ, Katya, and Ijs about the Coalition. They seem worried about the potential to be caught in the crossfire of a conflict between the Heliarchs and the Quarg."
 			`	Everyone quietly listens as you explain to them all you've learned about the Coalition. You bring up a map of the Free Worlds and show them the rough area of Coalition space and where it borders Free Worlds territory. As you gesture towards the map, you tell them of the three species, about the Heliarchs and how they've taken the three Quarg rings. Eventually you get to the Arach Houses, explaining that House Bebliss are the ones who wish to go study the Pug artifacts with Freya.`
 			`	When you're done, Alondo is the first to speak up, "So far, we seem to be getting along better with these aliens than we did with the Pug. It's good that they're trying to be diplomatic, though I'm not sure it'd be a good idea for the general public to know of them, given past experiences. At least for right now."`
 			`	"Do they have jump drives?" Katya asks. You nod, but say that they can't make their own. "Well, as long as what stockpile they have isn't too large, we shouldn't be in too much trouble."`
@@ -692,6 +697,8 @@ mission "House Bebliss 4-FW"
 			`	They stay silent for a while, then Alondo picks up the talk again. "If the Quarg have waited six thousand years so far then they might wait a few thousand more. What matters now is that we know of these aliens, meaning we must start thinking about possible outcomes to all of this and what they mean for the Free Worlds. If we start preparations now, perhaps we'll get lucky and we won't get caught up in any other wars; especially wars involving the Quarg."`
 				goto accept
 			label resistance
+			action
+				log "Informed Alondo, JJ, Katya, and Ijs about the Coalition. They seem worried about the potential to be caught in the crossfire of a conflict between the Heliarchs and the Quarg. And possible retaliations by the Heliarchs if the Lunarium fail."
 			`	Everyone quietly listens as you explain to them all you've learned about the Coalition. You bring up a map of the Free Worlds and show them the rough area of Coalition space and where it borders Free Worlds territory. As you gesture towards the map, you tell them of the three species, about the Heliarchs and how they've taken the three Quarg rings. Eventually you get to the Arach Houses, explaining that House Bebliss are the ones who wish to go study the Pug artifacts with Freya. You also tell them about the Lunarium, explaining the group's actions and their wish to take down the Heliarch government, and what role House Bebliss has in helping them.`
 			`	When you're done, Alondo is the first to speak up, "So far, we seem to be getting along better with these aliens than we did with the Pug. It's good that they're trying to be diplomatic, though I'm not sure it'd be a good idea for the general public to know of them, given past experiences. At least for right now." He pauses, then addresses you directly. "It's... bold of you to want to help this resistance group of theirs. There's some sympathy given the Free Worlds' own history, but they sound like they have an even worse shot than what we had."`
 			`	"Whatever their government is, or whether it's overthrown or not, it doesn't change that they're right at our doorstep," Katya says. "Do they have jump drives?" she asks. You nod, but say that they can't make their own. "Well, as long as what stockpile they have isn't too large, we shouldn't be in too much trouble."`
@@ -717,8 +724,9 @@ mission "House Bebliss 5-FW"
 	source "Factory of Eblumab"
 	destination "Ablub's Invention"
 	on offer
+		log "Informed House Bebliss that Freya has agreed to their proposal. They've requested a spare jump drive be brought to them so they can travel about their own ship to Deneb and keep it there as a base."
 		conversation
-			`Landing beside an Arach Spindle, you maneuver your ship to House Bebliss' estate, and are once again welcomed by maids and butlers. They show you to a room where the same three Arachi from last time are.`
+			`You maneuver your ship to House Bebliss' estate, landing beside an Arach Spindle, and are once again welcomed by maids and butlers. They show you to a room where the same three Arachi from last time are.`
 			`	"Agreed to work with us, has she, Captain?" they ask.`
 			`	You tell them that Freya has agreed to work with them and let them study the Pug artifacts she has collected on Deneb. You also explain that she asked you to inform the Free Worlds about the Coalition first.`
 			`	"Understandable, that is. An unusual request, from an unknown group, it was." They have some of the servants start carrying dozens of luggage bags outside. "If in agreement, Miss Freya is, head to that planet, 'Deneb,' to meet her, we shall."`
@@ -735,7 +743,7 @@ mission "House Bebliss 5-FW"
 			label myself
 			`	"Stay there for some months, we will, and though agreed to help us, your friend Freya has, troubled by our presence, other humans may be," they respond. "So that issues with accommodating us, she does not have, use our ship as a base, we will."`
 			label accept
-			`	You follow them outside, and see them board the Spindle, heading to <destination>. You board your own ship, and head back to the city docks, preparing to meet them on <planet> when you have a spare jump drive for their ship.`
+			`	You follow them outside, and see them board the Spindle, heading to <destination>. You board your own ship, and head back to the city docks. They'll be waiting for you when you have a spare jump drive for their ship.`
 				accept
 	on visit
 		dialog `You land on <planet>, but realize your escort bringing the jump drive hasn't arrived in this system yet. Better depart and wait for it to arrive.`
@@ -743,8 +751,9 @@ mission "House Bebliss 5-FW"
 		require "Jump Drive" 2
 		outfit "Jump Drive" -1
 		payment 1500000
+		log "Delivered a jump drive to House Bebliss to equip their ship for the journey to Deneb. They'll be waiting in the spaceport on Ablub's Invention."
 		conversation
-			`Some coordinates are automatically selected when you approach the surface of <planet>. You follow them to reach another private area of sorts, though it looks much more like a factory or a warehouse than an estate. House Bebliss' Spindle is landed there, and the members who will be following you to Deneb come to your ship when you land beside it. Some workers remove the jump drive from your ship and begin installing it on the Spindle. The House Bebliss members crewing the ship hand you <payment> when the drive is ready.`
+			`Some coordinates are automatically selected when you approach the surface of <planet>. You follow them to reach another private area of sorts, though it looks much more like a factory or a warehouse than an estate. House Bebliss' Spindle is landed there, and the members who will be following you to Deneb come to your ship when you land beside it. Some workers remove the extra jump drive from your ship and begin installing it on the Spindle. The House Bebliss members crewing the ship hand you <payment> when the drive is ready.`
 			`	"Once ready to leave, you are, meet us in the main spaceport, you should," one of them says.`
 
 mission "House Bebliss 6-FW"
@@ -770,6 +779,7 @@ mission "House Bebliss 6-FW"
 	on complete
 		event "bebliss research fw" 80 100
 		payment 930000
+		log "Escorted a House Bebliss Spire to Deneb. They'll probably be working on the Pug tech there for a while."
 		conversation
 			`As both your ships come in for a landing, you contact Freya and tell her the Arachi are with you this time. She tells you to land near the Free Worlds' warehouses, where you last met her, saying she'll be waiting there to greet them.`
 			`	When you arrive, you wait outside your ship while House Bebliss' ship keeps its hatch closed. It seems they intend to remain in there for the duration of their stay, most likely in fear that their appearance would cause a stir amongst other humans.`
@@ -777,7 +787,6 @@ mission "House Bebliss 6-FW"
 			`	"Indeed. The trade of our great House Bebliss for thousands of years, the study of hyperlanes has been," one of the Arachi says. "When Captain <last> told us of your achievements, know that need to come look into your work ourselves, we did."`
 			`	She quickly gets used to the translation box's odd speech quirk, as she and the members of House Bebliss discuss how to go about helping each other in researching the artifacts here. One of the crewmembers approaches you as they talk, and hands you <payment>, "as thanks for safely escorting us here," they whisper.`
 			`	Freya's talk with them goes on for almost an hour; they eventually settle on having some of the artifacts moved to their ship's cargo hold, so that some research can happen there without the risk of being seen. "Hopefully people buy into this being a new niche ship design that Southbound Shipyards asked me to check out," Freya says. House Bebliss' representatives thank her for the reception, and you follow her back outside.`
-			`	They talk with Freya for almost an hour before settling on having the research be moved to their ship. Freya says she will go get her team and bring whatever pieces of equipment they found to the ship before you and her go back outside.`
 			`	Once the hatch is closed, she asks, "This is one of their freighter ships?"`
 			choice
 				`	"Yeah, though it's not their largest one."`
@@ -816,12 +825,38 @@ mission "House Bebliss 7-FW"
 		"assisted resistance" ++
 		outfit "Jump Drive" 1
 		payment 2000000
+		log "The members of House Bebliss who were working on the Pug artifacts on Deneb have now returned to Coalition space. Also, got back the jump drive they borrowed for the trip."
 		conversation
 			`Once again, coordinates appear on your screen as you come in to land on <planet>, leading you to the same building where you delivered the jump drive to House Bebliss. Their Arach Spindle is docked there, and the members who were working with Freya come to your ship. "Captain <last>!" One of them greets you as you come down the hatch. "Received the message from Miss Freya, I trust you have? Very fruitful, our conjoined efforts have been."`
 			`	"Unfortunate, it is, that stay there longer we could not," another one interjects. "But away for much longer, we could not be. Need us here, House Bebliss does."`
 			`	They hand you <payment> as thanks for all your help, while the workers remove the jump drive from their Spindle and put it in your ship. The Arachi thank you once more and say goodbye one final time, boarding their Spindle and leaving the planet.`
 
 
+
+mission "Lunarium Evacuation Unknown Log 1"
+	invisible
+	landing
+	to offer
+		or
+			has "Resistance: Evacuation 1: active"
+			has "Resistance: Evacuation 1: done"
+		not "Resistance: Questions: done"
+		not "Lunarium Evacuation Known Log 1: offered"
+	on offer
+		log "People" "Elirom" "Elirom is a middle-aged Saryd who owns and operates a tourism company, providing transportation services in Coalition space."
+		log "Agreed to cover for a ship in need of repairs by completing an urgent transport mission for a Saryd called Elirom."
+
+mission "Lunarium Evacuation Known Log 1"
+	invisible
+	landing
+	to offer
+		or
+			has "Resistance: Evacuation 1: active"
+			has "Resistance: Evacuation 1: done"
+		has "Resistance: Questions: done"
+		not "Lunarium Evacuation Unknown Log 1: offered"
+	on offer
+		log "Agreed to evacuate some Lunarium members from a planet that will soon be too heavily surveilled by the Heliarchs for the resistance members to escape. The cover story is that they are students and teachers returning from a school trip whose original transport has canceled. Their reason for urgency is that they will otherwise miss important tests."
 
 mission "Resistance: Evacuation 1"
 	name "Pick Up Students"
@@ -843,7 +878,7 @@ mission "Resistance: Evacuation 1"
 		conversation
 			branch resistance
 				has "Resistance: Questions: done"
-			`A middle-aged Saryd, with little head hair and a dense beard approaches you in the spaceport. "Greetings, human friend. <first> <last> your name is, correct?" You nod. "Called Elirom, I am. The owner of a tourism company. For those wishing to travel in leisure or for work, provide comfortable ships we do," he explains. "Run into some trouble, one of our ships has. Supposed to transport <bunks> students and teachers back to Second Viridian after their school trip was done, now waiting for repairs for the ship's malfunctioning outfits, they are. Picked up by <date>, the students must be, so as to not miss their tests, but elsewhere busy, our other ships are. Pick them up in our stead, would you? 386,730 credits from our company, you will receive."`
+			`A middle-aged Saryd, with little head hair and a dense beard approaches you in the spaceport. "Greetings, human friend. <first> <last> your name is, correct?" You nod. "Called Elirom, I am. A tourism company, I own. For those wishing to travel in leisure or for work, provide comfortable ships we do," he explains. "Run into some trouble, one of our ships has. To Second Viridian, after a school trip, <bunks> students and teachers, it was to transport. Now, to the ship's malfunctioning outfits, for repairs they wait. Picked up by <date>, the students must be, else tests, they will miss. But elsewhere busy, our other ships are. Pick them up in our stead, would you? 386,730 credits from our company, you will receive."`
 			choice
 				`	"Sure, where am I picking them up from?"`
 				`	"I'm sorry, I can't help you right now."`
@@ -851,12 +886,13 @@ mission "Resistance: Evacuation 1"
 			`	"Waiting on <planet> they are. Inform them to expect your ship, I will. Remember, picked up before <date> they must be." He bends his front legs lightly in a bow, thanking you for agreeing to help, and walks off.`
 				accept
 			label resistance
-			`A middle-aged Saryd with little head hair and a dense beard approaches you in the spaceport. You recognize him as Elirom, one of the Lunarium leaders you met on Remote Blue. "Talk in your ship, could we?" he whispers once he's close. "Here, listening they are..." You bring him to your ship, and he continues once the hatch closes. "Looking for our members all over <planet>, Heliarch ships are. Received word, I have, that due to <date>, many more Punishers are. If they get there before evacuated our members, we have, afraid I am that unfeasible to save them, it will become. Still waiting for a ship, <bunks> of them are, and get back there before the Punishers arrive on <date>, our other ships will not. Captain, help us, you must. Compensate you with 386,730 credits, I will."`
+			action
+			`A middle-aged Saryd with little head hair and a dense beard approaches you in the spaceport. You recognize him as Elirom, one of the Lunarium leaders you met on Remote Blue. "Talk in your ship, could we?" he whispers once he's close. "Here, listening they are..." You bring him to your ship, and he continues once the hatch closes. "Looking for our members all over <planet>, Heliarch ships are. Received word, I have, that due by <date>, many more Punishers are. If they get there before evacuated our members, we have, afraid I am that unfeasible to save them, it will become. Still waiting for a ship, <bunks> of them there are, and get back there before the Punishers arrive on <date>, our other ships will not. Captain, help us, you must. Compensate you with 386,730 credits, I will."`
 			choice
 				`	"Of course, I'll head there right away."`
 					goto accept
 				`	"Can't they just lay low until the Punishers have gone away?"`
-			`	"No, no," he shakes his head. "Find them out, they would. They always do." His eyes wander around, as he takes a step back. He blinks repeatedly for a second, then looks back at you. "Seen what they do to the prisoners they take, I have, Captain. If there they remain, found they will be, and lost <bunks> more, I would have."`
+			`	"No, no," he shakes his head. "Find them out, they would. Always, they do." His eyes wander around, as he takes a step back. He blinks repeatedly for a second, then looks back at you. "Seen what they do to the prisoners they take, I have, Captain. If there they remain, found they will be, and lost <bunks> more, I would have."`
 			label accept
 			`	Before you open up your hatch for him to leave, he adds, "Students and their teachers, they are. Picking them up from a school trip, after canceled on them, the original transport did, you are. Bring them back home to Second Viridian for their tests, you will. Asked to do so by the captain of the original transport ship, you were." He urges you to go there as soon as possible to pick them up, and leaves your ship.`
 				accept
@@ -878,9 +914,11 @@ mission "Resistance: Evacuation 2"
 		has "Heliarch Investigation 2: active"
 	on offer
 		conversation
-			`A line of Kimek, with some Saryds and Arachi in their midst, rush to your ship even before you've finished landing. These must be the students. They are carrying very little luggage, and they hastily board your ship once you open the hatch. Given the young appearance of all of them, you struggle to guess which ones are the teachers. After the last of them comes in, you look outside for a while, confused. Only <bunks> came in, not the 35 that Elirom mentioned.`
+			`A line of Kimek, with some Saryds and Arachi in their midst, rush to your ship even before you've finished landing. These must be the students. They are carrying very little luggage, and they hastily board your ship once you open the hatch. Given the young appearance of all of them, you struggle to guess which ones are the teachers. After the last of them enters, you look outside for a while, confused. Only <bunks> came in, not the 35 that Elirom mentioned.`
 			branch resistance
 				has "Resistance: Questions: done"
+			action
+				log "Collected the students and teachers, though there are two fewer than the original request mentioned."
 			choice
 				`	"Weren't there 35 of you?"`
 				`	(Say nothing.)`
@@ -888,6 +926,8 @@ mission "Resistance: Evacuation 2"
 			`	Many of them wince at the question, and some of the Kimek start making some rhythmless, low clicking sounds. One of the Saryds comes to close the hatch. "Mistaken, the one who contacted you must have been," she says. "Here, all of us are."`
 				goto accept
 			label resistance
+			action
+				log "Collected the 'students' and 'teachers', though it seems two of them haven't made it."
 			choice
 				`	"Weren't there 35 of you?"`
 				`	(Say nothing.)`
@@ -910,6 +950,8 @@ mission "Resistance: Evacuation 2"
 					goto end
 				`	"There were only 33, actually."`
 			`	"Only... oh, I..." he pauses for a few seconds just as his voice cracks a little. "Forgive me, Captain, mistaken, it appears I was. Mixed up the number of passengers with that of another client, I did. Pay more attention next time, I shall." He thanks you again, and ends the call.`
+			action
+				log "Elirom seemed a little distraught at having mixed up the number of passengers. It didn't affect the payment."
 				accept
 			label resistance
 			`	"<last>! A life saver, you are, quite literally," he says. "Handling other evacuations, I still am, so be there to thank you in person, I could not, but know that deeply grateful for your saving those 35, I am. Contact you again I will, when in need of more help rescuing members we are."`

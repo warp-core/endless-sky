@@ -886,7 +886,6 @@ mission "Resistance: Evacuation 1"
 			`	"Waiting on <planet> they are. Inform them to expect your ship, I will. Remember, picked up before <date> they must be." He bends his front legs lightly in a bow, thanking you for agreeing to help, and walks off.`
 				accept
 			label resistance
-			action
 			`A middle-aged Saryd with little head hair and a dense beard approaches you in the spaceport. You recognize him as Elirom, one of the Lunarium leaders you met on Remote Blue. "Talk in your ship, could we?" he whispers once he's close. "Here, listening they are..." You bring him to your ship, and he continues once the hatch closes. "Looking for our members all over <planet>, Heliarch ships are. Received word, I have, that due by <date>, many more Punishers are. If they get there before evacuated our members, we have, afraid I am that unfeasible to save them, it will become. Still waiting for a ship, <bunks> of them there are, and get back there before the Punishers arrive on <date>, our other ships will not. Captain, help us, you must. Compensate you with 386,730 credits, I will."`
 			choice
 				`	"Of course, I'll head there right away."`
@@ -1767,6 +1766,7 @@ mission "Resistance: Questions"
 			"reputation: Quarg" < 0
 	on offer
 		require "Jump Drive"
+		log "Received an invitation from Lunarium leaders to meet their leaders to discuss an important task they have."
 		conversation
 			`As you prepare to land on <origin>, your monitor starts producing a low hum, stops, then starts again. This keeps up for nearly a minute until a message pops up. "Captain <last>, come to trust you our comrades have, thanks to your consistent help to our cause. Interested we are in your continuous support, so that free the Coalition, together we can. To <destination> you must come, meet with you, our leaders will, so that discuss an important task with them, you may. An available bunk in your ship, you should have."`
 			`	The message cuts off shortly after you finish reading it. Your monitor is back to normal, and no humming sound can be heard. You mark <planet> on your map.`
@@ -1783,6 +1783,8 @@ mission "Resistance: Quarg Interview"
 	to offer
 		has "Resistance: Questions: done"
 	on offer
+		log "People" "Lobmab Bebliss" "Lady Lobmab Bebliss, the head of the Arach House Bebliss, is also a benefactor of the Lunarium."
+		log "People" "Oobat" "Oobat, an Arach, is a leader in the Lunarium, and a linguist and aspiring diplomat."
 		conversation
 			`You leave your ship to find a pair of Kimek waiting for you. "Follow us to the meeting point, you will," one of them says, and you oblige, trying to keep a low profile as you go with them across the city. You reach a district near the center of town, with modest blocks and few skyscrapers, and head into what seems to be a Kimek restaurant. You continue following the two Kimek past busy tables and Kimek patrons who all have eyes on you as you head to the back.`
 			`	Taking an elevator, you move down a few levels. You arrive at some doors that open to an Arach delegation, with half a dozen bulky Arachi surrounding a young, fine-dressed lady in a blue "dress" with white lines wrapping around it. "Oh, finally arrived, have they?" she says as you step off the elevator, coming to meet you. "<first> <last>, is it? So intrigued by our most recent recruit, I was, that decided I did to come to this meeting for once. Lady Lobmab Bebliss, I am, head of our great house, and benefactor to the Lunarium." She steps one leg forward, to you, as if in some archaic Arach gesture. Unsure on how to respond, you do your best extravagant bow, which seems to satisfy her as she pulls her leg back closer to her body. "Confess I must, however, that most inconvenient it is, to come so far away while maintaining a low profile. Difficult to just disappear, it is, when the head of the greatest Arach House, you are. Hope I do that worth it, your contributions are."`
@@ -1804,27 +1806,37 @@ mission "Resistance: Quarg Interview"
 					goto outsiders
 				`	"How do you pay for all this?"`
 					goto pay
-				`	"I'm fine for now. What's about this task you need me for?"`
+				`	"I'm fine for now. What about this task you need me for?"`
 					goto task
+			action
+				log "Factions" "Lunarium Redoubt" "The Lunarium expect the Heliarchs to fight fiercely, and that in removing them, much damage will be doen to the Coalition. So, their first intention after freeing it from their rule is to rebuild. They also wish to ensure whatever system of governance comes after them is more transparent."
 			`	"Rebuild, first we will need to," Chiree responds. "Fight tooth and nail to remain in power, they will, so expect a great deal of damage done to the Coalition, we do."`
 			`	"Once back in order, everything is, focus on reassuring the populace we should. A change for the better, it will be, and help in making sure everyone realizes that, House Bebliss will," Lobmab jumps in. "Earn back what they took from us, we will."`
 			`	Once the head of House Bebliss is done, Chiree continues. "Pointless, our fight will have been, if corrupted in those rings again, our successors thousands of years from now become. Set up transparency measures, and means to ensure that absolute power, the consuls do not have, we will."`
 				goto questions
 			label fight
+			action
+				log "Factions" "Lunarium Redoubt" "The Lunarium is, military, at a great disadvantage to the Heliarchs. Their ships are far less durable and their weapons far less powerful. Elirom, however, believes that the Lunarium are smarter than the Heliarchs, and that they are only a few steps away from having the ability to close the technological gaps as well, though Pyakri is skeptical of his words."
 			`	"Try and fool you, I will not. At a tremendous disadvantage, to say the least, we are." Pyakri answers. "Weaker, our ships are, and far less powerful weapons, we boast. Mostly human designs. Due to being simpler, easier to produce them in what factories we have, they are. Also lack experience, the troops do..."`
 			`	The mood around the table quickly dims as she goes on listing the ways the Lunarium is lacking in comparison to your opponents. Elirom stands up, putting both hands on the table to draw attention. "Smarter than us, they are not. Assure you of that, I can. Wanting in many areas we are, yes, but only because hoard our best materials, they do. Already preparing some deadlier weapons, we are. Finished, the blueprints have been. Only lacking the right materials, we are. When secured those, we have, move on to reforming our arsenal we can, and maybe get some better ships produced, too."`
 			`	"And suppose I do that, intend to tell me where to attack for such materials, you do?" Pyakri asks as she stands up herself. "Caught by 'the unforeseen' will my men again be? By an Arach batallion you forgot to mention, again?"`
 			`	Caught apparently off-guard by the question, Elirom looks at her for a few seconds, then resigns himself to sit back down.`
 				goto questions
 			label outsiders
+			action
+				log "Factions" "Lunarium Redoubt" "There are, apparently, others from outside the Coalition aiding the Lunarium. House Bebliss has been the recipient of messages from a mysterious benefactor for centuries. The messages provide information about Heliarch activity, fleet movements, training drills, and propaganda plans. The information from this source has always been exactly right. They have also directed the Lunarium to hidden equipment caches, apparently transported to the Coalition from outside. Elirom believes it may be possible for a Heliarch Consul to be responsible, but that this possibility is unlikely. The messages have also mentioned Heliarch experiments into procedures to take over bodies."
 			`	For a few seconds, they simply exchange looks at your question, until Lobmab speaks up. "Transmissions and messages from some source, Bebliss has received for centuries now. Told us they have of Heliarch activity, fleet movements, training drills, propaganda plans. Always exactly right on their predictions, the messages were. Also pointed us to equipment caches - caches with outfits previously found nowhere in the Coalition - they have. Human weaponry, blueprints, factory parts..."`
 			`	"Aware of the identity of whoever does it, we are not," Elirom says. "An arbiter I was, and though a great deal I knew, still kept from me, some critical information was. Possible, it is, that from one of the consuls, the information comes. Though, difficult to steal a jump drive to bring in the weapons, it would be, even for a consul." He pauses, a dead stare in his eyes as he bites lightly on a finger. "Word of... experiments, we have also received from the messages. Some manner of procedure to take over bodies... stop whatever it is they're doing in the rings, we must."`
 				goto questions
 			label pay
+			action
+				log "Factions" "Lunarium Redoubt" "Almost all of the funding for the Lunarium comes from the great fortune of House Bebliss. Houses Bebliss and Idriss also act as intermediaries, taking out loans, on behalf of the Lunarium, with House Plumtab, who while interested in removing the Heliarchs from power, are not interested in interacting with the Lunarium directly."
 			`	The rest of the table look to Lobmab at the same time, prompting her explanation. "Amassed great fortune over our history, House Bebliss has. As part of our gracious help to the Lunarium, providing nearly everything in financial terms we have been."`
 			`	She stops, with the others still looking at her, as if expecting something more. She remains silent, so Chiree looks back at you, continuing, "Also taken some loans from House Plumtab in our stead, Houses Bebliss and Idriss have. Not terribly passionate for our cause, Plumtab's bankers are, but share our interest in booting the Heliarchs, they do, even if meet or talk with us, they never do."`
 				goto questions
 			label task
+			action
+				log "Agreed to transport Oobat to meet the Quarg living in human space. Since no Quarg ship has been seen in the Coalition in millenia, she believes they have moved on from the war. And that, if the populace can be shown that the Quarg are not interested in invading, the rule of the Heliarchs, who rely on fear of the Quarg to maintain their power, will be weakened. To this end, she wishes to meet a Quarg and record and interview for broadcast in the Coalition."
 			`	Tummug goes around the table, handing copies of some document of sorts to the other leaders before answering. "One of the center points of Heliarch propaganda, the fear of the Quarg is. Served to justify their budget, and their obsession with hoarding the military, for millennia it has. Thought up a way to mitigate the effect that has on the populace, Oobat has."`
 			`	As if given her cue, Oobat goes further into the plan. "Seen in the Coalition in over six thousand years, no Quarg ship has been. Most likely moved on from our war, they have, unlike the Heliarchs. If proof of the Quarg's lack of interest in waging war against us, we had, spread it to the people, we could. Given the Captain's resourcefulness, and jump drive, thought we did that the best way to acquire that proof, meeting up with the Quarg is." She grabs one of the documents, pointing to it. "For you all to review these questions, I would like. Careful we should be, about how worded they are. Once done, we are, board Captain <last>'s ship, I will. Meet with the Quarg in human space, we must," she says the last part looking at you. "Met with the Quarg before, have you, Captain?"`
 			branch metquarg
@@ -1861,19 +1873,20 @@ mission "Resistance: Join"
 	to offer
 		has "Resistance: Quarg Interview: done"
 	on offer
+		log "Recorded Oobat interviewing a Quarg. It went well, until she asked it if thy wished to reclaim the rings. It said they did, because they are their homes. It seemed to be pained by this thought."
 		conversation
 			`Once you've docked in <origin>, you go check on Oobat, who's readying some form of camera while rehearsing the questions for the interview. "Just a moment Captain, ready in a minute I will be," she says. You head out of your ship and flag down the first Quarg you see.`
 			`	"How may I assist you, human?"`
 			choice
 				`	"I've brought an Arach from the Coalition. She wants to interview the Quarg."`
 				`	"I'm with a group from the Coalition, the Lunarium, who are fighting the Heliarchs. They want to talk to you, and have sent a diplomat with me."`
-			`	It stays silent, glancing over at your ship. "I see," it says. "Wait here. I will bring one who can speak on the matter." It moves away in a quick step, briefly talking to some other Quarg along the way, who come to your ship and wait. Oobat comes out of your ship as you wait, leading to something of a scene as some the humans visiting the station panic at the sight of a giant spider. Others come closer, intrigued by the unknown alien, or perhaps thinking her to be some form of prop. Oobat doesn't pay them much mind though, instead focusing on the Quarg near the two of you, and watching the others in the distance.`
+			`	It stays silent, glancing over at your ship. "I see," it says. "Wait here. I will bring one who can speak on the matter." It moves away in a quick step, briefly talking to some other Quarg along the way, who come to your ship and wait. Oobat comes out of your ship as you wait, leading to something of a scene as some of the humans visiting the station panic at the sight of a giant spider. Others come closer, intrigued by the unknown alien, or perhaps thinking her to be some form of prop. Oobat doesn't pay them much mind though, instead focusing on the Quarg near the two of you, and watching the others in the distance.`
 			`	The Quarg around you dissuade the gawking humans from getting closer, and after a few more minutes a Quarg in faded, light gray robes comes to meet you. "Hello, human. And..."`
 			`	"Oobat, my name is," she says. "A member of the Lunarium Redoubt, a group in the Coalition that fighting the Heliarchs is. Assisted us much, Captain <last> has, and brought me here now they did, for wish to ask you some questions, for your views on the Coalition, my group does."`
 			`	The Quarg gazes at you two for a few seconds, before squatting down to your level. "Very well. What questions do you have?"`
 			`	She hands you the camera, turning it on and asking that you keep it as still as you can once you're positioned to get a good angle. She then connects her translator to it remotely, so that the audio picks up the Quarg's translated responses. "Well, begin then we shall. On the Coalition, intending to fight us again, are you?"`
 			`	It thinks for a moment, then answers, "No. We never intended to fight. It was the Saryds, Kimek and Arachi of old who fought us. We are not a warring people."`
-			`	Seemingly satisfied with the answer, Oobat moves on to the next. She questions the Quarg for about ten minutes on their activities outside the Coalition and their relation with the humans and other species. She even has you move the camera around for a bit to show the local human-Quarg interactions, as the Quarg compares dealing with humanity to dealing with the Coalition species. Oobat moves from question from question as if in a checklist, until she arrives at the last one. "About finished, we are. Thankful for your answers I am. Just one last thing, to appease the people back home. Interested in returning to take back the rings, are you?"`
+			`	Seemingly satisfied with the answer, Oobat moves on to the next. She questions the Quarg for about ten minutes on their activities outside the Coalition and their relation with the humans and other species. She even has you move the camera around for a bit to show the local human-Quarg interactions, as the Quarg compares dealing with humanity to dealing with the Coalition species. Oobat moves from question to question as if in a checklist, until she arrives at the last one. "About finished, we are. Thankful for your answers I am. Just one last thing, to appease the people back home. Interested in returning to take back the rings, are you?"`
 			`	"Of course," it says without hesitation. "The rings are our homes. My home." Clearly not expecting that answer, Oobat looks at you in confusion.`
 			choice
 				`	"It's been thousands of years. You're still lingering on those rings?"`
@@ -1896,6 +1909,8 @@ mission "Resistance: Join"
 	on complete
 		set "language: Coalition"
 		event "first resistance unlock"
+		log "People" "Elirom" "While extremely disappointed with the ending of the interview Oobat conducted with the Quarg, Elirom seemed intrigued by the change in the Quarg's skin colour. He seemed to think it was linked to some emotion."
+		log "Returned with Oobat to the other Lunarium leaders, with the recorded interview. Tummug will work on editing it into a more effective propaganda piece, and was given a Coalition translator by Chiree having become an official member of the Lunarium Redoubt."
 		conversation
 			`When you and Oobat reach the Lunarium's complex, you're welcomed back by Chiree, Elirom and Tummug. "Told you I did that come back safely, they would," Tummug says to Elirom. "So, well enough to use in our efforts, was it?"`
 			`	Oobat shows them the recording, satisfaction clear on their faces as they listen to the Quarg. The mood darkens when the last question appears, however. Once it ends, Elirom stands up and heads to the nearest wall, slamming an arm onto it. Chiree sighs, and turns to Tummug, "Worth using the footage still, is it?"`
@@ -1909,12 +1924,12 @@ mission "Resistance: Join"
 			`	She chuckles, and nods before leaving the room, following Tummug out of the Lunarium complex.`
 			branch heliarch
 				has "assisted heliarch"
-			`	Chiree approaches you and hands you a small box. You pick it up, and upon cursory examination, notice it's one of the Coalition's translation devices. "One of us you now are, so capable of understanding what we say without others aiding you, you should be," she says. "Still readying ourselves for major assaults on the Heliarchs, we are. A difficult fight against them, we will have, all the way. Hoping, I am, that with your help we can count, when the time comes."`
+			`	Chiree approaches you and hands you a small box. You pick it up, and upon cursory examination, notice it's one of the Coalition's translation devices. "One of us you now are, so capable of understanding what we say without others aiding you, you should be," she says. "Still readying ourselves for major assaults on the Heliarchs, we are. A difficult fight against them, we will have, all the way. Hoping, I am, that on your help we can count, when the time comes."`
 				goto end
 			label heliarch
-			`	You look to Chiree, and see her brushing her frontmost left leg with the tip of her right one, as if cleaning away something. Once she's done, you see various bolts and a metal texture revealed. "Lost two of my legs to a Heliarch attack, I did. Used to the prosthetics, I've grown, but faded away from my memory, that day has not." She stares at you. "Aware, we are, that helped the Heliarchs before, you have. Ask about specifics, I did not, for wish to know, I do not. Harmless work, it may have been. Or, helped them mutilate others like they did with me, you may have." She approaches you, handing you a small box: one of the Coalition's translation devices. "One of us, you now are. Hear of any more aid to the Heliarchs from your part, I will not."`
+			`	You look to Chiree, and see her brushing her frontmost left leg with the tip of her right one, as if cleaning away something. Once she's done, you see various bolts and a metal texture revealed. "Lost two of my legs to a Heliarch attack, I did. Used to the prosthetics, I've grown, but faded away from my memory, that day has not." She stares at you. "Aware, we are, that helped the Heliarchs before, you have. Ask about specifics, I did not, for wish to know, I do not. Harmless work, it may have been. Or, helped them mutilate others like they did with me, you may have." She approaches you, handing you a small box: one of the Coalition's translation devices. "One of us, you now are. Hear of any more aid to the Heliarchs from you, I will not."`
 			label end
-			`	You say your goodbyes, and you're escorted out of the complex and back to your ship. The Kimek who brought you there enter the ship with you briefly, and inform you that they've sent word across their major bases in the Coalition about your joining up. You're told that you'll find some new outfits available in their secretive outfitters. When they leave, you start tinkering with the translation device, figuring how to configure it to translate from each of the languages, and testing it with local transmissions and broadcasts. After half an hour or so, you're decently fast with it, to the point where you can change what language it translates to or from a few times in a second.`
+			`	You say your goodbyes, and are escorted out of the complex and back to your ship. The Kimek who brought you there enter the ship with you briefly, and inform you that they've sent word across their major bases in the Coalition about your joining up. You're told that you'll find some new outfits available in their secretive outfitters. When they leave, you start tinkering with the translation device, figuring how to configure it to translate from each of the languages, and testing it with local transmissions and broadcasts. After half an hour or so, you're decently fast with it, to the point where you can change what language it translates to or from a few times in a second.`
 			`	It may be a long time still before the Lunarium is ready to take up arms against the Heliarchs, so for now you figure you could help by looking into what minor jobs they may have for you.`
 
 event "first resistance unlock"
@@ -1932,3 +1947,45 @@ event "first resistance unlock"
 		outfitter "Resistance Basics"
 	planet "Refuge of Belugt"
 		outfitter "Resistance Basics"
+
+
+
+mission "Chiree log 1"
+	landing
+	invisible
+	to offer
+		has "Resistance: Quarg Interview: active"
+		not "Resistance: Smugging: Charity 1: done"
+	on offer
+		log "People" "Chiree" "Chiree, a Kimek, is a leader in the Lunarium."
+		fail
+
+mission "Elirom log 1"
+	landing
+	invisible
+	to offer
+		has "Resistance: Quarg Interview: active"
+		not "Resistance: Evacuation 1: done"
+	on offer
+		log "People" "Elirom" "Elirom, a Saryd, is a former Heliarch Arbiter who defected to the Lunarium over a hundred years ago."
+		fail
+
+mission "Tummug log 1"
+	landing
+	invisible
+	to offer
+		has "Resistance: Quarg Interview: active"
+		not "Resistance: Propagand 1: done"
+	on offer
+		log "People" "Tummug" "Tummug, an Arach, is a leader in the Lunarium. He focuses on spreading word of their cause and the truth about the Heliarchs."
+		fail
+
+mission "Pyakri log 1"
+	invisible
+	landing
+	to offer
+		has "Resistance: Quarg Interview 1: active"
+		not "Resistance: Combat Training 1: offered"
+	on offer
+		log "People" "Pyakri" "Pyakri is a leader in the Lunarium. She is one of their most senior militia officers."
+

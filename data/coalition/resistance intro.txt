@@ -498,6 +498,10 @@ mission "House Bebliss 1-A"
 					decline
 			`	He nods in some quick gesture, and gives you some coordinates. "To an estate, these will bring you. Thankful for your understanding, House Bebliss is." He finishes up his drink quickly, and leaves the bar to inform his superiors that you'll be on your way to <planet>.`
 				accept
+	on accept
+		log "Accepted an invitation from a representative of the Arach House Bebliss to visit his superiors who wish to offer a job."
+	on decline
+		log "Rejected an invitation from a representative of the Arach House Bebliss to visit his superiors who wish to offer a job. Told him they should come in person next time."
 
 mission "House Bebliss 1-B"
 	name "Eight Legged Hosts"
@@ -512,6 +516,7 @@ mission "House Bebliss 1-B"
 		not planet "Factory of Eblumab"
 	destination "Factory of Eblumab"
 	on offer
+		log "Somewhat surprisingly, the higher-ups in House Bebliss with the job offer actually came in person. They still won't give details about the job away from their private estate, though."
 		conversation
 			`On your way to the spaceport, you're stopped by a duo who seem to be Arachi businessmen, surrounded by half a dozen bulky, taller Arachi. "In person, as per your request, we have come, Captain," one of the two in fancy suits says.`
 			choice
@@ -521,7 +526,7 @@ mission "House Bebliss 1-B"
 					goto remember
 			`	"To our employee, what you said, it is," they answer. "To 'come in person next time' you requested."`
 			label remember
-			`	They 'invite' you to follow you into what looks like an expensive restaurant, serving typical Arach cuisine. The bulky Arachi don't give you much of a choice, barring you from going elsewhere, only letting up when you are seated. The two Arachi businessmen say they will pay for your meal, though you can't quite find much in the menu appealing to the human palate.`
+			`	They 'invite' you to follow them into what looks like an expensive restaurant, serving typical Arach cuisine. The bulky Arachi don't give you much of a choice, barring you from going elsewhere, only letting up when you are seated. The two Arachi businessmen say they will pay for your meal, though you can't quite find much in the menu appealing to the human palate.`
 			`	"Usually more... respectful about such requests from our House, people are, but hasty of us to approach a human Captain like we would an Arach one, it may have been," one of them says, going through the menu. "Still interested, the House is, so to entertain your request, we came."`
 			`	"Interested in your assistance, that is," the other continues, as he signals for one of the bodyguards to get a waiter. "An important job for you, we have."`
 			choice
@@ -557,10 +562,10 @@ mission "House Bebliss 2-FW"
 			`	"Difficult to replicate, some of these human drinks were, but for a special guest, the least we could do, it is," another one approaches, gesturing for you to pick one of the drinks, while signalling for another maid to bring him and the other two some drinks of their own.`
 			choice
 				`	"Thank you, but why exactly did you want to talk to me so badly?"`
-				`	"You asked me to come here for a job. What is the job?"`
+				`	"You asked me to come here for a job. What is it?"`
 			branch resistance
 				has "Resistance: Questions: done"
-			`	"The great House Bebliss, we represent. Maintain the local hyperspace communication network, our House does," he says as he swirls the drink in his cup before taking a sip.`
+			`	"The great House Bebliss, we represent. The local hyperspace communication network, our House maintains," he says as he swirls the drink in his cup before taking a sip.`
 			`	The other one jumps in as he gulps down his drink, "Studied hyperspace links, for millennia we have. More recently, an application of such phenomena that would help the Coalition, we have searched for."`
 				goto choice
 			label resistance
@@ -577,7 +582,7 @@ mission "House Bebliss 2-FW"
 				`	"I see. Well, yes, we were invaded by aliens known as the Pug."`
 					goto pug
 				`	"And how did the Heliarchy know?"`
-			`	"In 'their' space, are you not? Scanned by their ships, you were. Subtly amassed, your flight records, your charted map of the galaxy, were," she finishes, and her and the other two look to you, waiting for your answer.`
+			`	"In 'their' space, are you not? Scanned by their ships, you were. Subtly, your flight records, your charted map of the galaxy, were amassed," she finishes, and her and the other two look to you, waiting for your answer.`
 			choice
 				`	"Human space was invaded by a species known as the Pug."`
 			label pug
@@ -613,6 +618,10 @@ mission "House Bebliss 2-FW"
 			label decline
 			`	They stare at you in surprise for a bit, glancing at one another a few times. They sigh. "Very well, understandable, that is," one of them says. They ask for some more drinks, and have some servants escort you back to your ship.`
 				decline
+	on accept
+		log "Met members of House Bebliss on their private estate. They knew about the war and alien invasion in human space, but had an intense reaction to the knowledge that the Pug were the invaders. Agreed to take a proposal to Freya on Pugglemug from them, they seem interested in the technology left by the Pug, especially relating to hyperspace links, and her work with it."
+	on decline
+		log "Met members of House Bebliss on their private estate. They knew about the war and alien invasion in human space, but had an intense reaction to the knowledge that the Pug were the invaders. Declined to take a proposal to Freya on Pugglemug from them, they seem interested in the technology left by the Pug, especially relating to hyperspace links, and her work with it."
 
 mission "House Bebliss 3-FW"
 	name "Warn the Free Worlds"

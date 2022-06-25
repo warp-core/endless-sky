@@ -1520,9 +1520,12 @@ mission "Resistance: Combat Training 1"
 	on offer
 		require "Jump Drive"
 		conversation
-			`After wandering the spaceport for a while, you notice a crowd of dozens of individuals heading to the hangars, specifically in what looks like the direction of your ship. A roughly equal number of Kimek and Arachi, with some Saryds as well, they stand in front of the <ship>, looking around as if searching for its captain. You approach them, and one of the Kimek, whose thorax and abdomen are slimmer than the usual for a Kimek, meets you to speak for their group.`
+			`After wandering the spaceport for a while, you notice a crowd of dozens of individuals heading to the hangars, specifically in what looks like the direction of your ship. A roughly equal number of Kimek and Arachi, with some Saryds as well, they stand in front of the <ship>, looking around as if searching for its captain. You approach them, and one of the Kimek, whose thorax and abdomen are slimmer than the average Kimek's, meets you to speak for their group.`
 			branch resistance
 				has "Resistance: Questions: done"
+			action
+				log "People" "Pyakri" "Pyarkri is a Kimek and a military leader in the Lunarium."
+				log "People" "Pyakri" "She is conducting space combat training for some Lunarium members by having them buy ships in human space and then engage pirates with them."
 			`	"There you are, Captain <last>," she greets you. "Pyakri, my name is, and looking for your transport services, me and my friends are. Talk in your ship, could we? Wish to discuss the details there, I do."`
 			choice
 				`	"Sure, let me get the hatch."`
@@ -1533,14 +1536,16 @@ mission "Resistance: Combat Training 1"
 				`	"What's this 'endeavor' you need help with?"`
 					goto help
 				`	"Your friends only told me what I was really doing after I was done. I don't want to help you any further."`
-			`	"Why, interested are you in helping the Heliarchs instead? Worked with them, some of our members had. An arbiter, Elirom, one of them, was. One of the highest ranks, that is, second only to the consuls themselves," she responds, getting closer to you. "Change, for the better, the Coalition soon will. Difficult it will be, to take down the Heliarchy. Very strong they are, so greatly appreciated any help would be, and appropriately reward those who helped us, we will, once free from them we are."`
+			`	"Why, interested are you in helping the Heliarchs instead? Worked with them, some of our members had. An arbiter, Elirom, one of them, was. One of the highest ranks, that is, second only to the consuls themselves," she responds, getting closer to you. "Change, for the better, the Coalition soon will. Difficult it will be, to take down the Heliarchy. Very strong they are, so greatly appreciated any help would be, and appropriately reward those who help us, we will, once free from them we are."`
 			choice
 				`	"And what would I have to do to help you?"`
 					goto help
 				`	"Why do you want to take down the Heliarchs? Seems to me the Coalition is doing very well under them."`
 				`	"Whether you and your friends win or lose, I want no part in it. I'm not helping you."`
 					decline
-			`	"Of course, only shown what they want to be shown, you are. An achievement of the current Heliarchs, what prosperity we have is not, and furthering that prosperity, they most certainly are not!" She quickly slows down her breathing after the exclamation, calming down. "Grown paranoid, they have. Seen a Quarg in millennia, nobody in the Coalition has, but think they do, that to fight the Quarg their purpose is. Making enemies, taking prisoners of their own people, they have been." She backs away slightly, her mandibles clicking in some low murmur. "Leave I will, if interested you are not, but in need of help we are, Captain."`
+			action
+				log "Apparently, no one has seen a Quarg in the Coalition in millenia."
+			`	"Of course, what they want you to see, they only show. An achievement of the current Heliarchs, what prosperity we have is not, and furthering that prosperity, they most certainly are not!" She quickly slows down her breathing after the exclamation, calming down. "Grown paranoid, they have. Seen a Quarg in millennia, nobody in the Coalition has, but think they do, that to fight the Quarg their purpose is. Making enemies, taking prisoners of their own people, they have been." She backs away slightly, her mandibles clicking in some low murmur. "Leave I will, if interested you are not, but in need of help we are, Captain."`
 			choice
 				`	"Help with what, exactly?"`
 				`	"I'm sorry, but helping your group any further sounds too risky to me."`
@@ -1554,6 +1559,8 @@ mission "Resistance: Combat Training 1"
 			`	She perks up with your answer. "<bunks> in total, we are. Wish to cause a commotion in human space, we do not, so bringing along <cargo> to sustain ourselves for a while, we are. Avoid leaving the ships at all, we will."`
 				goto accept
 			label resistance
+			action
+				log "People" "Pyakri" "She is conducting space combat training for some Lunarium members by having them buy ships in human space and then engage pirates with them."
 			`	You recognize her as Pyakri, a Lunarium military leader who you met on Remote Blue, and bring her aboard your ship to talk. "Looking for you I have been, Captain <last>. Need your help I do, for a training endeavor of sorts."`
 			choice
 				`	"What do you need help with?"`
@@ -1565,6 +1572,8 @@ mission "Resistance: Combat Training 1"
 			label accept
 			`	She asks you to open the hatch, and she has a few more members from the crowd come in. They ask for your map, and then for the nearest hub of pirate activity. You point to Shaula, home to Greenrock, the biggest pirate world in southern human space, telling them it's one of the most dangerous ones. They then ask if there are any major shipyards in the South, and you point them to Southbound Shipyards, on <planet>, and the Tarazed Corporation, on Wayfarer. After some debate, they decide that <planet>'s proximity to the Coalition makes it a better pick in case they need to return quickly, and settle on that as the destination. "Bringing along enough credits to purchase a few warships, I hope we are," Pyakri comments. They have their <cargo> brought to your ship, and you show them to their bunks.`
 				accept
+	on accept
+		log "Agreed to transport a group of Lunarium fleet leaders to human space where they will buy ships and improve their space combat skills against the pirates, in preparation for eventual confrontations with the Heliarch forces."
 	on visit
 		dialog `You've reached <planet>, but your escort bringing Pyakri and the other Lunarium members and their supplies hasn't entered the system yet. Better depart and wait for them.`
 
@@ -1602,6 +1611,8 @@ mission "Resistance: Combat Training 2"
 				`	"I'm more worried that the... speech pattern will give you away."`
 				`	"Well, if you think you'll be alright, sure."`
 					goto accept
+			action
+				log "People" "Pyakri" "Pyakri was quite distressed to discovery that Coalition translator have a strange speech pattern when translating to the human language. These issues are apparently not present when translating the other way or between the languages of the Coalition. The Heliarchs have apparently never been informed."
 			`	"Pattern?" She looks at you, confused, and so you explain of the Coalition's translator boxes' quirk. You ask her to simply type something into your monitor, with the aid of the same translating software, and point to her the jumbled words when it translates to your language. "And always like this, our translators have been?" she asks in disbelief. You nod, and in either some act of shame, or anger, she cowers her legs closer to her body, while tapping the ground with them erratically. "Work perfectly for translating from the human language, they do, and problems between the Coalition languages, there are not... Reported before, this issue was not. Not to the Heliarchs, not to us! An embarrassment, that is..." She sighs, jumping her legs back to normal. "Once in power, we are, talk to Oobat about fixing them, I will. For now, hope I will that need to communicate with humans much, we will not."`
 			label accept
 			`	Once all the purchased ships are parked near your own, you give her another rundown, this time of the job board. You help her learn the layout of bounty hunting jobs, and give her some tips on locating ships with bounties on them. Hours after nightfall, you see the hangars become much less lively, with only the night shift workers moving about. You open the hatch and make sure the coast is clear before moving with the Lunarium members to the Bastion, parked closest to your own ship. The members assigned to that ship enter the hatch, Pyakri included, and you repeat the process with the others, heading to the Argosies in front of you. After the last of them, you move in quick trips to each of the Clippers, finally looping back to your ship once you're done. With everyone now in their own ship, you ask some workers to help move the supplies right by the hatches. Once the workers have moved away, the Lunarium crew open up to bring the cargo inside, and you head to the Bastion to meet with Pyakri.`
@@ -1633,6 +1644,7 @@ mission "Resistance: Combat Training 2"
 	on complete
 		event "resistance training: shaula back to normal"
 		event "resistance training done" 96 148
+		log "Successfully escorted Pyakri's group on a training operation, defeating pirates in the Shaula system. She says she and her cohorts will spend some time training with smaller bounties until they are able to take on larger fleets on their own."
 		conversation
 			`Pyakri contacts you right as you land, by a text message in your monitor. "A great help you were, Captain! More... veteran members, if you could call them that, the crew I brought are, so much trouble with their morale, I had not, but still worried, the pirates had me. Used to human ships, we are not, so fly them well enough to combat such fleets, we cannot. Not yet. Now that guided us through this first fight, you have, work on our own for a while - taking smaller, simpler bounties - we will. Contact you again, I shall, once done with our training, we are."`
 
@@ -1672,6 +1684,7 @@ mission "Resistance: Combat Training 3"
 	to fail
 		has "Heliarch Investigation 2: active"
 	on offer
+		log "Pyakri and her group have finished their training in human space and requested transport back to the Coalition."
 		conversation
 			`Your monitor shifts into a messaging interface as you're landing, and some text quickly pours in. "Captain, hello. Pyakri, it is. In the last few months, fought many human pirates, and managed to practice and hone fleet movements, we have. Return to the others in the Coalition, we now must, so need your help again, we will. Waiting on <planet>, we will be." The message ends and your monitor returns to normal. You set a marker on <destination> to head there later and pick up the Lunarium members.`
 				accept
@@ -1699,10 +1712,10 @@ mission "Resistance: Combat Training 4"
 				`	"Did you manage to fight the pirates well enough?"`
 					goto pirates
 				`	"Honestly I'm surprised you didn't lose anyone. Some of the ships you bought aren't exactly made for fighting."`
-			`	She clicks her mandibles quickly. "Neither are ours. Coalition ships, I mean. Of weaker materials, our civilian vessels are made, with less intricate hull matrixes, less space for weaponry. With that knowledge, intentionally choose ships on the more fragile side for this training, I did. Focused on fighting heavier human ships, we were, to simulate that difference in durability and firepower," she explains. "Of course, with Heliarch ships, much greater the gap is, but a useful experience it has been regardless."`
+			`	She clicks her mandibles quickly. "Neither are ours. Coalition ships, I mean. Of weaker materials, our civilian vessels are made, with less resilient shield matrices, and less space for weaponry. With that knowledge, intentionally choose ships on the more fragile side for this training, I did. Focused on fighting heavier human ships, we were, to simulate that difference in durability and firepower," she explains. "Of course, with Heliarch ships, much greater the gap is, but a useful experience it has been regardless."`
 				goto accept
 			label pirates
-			`	"Lie I will not, difficult the first few months were. Very used to the Coalition, to our equipment, we were, so forget that the ships had no hull repair capabilities of their own, we many times did," she passes her two front legs over her head a few times, as if brushing it in some shame. "Lucky we were, that no casualties we had. At least, a good way to improvise mid-battle rescues, it all was." she finishes, perking up her head.`
+			`	"Lie I will not, difficult the first few months were. Very used to the Coalition, to our equipment, we were, so forget that the ships had no hull repair capabilities of their own, we often did," she passes her two front legs over her head a few times, as if brushing it in some shame. "Lucky we were, that no casualties we had. At least, a good way to improvise mid-battle rescues, it all was." she finishes, perking up her head.`
 			label accept
 			`	She tells you that they're ready to head back to the Coalition, to <destination>, where they'll head back to their respective bases and share their newfound experience with Lunarium recruits. You help Pyakri and the rest to their bunks, and set a course for <planet>.`
 				accept
@@ -1710,6 +1723,7 @@ mission "Resistance: Combat Training 4"
 		dialog `You've reached <planet>, but your escort bringing Pyakri and the other Lunarium members hasn't entered the system yet. Better depart and wait for them.`
 	on complete
 		"assisted resistance" ++
+		log "Returned Pyakri's group to Coalition space following their time training in the art of space combat in human space."
 		conversation
 			`Shortly after you land, several groups come meet some of the Lunarium members, escorting them to their ships, which depart right away, while the remaining members leave straight for the city. "Gotten word of our return, the others have yet not, so wait here for more ships to bring them to the planet they normally operate from, they will," Pyakri explains.`
 			branch resistance

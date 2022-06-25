@@ -949,11 +949,13 @@ mission "Resistance: Evacuation 2"
 				`	"Sure thing, it's no problem helping with this."`
 					goto end
 				`	"There were only 33, actually."`
-			`	"Only... oh, I..." he pauses for a few seconds just as his voice cracks a little. "Forgive me, Captain, mistaken, it appears I was. Mixed up the number of passengers with that of another client, I did. Pay more attention next time, I shall." He thanks you again, and ends the call.`
 			action
 				log "Elirom seemed a little distraught at having mixed up the number of passengers. It didn't affect the payment."
+			`	"Only... oh, I..." he pauses for a few seconds just as his voice cracks a little. "Forgive me, Captain, mistaken, it appears I was. Mixed up the number of passengers with that of another client, I did. Pay more attention next time, I shall." He thanks you again, and ends the call.`
 				accept
 			label resistance
+			action
+				log "People" "Elirom" "At the moment, Elirom is overseeing evacuation operations for the Lunarium."
 			`	"<last>! A life saver, you are, quite literally," he says. "Handling other evacuations, I still am, so be there to thank you in person, I could not, but know that deeply grateful for your saving those 35, I am. Contact you again I will, when in need of more help rescuing members we are."`
 			choice
 				`	"Of course, I'd be glad to help again."`
@@ -995,7 +997,9 @@ mission "Resistance: Evacuation 3"
 				`	"I'm just not interested in working with you anymore, no."`
 					decline
 			label accept
-			`	"Contracted us for transport to <planet>, some Arach ranchers did. Attempting to start a longcow business on the deserts of Shifting Sand, they are, and hoping for a loan from a prestigious bank on <planet>, to start off a new expansion to the ranch they were. <bunks> they are, in total, both ranchers and their employees. Only..." He pauses for a moment, as if considering something. "Difficult, the Arachi can be at times. Once discovered they had, that the captain of their original transport was originally from a rival Arach House, refusing to return with him, they have. Given us until <date> to find a new transport, before they cancel out on us, they have."`
+			`	"Contracted us for transport to <planet>, some Arach ranchers did. Attempting to start a longcow business on the deserts of Shifting Sand, they are, and hoping for a loan from a prestigious bank on <planet>, to start off a new expansion to the ranch they were. <bunks> they are, in total, both ranchers and their employees. Only..." He pauses for a moment, as if considering something. "Difficult, the Arachi can be at times. That of their first transport, originally from a rival Arach house, the captain was, they discovered. Now, to return abourd his ship, they have refused. Given us until <date> to find a new transport, before they cancel out on us, they have."`
+			action
+				log "Agreed to help Elirom by transporting some Arach ranchers who refuse to complete their return journey under a captain originating from a rival House."
 			`	He says you'll receive 748,300 credits once the ranchers are back on Shifting Sand, and urges you to hurry to <destination> before <date>, so that the Arachi don't cancel the transport.`
 				accept
 			label resistance
@@ -1005,8 +1009,12 @@ mission "Resistance: Evacuation 3"
 				`	"I'll go there right away."`
 					goto end
 				`	"How do you keep getting information about these fleets?"`
+			action
+				log "Lunarium Redoubt" "A mysterious benefactor uses the infrastructure of the Arach Houses Bebliss and Idriss to secretively feed the Lunarium up-to-date Heliarch fleet movements. The information provided is never wrong."
 			`	He collects his thoughts for a while, before answering, "Work together to provide us secretive, quick data, Houses Bebliss and Idriss do. From them, the messages come. But, not by them, the information is found. Someone... something maybe, spying on the Heliarchs is. Not one of ours." He pauses again. "Doubted them myself, at first I had. But, never wrong, the information is, almost as if..." He trails off.`
 			label end
+			action
+				log "Agreed to another evacuation job for Elirom of the Lunarium. This time the cover is that the passengers are Arach ranchers who have refused to continue their journey aboard their original transport due to an argument."
 			`	"Attempting to pass as ranchers, they are. On a trip to <planet>, but an argument with their original transport, they had. If stopped, you are, tell them that, you should. Remember, <date>. Hopefully still there when you arrive, all <bunks> of them are." He wishes you good luck, and leaves your ship.`
 				accept
 	on visit
@@ -1035,6 +1043,8 @@ mission "Resistance: Evacuation 4"
 				`	"Got it, we'll leave soon."`
 					goto accept
 				`	"How did getting that loan go?"`
+			action
+				log "Picked up the ranchers. There doesn't seem to have been a mistake in the numbers this time. One seemed a little confused when asked about the loan they were here to acquire, though."
 			`	"What?" She looks at you with puzzled eyes, until another Arach lightly whacks one of her legs. "Ah, yes, the loan. Well enough. Agreed to grant us the amount needed, they have." She looks back at the other Arach, who stares at her for a moment. "Well, very tired we all are, Captain, so head to my bunk, I will."`
 				goto accept
 			label resistance
@@ -1072,6 +1082,8 @@ mission "Resistance: Evacuation 4"
 			`	"At the moment, I did not, and available in time to rescue them, none of my ships would be," he explains. "Come here with the first ship that returned, I did. Wished to apologize to them in person, though it seems that hear any of it, they will not..."`
 				goto end
 			label happy2
+			action
+				log "People" "Elirom" "Elirom was once a Heliarch Arbiter, apparently, a high rank in their organization. Many of the Lunarium still do not trust him and blame him for tragedies that have affected their fammilies."
 			`	"No, they were not." He sighs. "A Heliarch, I once was. Arbiter. High rank. Thought untrustworthy by many of the Redoubt, I still am. Think, some of them do, that responsible for tragedies that came to their families, I was." He continues watching the group walk away, until they all disappear into the spaceport village. "That they are wrong, I hope."`
 			label end
 			`	He thanks you for helping out again, and says he'll be in contact if he needs any more of your help.`
@@ -1103,12 +1115,18 @@ mission "Resistance: Evacuation 5"
 					goto glad
 				`	"Can't they just wait a bit longer for you to send another ship?"`
 				`	"I'm sorry, but I'm busy right now."`
-			`	He reaches into his clothes, and pulls out many credit chips. "Please, Captain. Answer all your questions, I will, once safely here they are," he drops the chips on your hands, and you count <payment> in total. "Paid much more for bringing them here, you will be. Send word for them to wait for you, I will. Please help us this one more time, <last>." He looks at you for a moment, then bows lightly before leaving.`
+			action
+				log "'Agreed' to handle another transport job for Elirom, though not much choice was given. He seems desperate to get it done quicker than is possible without a jump drive, even though the matter doesn't appear to be time sensitive. Still, he paid a lot up front and has promised much more when the job is complete."
+			`	He reaches into his clothes, and pulls out many credit chips. "Please, Captain. Answer all your questions, I will, once safely here they are," he drops the chips on your hands, and you count <payment> in total. "Paid much more upon completion, you will be. Send word for them to wait for you, I will. Please help us this one more time, <last>." He looks at you for a moment, then bows lightly before leaving.`
 				accept
 			label glad
-			`	He sighs in relief, then pulls out many credit chips, placing them on your hands. You count <payment> in total. "Paid much more you will be, once safely here, the immigrants are. Send word for them to expect you, I shall." He bows lightly, then leaves.`
+			action
+				log "Agreed to handle another transport job for Elirom. He seems desperate to get it done quicker than is possible without a jump drive, even though the matter doesn't appear to be time sensitive. Still, he paid a lot up front and has promised much more when the job is complete."
+			`	He sighs in relief, then pulls out many credit chips, placing them on your hands. You count <payment> in total. "Paid much more you will be, once safely arrive, the immigrants do. Send word for them to expect you, I shall." He bows lightly, then leaves.`
 				accept
 			label resistance
+			action
+				log "Agreed to evacuate over a hundred members of the Lunarium from a world that can only be reached in time with a jump drive. The Heliarchs have already found dozens. Elirom paid significantly up front and has promised much more once the passengers arrive safely. The cover story is that they are immigrants hired by House Idriss being transported to Ablub's Invention."
 			`Entering the spaceport, you hear a rushed galloping getting closer, and recognize Elirom rushing towards you. "Your ship," he says when he's beside you, and you two move to the <ship> to talk. "A particularly urgent matter, this is," he says once you're inside. "Looking for our members on <planet>, the Heliarchs are. Found, dozens have already been, and even more Heliarch by <date> will there arrive. Make it in time, none of our ships can, too far away it is. You, however, a jump drive possess. Rescue the <bunks> remaining, you must." He hands you <payment>. "Much more I will give you, once safely back on Ablub's Invention you are. If stopped by the Heliarchs you are..." He trails off for a while, tapping one hoof repeatedly on the floor. "If stopped you are, tell them that transporting immigrants to their new homes on Ablub's Invention, you will. Hired by House Idriss, they have been." He urges you to go to <destination> immediately, wishing you good luck, and leaves your ship.`
 				accept
 	on visit
@@ -1129,16 +1147,22 @@ mission "Resistance: Evacuation 6"
 		has "Heliarch Investigation 2: active"
 	on offer
 		conversation
-			`The moment your ship touches down on the hangar you can already see a very large group of Saryds waiting. When you open your hatch, they rush in dozens at a time, and you catch some Kimek and Arachi in the middle, struggling to keep with the galloping mass. Once everyone is inside, you run a passenger count: only <bunks> of the 116 are on board. You look out, and see nobody else coming to your ship. One of the older Saryds approaches you, pressing the button to close the hatch. "Leave we must," he says. Looking back to the Saryd crowd, many of the adults are comforting their children. The sobs of one Saryd girl in particular drown out the others.`
+			`The moment your ship touches down in the hangar you can already see a very large group of Saryds waiting. When you open your hatch, they rush in dozens at a time, and you catch some Kimek and Arachi in the middle, struggling to keep with the galloping mass. Once everyone is inside, you run a passenger count: only <bunks> of the 116 are on board. You look out, and see nobody else coming to your ship. One of the older Saryds approaches you, pressing the button to close the hatch. "Leave we must," he says. Looking back to the Saryd crowd, many of the adults are comforting their children. The sobs of one Saryd girl in particular drown out the others.`
 			branch resistance
 				has "Resistance: Questions: done"
+			action
+				log "Collected the immigrants. Two dozen fewer than expected. Many of those who arrived seemed distraught."
 			choice
 				`	"I was told there were 116 of you for me to pick up. We only have 91."`
 				`	"Alright, we'll leave in a few minutes."`
 					goto launch
+			action
+				log "Some of those passengers are also extremely eager to leave, to the point of aggression."
 			`	He squints, clenching his hands into fists and then relaxing them again. "Only 91 you are getting. Take us away from here, now, or fly your ship myself, I will."`
 				goto launch
 			label resistance
+			action
+				log "It seems even with the jump drive, it was not possible to arrive soon enough for everyone here. Over two dozen haven't made it, many of those who have are distraught."
 			choice
 				`	"Understood. We'll leave in a few minutes."`
 					goto launch
@@ -1159,16 +1183,22 @@ mission "Resistance: Evacuation 6"
 			choice
 				`	"What were all of them so worked up about?"`
 				`	"What's really going on with you and your company?"`
-			`	He looks into your eyes for a few seconds, before taking a long look around the hangars. "Talk inside your ship, we should." You two head inside, and you close the hatch. He sits down, and begins, "A transport company, I do not own. No company at all, I own. Transporting students, ranchers, immigrants, you were not." He looks at you intensely. "Saving lives, what you have been doing is. Saving them," he points to outside your ship.`
+			`	He looks into your eyes for a few seconds, before taking a long look around the hangars. "Talk inside your ship, we should." You two head inside, and you close the hatch. He sits down, and begins, "A transport company, I do not own. No company at all, I own. Transporting students, ranchers, and immigrants, you were not." He looks at you intensely. "Saving lives, what you have been doing is. Saving them," he points to outside your ship.`
 			choice
 				`	"Saving them? From what?"`
 					goto what
 				`	"I just flew them from one planet to another."`
-			`	"And in doing so, saved their lives, you have," he responds. "The truth, it was, that arrive to the planets I sent you in time, my other ships would not, but not in a hurry due to contracts, we were. Searching for them, the Heliarchs were, and on their way, Punisher fleets were. Captured, all those you rescued would have been, if arrived before you, those Punishers had."`
+			`	"And in doing so, saved their lives, you have," he responds. "The truth, it was, that arrive to the planets I sent you in time, my other ships would not, but not in a hurry due to contracts, we were. For them, the Heliarchs searched, and on their way, Punisher fleets were. Captured, all those you rescued would have been, if arrived before you, those Punishers had."`
 				goto reveal
 			label what
 			`	"Why, the Heliarchs. Our so-called 'protectors.' Paranoid, self-decorated butchers in their rooms deep within the rings..." He looks to the ground, disgust written on his face. "Preying on us for many centuries, they have been. With what insanities they invent and worship, their actions they justify."`
 			label reveal
+			action
+				set "Lunarium introduced"
+				log "People" "Elirom" "Elirom does not actually own a transport company, or any other sort of company for that matter. He is, in fact, a leading member of the Lunarium Redoubt, a resistance movement within the Coalition, aiming to free it from the Heliarchs' rule."
+				log "People" "Elirom" "Born and raised on Saros, Elirom was always fascinated by the Heliarchs, enlisting in the Academy of Cadets as soon as possible. He served for 67 years, the last 18 as an Arbiter, before doing the "right thing", joining the Lunarium. He has been a member for decades now."
+				log "People" "Elirom" "He has been overseeing evacuation operations to help Lunarium members, and their (sometimes orphaned) children escape the Heliarch forces closing in on them."
+				log "It turns out the transport jobs were actually evacuations, and the passengers weren't students, ranchers, and immigrants, but members of the Lunarium who needed to escape Heliarch forces closing in on them."
 			choice
 				`	"The Heliarchs were looking for them? So they- you all are criminals?"`
 				`	"Who are you?"`
@@ -1185,6 +1215,8 @@ mission "Resistance: Evacuation 6"
 			label angry
 			`	"That he is. A difficult thing to go through, it is. Used to such rough talk, I've grown."`
 			label end
+			action
+				log "Elirom says hw on't ask for further help directly for a long time, but others of hte Lunarium maybe be make contact."
 			`	He comes closer to you, slouching down and speaking quietly, "Come ask for your help directly again, for a long time I may not, but still in need of help saving our members, we will be. Very grateful, we would be, if help us again when we need it, you would." He pulls back, and extends his arm to shake your hand. He looks at the sky just before he leaves, "Steer clear from the sun you should, <last>." He thanks you again, and leaves to accompany the rescued members.`
 
 

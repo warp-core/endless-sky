@@ -23,7 +23,7 @@ mission "Heliarch Investigation 1"
 	destination "Ring of Friendship"
 	on offer
 		conversation
-			`A group of Heliarch agents rapidly approach you as you step onto the spaceport, looking rather agitated as they stand in front of you.`
+			`A group of Heliarch agents rapidly approach you as you step into the spaceport, looking rather agitated as they stand in front of you.`
 			`	"Looking for work, the human visitor is?" the Saryd asks.`
 			`	"To the <destination>, a means of transport we need," the Kimek follows.`
 			`	"<payment>, we can offer," the Arach finishes.`
@@ -36,6 +36,7 @@ mission "Heliarch Investigation 1"
 	on complete
 		"coalition jobs" ++
 		payment 90000
+		log "Transported three Heliarch agents, called Iplora, Kirrie, and Tugroob, to the Ring of Friendship. They seemed to be in a rush, and have promised more work in the spaceport."
 		conversation
 			`The three Heliarchs disembark, heading immediately across the spaceport, but not before Iplora hands you <payment>. "Speak with our superior, we must. Need your services again, we likely will, so if interested in further work, you are, look for us in the spaceport, you should."`
 
@@ -58,17 +59,17 @@ mission "Heliarch Investigation 2"
 	on offer
 		conversation
 			`The Heliarch trio you brought here approaches you when you enter the spaceport, Kirrie being the first to greet you, "Captain <last>! Glad I am, that still around, you are."`
-			`	"Accompany us, would you? A job in mind for you, our superior has." Iplora says.`
+			`	"Accompany us, would you? A job in mind, our superior has." Iplora says.`
 			choice
 				`	"I don't see why not, lead the way."`
-				`	"Not this time, I'm really busy now."`
+				`	"Not this time, I'm really busy right now."`
 					decline
 			`	The trio escorts you through a number of restricted passageways, eventually leading you to a meeting room of sorts with about a dozen other Heliarchs, one of whom motions for you to sit with them.`
 			`	You take a seat before one of the Kimek there speaks. "The honorable Captain, we salute. Make you feel welcome, I, Consul Iekie of the Heliarch council, hope we will."`
 			choice
 				`	"Nice to meet you."`
 				`	"Are you the one that has a job for me?"`
-			`	"Stable and safe, our great Coalition is. Sadly, there are some who ideas of revolt and rebellion spread," she says. "To combat these thoughts of disunion, we swore. Correct such behavior, we must," she says as she points to the three agents beside you. "Dedicated to that, our agents are, but often times slow and predictable, their tactics are. A different approach might be due, so an outsider's help, and their way of thinking, we'd like to ask for."`
+			`	"Stable and safe, our great Coalition is. Sadly, there are some who ideas of revolt and rebellion spread," she says. "To combat these thoughts of disunion, we swore. Correct such behavior, we must," she says as she points to the three agents beside you. "Dedicated to that, our agents are, but often times slow and predictable, their tactics can be. A different approach might be due, so an outsider's help, and their way of thinking, we'd like to enlist."`
 			choice
 				`	"What exactly would I have to do?"`
 				`	"In that case, I'm not interested. I thought this was some simple job, not a political matter."`
@@ -79,9 +80,11 @@ mission "Heliarch Investigation 2"
 				`	"Whether they go undercover or not, this seems a bit risky for me. Sorry, you'll have to find someone else."`
 					decline
 			`	"Your choice, that is," Iekie responds. "Known to these outlaws, many of our methods are. Easily predicted, our ordering would be."`
-			`	Some of the others explain that you will have to visit the following worlds they have deemed suspicious: Shifting Sand, in Saryd space, Into White, Fourth Shadow and Remote Blue, in Kimek space, and Mebla's Portion and Stronghold of Flugbu, in Arach space.`
-			`	They wish the four of you luck. You're escorted back to the spaceport, after which you show the 'tourists' to their bunks in your ship.`
+			`	Some of the others list the worlds they have deemed suspicious: Shifting Sand, in Saryd space, Into White, Fourth Shadow and Remote Blue, in Kimek space, and Mebla's Portion and Stronghold of Flugbu, in Arach space.`
+			`	They wish the four of you luck. You're escorted back to the spaceport, after which you show the 'tourists' to their bunks in your ship again.`
 				accept
+	on accept
+		log "People" "Iekie" "Iekie, a Kimek, is a Heliarch of the rank Consul, the highest there is."
 	on complete
 		"assisted heliarch" ++
 		log "Assisted the Heliarch in investigating several worlds around Coalition space, bringing their agents to each world to look for any signs of criminal activity."
@@ -104,11 +107,11 @@ mission "Heliarch Investigation 2"
 			`	Iekie turns to you once more, saying, "Quite a find, this is. Done well, you have, Captain."`
 				goto finalthanks
 			label evidence2
-			`	The agents then get closer to her before Iplora whispers something, handing her two separate reports.`
+			`	The agents then get closer to her before Iplora whispers something, handing her two additional reports.`
 			`	Iekie turns to you once more, saying, "Most useful to our investigation, these findings will prove. Excellent work, Captain."`
 				goto finalthanks
 			label evidence3
-			`	The agents then get closer to her before Iplora whispers something, handing her three separate reports.`
+			`	The agents then get closer to her before Iplora whispers something, handing her three additional reports.`
 			`	Iekie turns to you once more, saying, "Enviable, your prowess at investigation is, <last>. Outstanding work, Captain."`
 				goto finalthanks
 
@@ -122,11 +125,10 @@ mission "HI2-Bonus 1"
 		government "Coalition"
 	on offer
 		payment 300000
+		clear "resistance evidence"
 		conversation
-			apply
-				clear "resistance evidence"
-			`You receive a message from the Heliarch Consul Iekie as you go in for a landing.`
-			`	"Captain <last>! Analyzed your findings, we have. Brought light to some stolen equipment, your aid has, and for that, grateful we are. Sending a monetary bonus as thanks, I am."`
+			`You receive a message from the Heliarch Consul Iekie as you prepare to land.`
+			`	"Captain <last>! Analyzed your findings, we have. To some stolen equipment, your aid brought light, and for that, grateful we are. Sending a monetary bonus as thanks, I am."`
 			`	<payment> are transferred to your account.`
 				decline
 
@@ -140,10 +142,9 @@ mission "HI2-Bonus 2"
 		government "Coalition"
 	on offer
 		payment 700000
+		clear "resistance evidence"
 		conversation
-			apply
-				clear "resistance evidence"
-			`You receive a message from the Heliarch consul Iekie as you go in for a landing.`
+			`You receive a message from the Heliarch consul Iekie as you prepare to land.`
 			`	"Captain <last>! Analyzed your findings, we have. A great help, your assistance was, with finding two stashes of our stolen equipment. Investigating who was involved in such operations, my teams are. Grateful for your help, we are, so a monetary bonus, as thanks, I am sending."`
 			`	<payment> are transferred to your account.`
 				decline
@@ -158,10 +159,9 @@ mission "HI2-Bonus 3"
 		government "Coalition"
 	on offer
 		payment 1200000
+		clear "resistance evidence"
 		conversation
-			apply
-				clear "resistance evidence"
-			`You receive a message from the Heliarch Consul Iekie as you go in for a landing.`
+			`You receive a message from the Heliarch Consul Iekie as you prepare to land.`
 			`	"Captain <last>! Analyzed your findings, we have. Worry me greatly, all these stashes of stolen equipment do. Indebted to you, we are, as without your help found all these operations, we would not have. A monetary bonus, as thanks, I am sending. Deserve it, you do, Captain."`
 			`	<payment> are transferred to your account.`
 				decline
@@ -186,13 +186,13 @@ mission "HI2-MP"
 			choice
 				`	"Are you not going to follow their lead?"`
 				`	"Have you not decided how to investigate the planet?"`
-			`	"Captain <last>. An edge your human approach to these missions would give us, the consul said. Except underused, your foreign ideas are, if only the order at which we land on these planets, they are used for."`
+			`	"Captain <last>. An edge your human approach to these missions would give us, the consul said. Except underused, your foreign ideas are, if only the order at which we these planets visit, you decide."`
 			`	He looks out to the rainy spaceport through your hatch, still open from his friends' exits. "Lead the way, would you? The warehouses, I wish to inspect, but your assistance I could use."`
 			choice
 				`	"Of course, I'll get my rain coat."`
 				`	"I'd rather not go out there with that rain."`
 					goto decline
-			`	You walk in a straight line for about an hour, many times without any building providing cover from the rain. Kirrie takes you to the very edge of the town where you would be able to see the hills and mountains in the distance, were it not for the colossal rain clouds and constant downpour. One or two warehouses have a fair bit of rust on their doors, and just once you spot one with a damaged roof. You can also make out the shapes of small trees and bushes not too far out.`
+			`	You walk in a straight line for about an hour, many times without any cover from the rain. Kirrie takes you to the very edge of the town where you would be able to see the hills and mountains in the distance, were it not for the colossal rain clouds and constant downpour. One or two warehouses have a fair bit of rust on their doors, and just once you spot one with a damaged roof. You can also make out the shapes of small trees and bushes not too far out.`
 			`	"Now, Captain, start looking for something suspicious, where would you?" he asks as he shows you some sort of identification card, explaining that it can open any of the warehouse doors.`
 			choice
 				`	(Check the warehouses with the rusty doors.)`
@@ -209,12 +209,13 @@ mission "HI2-MP"
 				`	(Leave the rest of this to Kirrie.)`
 			`	You apologize and tell Kirrie that you don't know what to do next. While he does agree to do it himself, he never stops asking for your opinion on his choices.`
 			`	You spend a few more hours checking the warehouses until the rain and the wind get too dangerous for you to be moving from warehouse to warehouse, so you take shelter in one of them until the weather settles. Once it does, it is nearly nightfall, and Kirrie is notified by Iplora that she and Tugroob are already back at the ship. You two decide to head back as well.`
-			`	It seems Tugroob found some evidence of some smuggled weapons passing through here, but nothing major. Exhausted, they get back in their bunks, asking you to depart the planet.`
+			`	It seems Tugroob found some evidence of some smuggled weapons passing through here, but nothing major. Exhausted, they return to their bunks, asking you to depart the planet.`
 				accept
 			label reactor
-			apply
+			action
 				"resistance evidence" ++
-			`	Kirrie tries to open the door but can't get his card to work. "All the doors to these warehouses, my card should open. Damaged, the reader doesn't seem to be," he says. He decides that he must get in, and grabs a small sidearm, busting the door open with a couple shots.`
+				log "Joined Kirrie in his investigation on Mebla's Portion. Found a resistance production facility, guarded by automated turrets and powered by a Heliarch reactor module."
+			`	Kirrie tries to open the door but can't get his card to work. "All the doors to these warehouses, my card should open. Damaged, the reader doesn't appear," he says. He decides that he must get in, and grabs a small sidearm, and fires a few shots into the locking mechanism, releasing the door.`
 			`	At first glance there is nothing inside, but after he furiously crawls all over the place, he puts his head to a large metal panel on the opposite end of the room, before shooting that too. You approach him to find a hidden staircase leading underground.`
 			`	On your way down, Kirrie yells for you to take cover, and you barely escape a barrage of shots. Kirrie is hit on one of his legs before he can take cover.`
 			`	Just as you spot several small automatic turrets on the ceiling and walls, you two attempt to retaliate, but their fire proves too much. Barely escaping, you rush back outside, where Kirrie uses a small radio-like device to call for support. A pair of Heliarch Punishers soon land nearby, and dozens of armed agents enter the warehouse while you wait with Kirrie as his wound is treated.`
@@ -223,13 +224,13 @@ mission "HI2-MP"
 				accept
 			label trees
 			`	You suggest looking for something unusual near the plant life you spotted while the rain is still fairly tame, and he follows you. You spend a few minutes looking around the trees but find nothing suspicious.`
-			`	While passing by another set of bushes, Kirrie notices that some of them are awkwardly tilted. Upon further inspection, he tells you that they appear to have been removed, and then hastily replanted, noting the odd wavy patterns of the small rocks around the roots. The rain has gotten heavier.`
+			`	While passing by another set of bushes, Kirrie notices that some of them are awkwardly tilted. Upon further inspection, he tells you that they appear to have been removed, and then hastily replanted, noting the odd wavy patterns of the small rocks around the roots. The rain intensifies.`
 			choice
 				`	(Dig out the bushes.)`
 				`	(Head back to the warehouses and look around there.)`
 					goto back
 			label bushending
-			`	You help him unearth the bushes and dig a bit more to see if there's anything under them, but you never find anything. You find some other suspicious sets of bushes, but none have anything underneath. The rain and wind become too intense to stay outside, so you head inside a warehouse and take shelter there.`
+			`	You help him unearth the bushes and dig a little deeper to see if there's anything under them, but you never find anything. You find some other suspicious sets of bushes, but none have anything underneath. The rain and wind become too intense to stay outside, so you head inside a warehouse and take shelter there.`
 			`	Once the weather settles near nightfall, Iplora notifies him that she and Tugroob are already back at the ship, so you two decide to return as well.`
 			`	It seems Tugroob found some evidence of some smuggled weapons passing through here, but nothing major. They get back in their bunks, saying you may depart now.`
 				accept
@@ -245,7 +246,7 @@ mission "HI2-MP"
 				accept
 			label trees2
 			`	You suggest looking for something unusual near the plant life you spotted while the rain is still fairly tame, and he follows you. You spend a few minutes looking around the trees but find nothing suspicious.`
-			`	While passing by another set of bushes, Kirrie notices that some of them are awkwardly tilted. Upon further inspection, he tells you that they appear to have been removed, and then hastily replanted, noting the odd wavy patterns of the small rocks around the roots. The rain has gotten heavier.`
+			`	While passing by another set of bushes, Kirrie notices that some of them are awkwardly tilted. Upon further inspection, he tells you that they appear to have been removed, and then hastily replanted, noting the odd wavy patterns of the small rocks around the roots. The rain intensifies.`
 			choice
 				`	(Dig out the bushes.)`
 					goto bushending
@@ -299,7 +300,7 @@ mission "HI2-SS"
 					goto decline
 			`	"Reports of suspicious transactions at an outdated, abandoned warehouse, we have received. For storage of the few crops that can grow here, used it was," he says as you put in the coordinates he gave you.`
 			`	You follow Tugroob to the storage area after landing, spotting a desert storm brewing in the distance as you make your way there. A large crack has formed around the area where he said the crops were originally planted and tested.`
-			`	The barn is large enough that it could have held more stockpile than any medium-sized Arach freighters in its early days. Now a dilapidated husk, the barn is missing many of the planks that made up the walls in more then a few spots.`
+			`	The barn is large enough that it could have held a larger stockpile than any medium-sized Arach freighters in its early days. Now a dilapidated husk, the barn is missing many of the planks that made up the walls in more then a few spots.`
 			choice
 				`	"Let's check out the barn."`
 				`	"Maybe we should enter that hole where the crops used to be."`
@@ -317,7 +318,7 @@ mission "HI2-SS"
 				`	"Sorry, let's go outside and check that hole while we can."`
 					goto hole3
 				`	"Hold on. We can still check the ones down there."`
-			`	At this point, Tugroob grips the containers with all of his legs and brings his entire body weight against them, crushing each crate and barrel open. Once everything is broken up and it turns out there was nothing inside any of them after all, you two try to leave, but with the sandstorm raging strong, you decide to wait it out inside the barn.`
+			`	At this point, Tugroob grips the containers with all of his legs and brings his entire body weight against them, crushing each crate and barrel open. Once everything is broken up and it turns out there was nothing inside any of them after all, you two try to leave, but with the sandstorm raging, you decide to wait it out inside the barn.`
 				goto fail
 			label hole3
 			`	You two find the hole, but with the storm making it too dificult to see any safe path for you to get down there, you two head back inside to wait for better visibility.`
@@ -325,7 +326,7 @@ mission "HI2-SS"
 			label hole
 			`	You two carefully make your way down the hole. It bottoms out around ten meters below the barn.`
 			`	As you come down, Tugroob points to the cracked, rocky walls. He says that most of them were unstable, and you should watch out for rock slides.`
-			`	Looking around, you spot several smaller holes on the walls just large enough for a human or Saryd arm. There are also few larger cracks that you two shouldn't have much trouble going through.`
+			`	Looking around, you spot several smaller holes on the walls just large enough for a human or Saryd arm. There are also a few larger cracks that you two shouldn't have much trouble going through.`
 			choice
 				`	(Reach my arms inside the smaller holes to look for anything there.)`
 				`	(Head for the larger cracks to see if they lead to anything.)`
@@ -343,15 +344,16 @@ mission "HI2-SS"
 			`	"Much too obvious a hiding spot, this would be," he says, but seeing as the storm doesn't let up, you two break open the crates, just in case. To Tugroob's frustration, you find nothing.`
 				goto fail
 			label rockraider
-			apply
+			action
 				"resistance evidence" ++
+				log "Assisted Tugroob in his investigation on Shifting Sand. Discovered a hidden cache of Heliarch weapons. Probably stored there by the resistance."
 			`	You find a hole large enough for both of you and enter, Tugroob holding a flashlight to illuminate the path below. Larger rocks occasionally fall, and Tugroob has to prevent some from hitting you, quickly crawling around the walls to try and slow them down so you have time to move away.`
-			`	Eventually you two arrive at a pair of wooden beams, in what looks like a mineshaft. A few lights on the walls flicker on as you approach them.`
+			`	Eventually you arrive at a pair of wooden beams, in what looks like a mineshaft. A few lights on the walls flicker on as you approach them.`
 			`	You're about to go forward when you're stopped by Tugroob. He crawls around the entrance, looping it several times without ever going further in. He only stops to slowly reach one leg inside, then right back out after apparently touching something.`
 			`	He comes back down and says, "Request support equipment to get through safely, we must." Using a communication device, he calls for assistance from Heliarch agents, warning them about the sandstorm.`
-			`	Shortly after, several dozen Heliarch agents are there, most of them working to keep the sand out, while a few follow you two inside with some form of cutting tool. They use it to surgically remove what Tugroob was slowly examining before: several extremely thin wires, connected to some type of machinery hidden within the wooden beams.`
+			`	It does not take long for several dozen Heliarch agents to arrive, most of them working to keep the sand out, while a few follow you and Tugroob inside with some form of cutting tool. They use it to surgically remove what Tugroob was slowly examining before: several extremely thin wires, connected to some type of machinery hidden within the wooden beams.`
 			`	After they're done, the agents storm the place but find nobody. What they do find are dozens upon dozens of crates filled to the brim with Heliarch staves and blaster guns.`
-			`	They escort you two back outside as the agents prepare to bring the smuggled weapons to their own ships. Though the storm is still raging on, you can make out the shape of a few Heliarch Interdictors parked near your own ship right before you take off. You regroup with Iplora and Kirrie, and they ask Tugroob for more details on the ordeal, before they head to their own bunks.`
+			`	You are escorted back outside as the agents prepare to bring the smuggled weapons to their own ships. Though the storm persists, you can make out the shape of a few Heliarch Interdictors parked near your own ship right before you take off. You regroup with Iplora and Kirrie, and they ask Tugroob for more details on the ordeal, before they head to their own bunks.`
 				accept
 			label hole2
 			`	You two carefully make your way down the hole. It bottoms out around ten meters below the barn.`
@@ -363,9 +365,9 @@ mission "HI2-SS"
 					goto rockraider
 			`	You carefully go about putting your arm inside a few of the holes, with Tugroob helping you up for the ones you couldn't reach, but ultimately you find nothing.`
 			`	Many small rocks fell while you were checking the holes, but miraculously you both remain unscathed. Unfortunately, too much sand from the storm above is piling up for you to look around for more holes or the exact location of the larger cracks you saw before.`
-			`	"Dangerous, it will be, to remain here for long, Captain," Tugroob says as he urges you to cling to them. He carefully crawls back up, and you two take refuge inside the barn.`
+			`	"Dangerous, it will be, to remain here for long, Captain," Tugroob says as he urges you to cling to them. He carefully crawls back up, and you both take refuge inside the barn.`
 			label fail
-			`	Night falls, with no sign of the storm dying down, and after receiving a notification from Iplora, Tugroob informs you that you should both head back to the ship and pick her and Kirrie up. As soon as the storm lets up slightly, he helps you out of the barn and through the raging winds, until you reach your ship. You two meet up with the rest of the group, and the agents head to their bunks.`
+			`	Night falls, with no sign of the storm dying down, and after receiving a notification from Iplora, Tugroob informs you that you should both head back to the ship and pick her and Kirrie up. As soon as the storm lets up slightly, he helps you out of the barn and through the still strong winds, until you reach your ship. You two meet up with the rest of the group, and the agents head to their bunks.`
 				accept
 			label decline
 			`	"I see," he says. He gives you the coordinates he needs to go to and you drop him off before returning to the hangars.`
@@ -385,9 +387,9 @@ mission "HI2-FS"
 			has "Heliarch Investigation 2 :failed"
 	on complete
 		conversation
-			`For this planet, the trio informs you that they cannot spend too much time in one place considering how densely populated it is. Instead, they hand you the coordinates of dozens of factories, with the instructions to take them to each factory in whichever order you'd prefer.`
-			`	"Surprise inspections, we shall perform," Kirrie says as the three prepare their equipment and weapons. You spend hours flying around the planet dropping one agent off in a factory, running off to another, then another, then picking up the first of the three, and continuing the process.`
-			`	After picking up Tugroob from the last factory, they all analyze their findings one last time. They do this by going over each individual factory, mechanically running down a long list of "possible abnormalities" for each, leaving a mark on the side, and briefly writing a description if any such "abnormality" was noted in a factory.`
+			`For this planet, the trio informs you that they cannot spend too much time in one place considering how densely populated it is. Instead, they hand you the coordinates of dozens of factories, with instructions to take them to each factory in whichever order you prefer.`
+			`	"Surprise inspections, we shall perform," Kirrie says as the three prepare their equipment and weapons. You spend hours flying around the planet dropping one agent off in a factory, running off to another, then another, then picking up the first of the three, and repeating the process.`
+			`	After picking up Tugroob from the last factory, they all analyze their findings one last time. They do this by going over each individual factory, mechanically running down a long list of "possible abnormalities" for each, leaving a mark on the side, and briefly writing a description of any "abnormalities" noted.`
 			`	"Unauthorized power surges to some replicators, we found. Missing as well, some records of storage transport were," Iplora says. You land on a Heliarch base, and they hand all their findings to the agents there before returning to your ship. As they head to their bunks, you see several Heliarch ships fly off in the direction of some of the factories.`
 
 mission "HI2-IW"
@@ -406,8 +408,8 @@ mission "HI2-IW"
 		conversation
 			`Kirrie, already donning his winter coat, instructs you to land near the equator. He says him and Tugroob will conduct some subtle interrogations, stating that it's 'all they can do' in this climate.`
 			`	You drop them off in one of the larger settlements there. After they leave, Iplora asks that you bring her close to the southern pole of the planet.`
-			`	"Suspiciously similar, independent reports on that area have been. Tasked with investigating it, I was."`
-			`	As you land on an isolated icy patch in the middle of a snowstorm, Iplora finishes her preparations, carrying a bag with some equipment and wearing what is - at least when compared to what her colleagues were wearing - fairly light clothing. Although she is a Saryd, you still worry that she might be frostbitten in this extreme weather, but she reassures you that she will be fine.`
+			`	"Suspiciously similar, independent reports on that area have been. I with investigating it, am tasked."`
+			`	As you land on an isolated icy patch in the middle of a snowstorm, Iplora finishes her preparations, carrying a bag with some equipment and donning what is - at least when compared to what her colleagues were wearing - fairly light clothing. Although she is a Saryd, you still worry that she might be frostbitten in this extreme weather, but she reassures you that she will be fine.`
 			`	You open your ship's hatch and she prepares to leave.`
 			choice
 				`	"Good luck. Be careful not to get lost in all this snow."`
@@ -423,17 +425,17 @@ mission "HI2-IW"
 			`	You slouch around your ship for a few hours, waiting for any signal from the Heliarch agents, but nothing comes up on your commlink. Iplora comes back, saying she couldn't find anything, so you leave and pick up Kirrie and Tugroob. They also return empty handed.`
 				accept
 			label snow
-			`	She remains silent, and walks back inside. You close the hatch and prepare yourself for what's to come with the warmest clothing you could find. You open the hatch once more, and the both of you head out into the white fields. Not long after leaving your ship, you can make out small, dark lines nearby, probably pine trees. It seems you landed close to a forest. Unfortunately, they don't do much to protect you from the snowfall.`
-			`	You continue deeper into the lifeless forest for what feels like hours, so long that your feet start feeling numb from the cold. After yet another turn, Iplora guides you out of the forest to snowy hills. The storm is not so terrible here, so you can faintly see cave entrances in some of the more distant hills. Looking back at the woods, you see that there's a small shack in the outskirts, not too far from where you are now.`
+			`	She remains silent, and walks back inside. You close the hatch and prepare yourself for what's to come with the warmest clothing you could find. You open the hatch once more, and the pair of you head out into the white fields. Not long after leaving your ship, you can make out small, dark lines nearby, probably pine trees, or at least, something like them. It seems you landed close to a forest. Unfortunately, they don't do much to protect you from the snowfall.`
+			`	You continue deeper into the lifeless forest for what feels like hours, so long that your feet start feeling numb from the cold. After yet another turn, Iplora guides you out of the forest towards some snowy hills. The storm is not so terrible here, so you can faintly see cave entrances in some of the more distant hills. Looking back at the woods, you see that there's a small shack in the outskirts, not too far from where you are now.`
 			`	"Check the caverns, we must. More relentless, the storm will soon become," Iplora says.`
 			choice
 				`	"Lead the way."`
 					goto bumpyroad
 				`	"You go ahead. I'll see if I can find anything in that shack."`
 			`	She nods, and starts making her way uphill. You start walking to the shack, but just a couple steps into it you trip on something hard, unlike the soft, deep snow you've been in up until now.`
-			`	Iplora notices it and walks over to you, "Many boulders, this area has. Buried by the snow they have been. Great care you must take, while walking here," she explains before getting on with her own path to the caverns.`
+			`	Iplora notices it and walks over to you, "Many boulders, this area has. Buried by the snow they have been. Great care you must take," she explains before getting on with her own path to the caverns.`
 			`	You reach the shack and knock to see if anyone is inside. Your question is answered as your soft knocks push open the door into an empty building. The place is abandoned, with only a few boxes laying around, small, empty bedrooms, and a fireplace that resembles the spiky design of Kimek ships. All of them are covered in a thin layer of dust. A large carpet covers the center of the living room.`
-			`	You pull it up but find nothing hidden underneath. You leave the shack, circling it, finding only a few tools on the ground around the back. You take another look around, and even start checking some of the nearby trees, but as the snowfall grows stronger, you decide to head to the caverns and catch up with Iplora.`
+			`	You pull it up but find nothing hidden underneath. You leave the shack, circling it, finding only a few tools on the ground around the back. You take another look around, and even start checking some of the nearby trees, but as the snowfall grows heavier, you decide to head for the caverns and catch up with Iplora.`
 			`	You trip over a few more of the small mounds, and right in the middle of the snowfield, you start wondering which cavern Iplora is in now. Though you can't be sure if you'll find her by entering the nearest one, it would certainly be better than standing outside in what will soon be a blizzard.`
 			choice
 				`	(Enter the nearest cavern.)`
@@ -452,7 +454,7 @@ mission "HI2-IW"
 			`	Once you're there, you leave to pick up Kirrie and Tugroob, who also come back empty handed.`
 				accept
 			label bumpyroad
-			`	Following her up the hills proves difficult at first, with your legs sinking into the snow, but after a few minutes the ground below becomes more and more solid - if a bit bumpy. Iplora explains that the area has several small and medium sized boulders buried by the snow over the years. You try to watch your step, but as the snowfall grows stronger, you trip over one of the mounds. She helps you up, and the two of you eventually arrive at the entrance of one of the caverns.`
+			`	Following her up the hills proves difficult at first, with your legs sinking into the snow, but after a few minutes the ground below becomes more and more solid - if a bit bumpy. Iplora explains that the area has numerous small and medium sized boulders buried by the snow over the years. You try to watch your step, but as the snowfall grows stronger, you trip over one of the mounds. She helps you up, and the two of you eventually arrive at the entrance of one of the caverns.`
 			choice
 				`	(Go inside with Iplora.)`
 					goto cave
@@ -465,13 +467,13 @@ mission "HI2-IW"
 				`	(Try and dig through the snowy mounds to find something.)`
 					goto dig
 			label cave
-			`	Iplora brings out a flashlight and lights up the way as you two explore the caverns. After some twists and turns she notices some large rocks, broken free from the walls, but still hugging them closely. She asks that you hold the flashlight for her and starts pushing the rocks, revealing a passage to a small campsite containing some makeshift beds, small wooden crates, and a worn down campfire in the middle.`
-			`	You search through the crates as she examines the room looking for some other hidden area, but neither of you find anything. She checks the campfire and concludes that nobody has been here for a few months. You continue exploring the cave and eventually loop back outside, leaving via another cave entrance, this time much further from the forest according to Iplora. You don't know how she can determine that because the blizzard has gotten so much stronger that you can't even see the trees anymore.`
+			`	Iplora brings out a flashlight and lights up the way as the two of you explore the cavern. After some twists and turns she notices some large rocks, broken free from the walls, but still hugging them closely. She asks that you hold the flashlight for her and starts pushing the rocks, revealing a passage to a small campsite containing some makeshift beds, small wooden crates, and a worn down campfire in the middle.`
+			`	You search through the crates as she examines the room looking for some other hidden area, but neither of you find anything. She checks the campfire and concludes that nobody has been here for a few months. You continue exploring the cave and eventually loop back outside, leaving via another entrance, this time much further from the forest according to Iplora. You don't know how she can determine that because the storm outside has developed into a full blizzard and you can't even see the trees anymore.`
 			choice
 				`	(Suggest returning to the ship.)`
 					goto bumpyblizzard
 				`	(Continue looking around the caves.)`
-			`	You head back inside and continue exploring the cave system. You two find a few more of the hidden campsites, but all are as abandoned as the first one. You're alerted by the wind, snow, and ice whenever you're close to another exit.`
+			`	You head back inside and continue exploring the cave system. You find a few more of the hidden campsites, but all are as abandoned as the first. You're alerted by the wind, snow, and ice whenever you're close to another exit.`
 			`	After a few hours, the storm finally subsides, and you both return to your ship. You leave to pick up Kirrie and Tugroob, who also come back empty-handed.`
 				accept
 			label bumpyblizzard
@@ -482,7 +484,7 @@ mission "HI2-IW"
 				`	(Try and dig through the snow to find something.)`
 					goto snowdig
 			label back
-			`	She helps you up, and you continue on your way down the hills. You get back to the forest, and she starts finding the trail back to the ship. Halfway through, the storm gets progressively weaker.`
+			`	She helps you up, and you continue on your way down the hills. You get back to the forest, and she starts finding the trail back to the ship. Halfway through, the storm begins weakening.`
 			`	When you two return to your ship, you leave to pick up Kirrie and Tugroob, who also come back empty handed.`
 				accept
 			label snowdig
@@ -494,10 +496,11 @@ mission "HI2-IW"
 				`	(Head to another mound and try digging there.)`
 			label keepdig
 			`	You stand up and run to another spot where you fell over. Iplora follows you, and even with the snow muffling the sounds around you, you can hear her exasperated sigh. She tries to pull you away, but you hit a hard surface yet again, this time creating a faint metallic echo. She takes her hands off of you and lays down, now helping you dig out whatever is there. Once the crate is visible, she stands up. It's large and looks like a coffin, but much of it is still buried. She asks you to help her get some hooks on it, after which she struggles to try and pull it out.`
-			`	The slippery snow certainly doesn't help her hooves, but it does make the crate slippery as well. It's coaxed out of the ground, bit by bit. You help her as best as you can and eventually get it on top of the snow field. Iplora searches through some tools in her bag and takes out what looks like a crowbar. She starts opening it, a dim light creeping out, but an energy blast coming from the the top of the hills hits the ground near the hole. It misses you by just about a meter.`
+			`	The slippery snow certainly doesn't help her hooves, but it also makes the crate slippery. It's coaxed out of the ground, bit by bit. You help her as best as you can and eventually get it on top of the snow field. Iplora searches through some tools in her bag and takes out what looks like a crowbar. She starts opening it, a dim light creeping out, but an energy blast coming from the the top of the hills hits the ground near the hole. It misses you by just about a meter.`
 			`	She yells for you to get down, pulling out her weapon and firing in the direction the shot came from.`
-			apply
+			action
 				"resistance evidence" ++
+				log "Assisted Iplora with her investigation on Into White. Discovered numerous Finisher torpedoes hidden in crates under the snow near the southern pole. While retrieving one, come under fire from a hidden assailant atop a hill, but they soon fled when the attack was reciprocated."
 			choice
 				`	(Take cover.)`
 				`	(Pull out your gun and help her.)`
@@ -506,12 +509,12 @@ mission "HI2-IW"
 			`	"Fled, our attacker has," she claims. From the looks of it she wasn't injured. You two get back to the crate.`
 				goto opencrate
 			label help
-			`	You start shooting the hills above, trying to aim around where Iplora's own shots go to. A shot comes your way, and you jump to the side. Iplora takes cover inside the hole, firing a few more shots from there, then leaves up the hill. You follow her lead, approaching from another direction.`
-			`	The shots alternate targets, some firing at Iplora, then some at you, then back at her. The blizzard is bad enough that you can't even see the attacker, but it seems that goes both ways, as you and Iplora manage to avoid getting hit without too much trouble.`
-			`	You've barely gotten past the last cave you visited when the shots stop altogether. Iplora still takes aim for a bit, but ultimately lowers her weapon, coming toward you. "Fled, our attacker has," she claims. You two walk back to the crate.`
+			`	You start shooting towards the hills above, trying to aim around where Iplora's own shots go. A shot comes your way, and you jump to the side. Iplora takes cover inside the hole, firing a few more shots from there, then leaves up the hill. You follow her lead, approaching from another direction.`
+			`	The shots alternate between targeting you and her. The blizzard is bad enough that you can't even see the attacker, but it seems that goes both ways, as you and Iplora manage to avoid getting hit without too much trouble.`
+			`	You've barely gotten past the last cave you visited when the incoming fire stops altogether. Iplora still holds her weapon at the ready, but ultimately lowers it, coming toward you. "Fled, our attacker has," she claims. You two return to the crate.`
 			label opencrate
-			`	When it's finally open, you see it contains a Heliarch finisher torpedo. You two go around the fields, and find that many other mounds are identical crates. She uses a communication device and calls for Heliarch support. Several Heliarch Neutralizers arrive some time after the blizzard subsides, and you're directed to one of them to dry your clothes and make sure you're not frostbitten.`
-			`	Once you leave, you see several Heliarch agents using proper equipment to dig out the crates and opening them dozens at a time, revealing several more torpedoes. A group has also made their way up the hills looking for any sign of whoever attacked you. Iplora speaks with some of the Heliarchs there, then tells you that they will handle everything from here. One of the ships takes both of you to where your own ship landed and leaves as you prepare to take off.`
+			`	When it's finally open, you see it contains a Heliarch finisher torpedo. You both go around the fields, and find that many other mounds conceal identical crates. She uses a communication device and calls for Heliarch support. Several Heliarch Neutralizers arrive some time after the blizzard subsides, and you are invited to one of them to dry your clothes and make sure you're not frostbitten.`
+			`	Once you leave, you see several Heliarch agents using proper equipment to dig out the crates and opening them dozens at a time, revealing several more torpedoes. A group has also made their way up the hills looking for any sign of whoever attacked you. Iplora speaks with some of the Heliarchs there, then tells you that they will handle everything from here. One of the ships takes both of you to where your own ship is parked and leaves as you prepare to take off.`
 			`	You head back to pick up Kirrie and Tugroob, who are excited to hear about what happened. They themselves didn't find anything, but they're content with listening to Iplora as she tells the story.`
 
 mission "HI2-RB"
@@ -528,9 +531,9 @@ mission "HI2-RB"
 			has "Heliarch Investigation 2 :failed"
 	on complete
 		conversation
-			`When you land, a couple of other civilian ships land nearby. Some Kimek leave them and wait outside your own. Kirrie is the only one to leave, and after speaking a bit with the other Kimek, they leave for the city, splitting in two groups.`
+			`When you land, a couple of other civilian ships land nearby. Some Kimek leave them and wait outside your own. Kirrie is the only one to leave, and after speaking a bit with the other Kimek, they leave for the city, splitting into two groups.`
 			`	"Not fond of outsiders, the people of this world are," Tugroob explains. "Decided to employ undercover Kimek agents, the consul has."`
-			`	You wait around for a couple hours as Iplora and Tugroob tinker with your ship's communication devices, keeping in contact with the two groups. They don't mention if either group finds anything, and as night falls, Kirrie returns to the ship on his own.`
+			`	You wait around for a couple of hours as Iplora and Tugroob tinker with your ship's communication devices, keeping in contact with the two groups. They don't mention if either group finds anything, and as night falls, Kirrie returns to the ship alone.`
 
 
 

@@ -566,7 +566,7 @@ mission "Heliarch Recon 1"
 	on offer
 		require "Jump Drive"
 		conversation
-			`Three Heliarch agents are waiting for you when you land. "The human visitor who so much to our society has contributed, we greet," the Saryd says as they all salute you.`
+			`Three Heliarch agents are waiting for you when you land. "We the human visitor, who so much to our society has contributed, greet," the Saryd says as they all salute you.`
 			`	"Sent by Consul Aulori, we were," the Kimek says proudly, as if you were supposed to know who that is. "An important task for you, he has in mind."`
 			`	"How far would the visitor go, if to further help our Coalition, it meant?" The Arach asks.`
 			choice
@@ -574,7 +574,7 @@ mission "Heliarch Recon 1"
 				`	"Obviously I have my limits as for what I would do."`
 			`	"A jump drive, you possess. Far away, you can travel. Bother you, the harsh cages of the Quarg do not," the Saryd explains as all three walk toward your ship.`
 			`	"Few in number, our own jump drives are, and too risky would it be, for one of our own to venture far out," the Kimek adds.`
-			`	"If to help us gain knowledge of the opressors, you wish, lend the Coalition your ship's sensors for a short time, would you?" asks the Arach.`
+			`	"If to help us gain knowledge of the oppressors, you wish, lend the Coalition your ship's sensors for a short time, would you?" asks the Arach.`
 			choice
 				`	"Are you asking me to spy on the Quarg?"`
 				`	"Sorry, I don't want to get involved in your conflict with the Quarg."`
@@ -592,10 +592,13 @@ mission "Heliarch Recon 1"
 				accept
 	to fail
 		"reputation: Quarg" < 0
+	on accept
+		log "Agreed to travel to the Quarg worlds and station in human, Hai, and Korath space, to collect scans for the Heliarchs using sensors they have modified. It should appear to the Quarg as a malfunction."
 	on complete
 		event "heliarch recon break" 10 21
 		"coalition jobs" ++
 		payment 165000
+		log "Returned to the Heliarchs with the scans of Quarg worlds they requested. It seems the Quarg have some countermeasures to the sensors modified by the Heliarchs, and no records of the ringworlds were collected. They say they will make contact in the future to try a new approach."
 		conversation
 			`The Heliarch trio are eagerly waiting for you when you return. They are quick to welcome you, urging you to show them your ship's logs so they can see what information you've gathered. They don't seem to pay much mind to data on Grakhord or Forpelog, being much more interested in the ringworlds. As they examine the data, though, the Saryd frowns, while the Kimek brings all his legs closer to his body, and the Arach squints all her eyes - probably their versions of that reaction.`
 			`	"Land on the rings, you really did, right Captain?" The Saryd asks while pointing at Lagrange, then Kuwaru Efreti, then Alta Hai.`
@@ -611,6 +614,7 @@ mission "Heliarch Recon Alta Hai"
 	to offer
 		has "Heliarch Recon 1: active"
 	on offer
+		log "While landing on Alta Hai with the sensor modifications from the Heliarchs, something strange happened to the ship. The Quarg seem to have noticed but they left without word."
 		conversation
 			`Coming in for a landing, something from inside your ship produces an irritating, high pitched whistle sound. It grows stronger the closer you get to the ringworld, until your ship completely shuts down. Your controls are rendered useless as you attempt to land manually, only for your autopilot to click back to normal and land as usual at the last moment. Looking outside, you spot several Quarg standing still, staring at your ship, until they hastily leave without contacting you at all.`
 				decline
@@ -667,7 +671,7 @@ event "heliarch recon break"
 
 mission "Heliarch Recon 2-A"
 	name "Scanning Preparations"
-	description "Install an Outfit Scanner, then land on <destination>, where the Heliarch will modify it to be able to scan Quarg ships the way they need it."
+	description "Install an Outfit Scanner, then land on <destination>, where the Heliarch will modify it to better scan Quarg ships to their requirements."
 	landing
 	source
 		near "Ekuarik" 1 100
@@ -695,7 +699,7 @@ mission "Heliarch Recon 2-A"
 
 mission "Heliarch Recon 2-B"
 	name "Silent Scan"
-	description "Now that the Heliarchs have altered your Outfit Scanner, head to <waypoints> and scan some Quarg ships there, then report back to <destination>."
+	description "Now that the Heliarchs have altered your Outfit Scanner, head to <waypoints> and scan some Quarg ships there, then report back to the <destination>."
 	landing
 	source "Ring of Wisdom"
 	waypoint "Enif"
@@ -719,9 +723,10 @@ mission "Heliarch Recon 2-B"
 	on complete
 		"coalition jobs" ++
 		payment 200000
+		log "Scanned some Quarg ships for the Heliarchs using an Outfit Scanner they modified."
 		conversation
 			`Once again the engineers remove your outfit scanner, taking a copy of the scan logs and handing it to the Heliarch agents, who give you <payment>. "Grateful to you, we are, Captain <last>," the Saryd says. "Remember your assistance, the consul will."`
-			`	When the engineers return, they put your outfit scanner back in place. The Heliarch agents say their goodbyes, reassuring you that the Quarg shouldn't attack you for this. "If interested in doing some investigation of your own, you wish, maybe land on their rings again, you could," the Kimek suggests. "Maybe find out something of interest for us, you will."`
+			`	When the engineers return, they put your Outfit Scanner back in place. The Heliarch agents say their goodbyes, reassuring you that the Quarg shouldn't attack you for this. "If to perform some investigations of your own, you wish, maybe land on their rings again, you could," the Kimek suggests. "Maybe discover something of interest for us, you will."`
 			`	He wishes you safe travels, and leaves with his colleagues.`
 
 mission "Quarg Interrogation"
@@ -735,6 +740,7 @@ mission "Quarg Interrogation"
 	to offer
 		has "Heliarch Recon 2-B: done"
 	on offer
+		log "The Quarg know! The Heliarchs were wrong! Their assurances that the Quarg would not discover the scans performed on their behalf were untrue!"
 		conversation
 			`As you land on <origin>, a Quarg is patiently waiting right outside. Seeing that it won't go away, you head outside to speak with it.`
 			`	"Hello, <first> <last>," it says.`
@@ -752,7 +758,7 @@ mission "Quarg Interrogation"
 				`	"The Heliarchs asked me to do it."`
 					goto truth
 			label lie
-			`	Around ten seconds pass without it saying anything, simply staring at your eyes and blinking slowly. "I see." Without another word, it walks away, headed to the Wardragon.`
+			`	Around ten seconds pass without it saying anything, simply staring at your eyes and blinking slowly. "I see." Without another word, it walks away, towards the Wardragon.`
 				accept
 			label truth
 			`	"And why did you agree? Do you wish to join their ranks, perhaps?" it asks.`
@@ -790,11 +796,11 @@ mission "Heliarch Recon 3-A"
 		"coalition jobs" >= 65
 	on offer
 		conversation
-			`Upon landing, you're contacted by the Heliarch agents who have had you scan Quarg worlds and ships. "Hello again, Captain <last>!" the Kimek greets you. "Thank you again, we must, for your latest service. Much more detailed than what we had, they are."`
+			`Upon landing, you're contacted by the Heliarch agents who have had you scan Quarg worlds and ships. "Hello again, Captain <last>!" the Kimek greets you. "Thank you again, we must, for your latest scans. Much more detailed than what we had, they are."`
 			`	The Saryd interrupts him, "Not... satisfied with them, Consul Aulori was, however. Tasked with acquiring your help again, we were."`
 			branch license
 				has "Heliarch License: done"
-			`	"An exception, the council has decided to make," the Arach explains. "Granted one of our scanning modules, you will be. Just for the mission, it is, so return it once it's over, you must. Install it on your ship, a team in the <planet> will."`
+			`	"An exception, the council has decided to make," the Arach explains. "Granted one of our scanning modules, you will be. Just for this mission, it is, so return it once it's over, you must. Install it on your ship, a team in the <planet> will."`
 				goto choice
 			label license
 			`	"A 'proper' close-up scan, with a Heliarch scanning module, the consul wants," the Arach explains. "Now that in our ranks, you are, simple enough for you, purchasing one should be. Once ready, you are, head to the <planet> to hear the plan, you must."`
@@ -832,7 +838,7 @@ mission "Heliarch Recon 3-A"
 
 mission "Heliarch Recon 3-B"
 	name "Not So Silent Scan"
-	description "Now that your ship is equipped with a Heliarch Scanning Module, head to the Zubeneschamali system and scan the Quarg Wardragon there."
+	description "Now that your ship is equipped with a Heliarch Scanning Module, head to <waypoints> and scan the Quarg Wardragon there. Return to <destination> by <deadline> with the borrowed Heliarch scanner."
 	landing
 	source "Ring of Wisdom"
 	destination "Ring of Wisdom"
@@ -854,7 +860,7 @@ mission "Heliarch Recon 3-B"
 			`	You confirm it, explaining to them that you were involved in the work around the site on Zug, and were there when the Wardragon came in to protect it.`
 			`	"Then no trouble finding it, you should have," the Arach says. "Far from other Quarg, that ship is, so easier for you to flee, it should be, if attack you it does."`
 			`	"All we need, a quick scan is," the Saryd tells you. "Once scanned it, you have, come back right away, you should."`
-			`	You're warned not to disable or destroy the Wardragon should it attack you, as that would no doubt permanently damage your standing with them.`
+			`	You're warned not to disable or destroy the Wardragon should it attack you, as that would no doubt permanently damage your standing with the Quarg.`
 			`	When the engineers are done, the agents wish you good luck, and you head back inside your ship.`
 				accept
 	on accept
@@ -871,7 +877,7 @@ mission "Heliarch Recon 3-B"
 		outfit "Scanning Module" -1
 		payment 690000
 		conversation
-			`The Heliarch agents have the engineers remove their scanners from your ship immediately when you land back. They seem pleased with the results, looking at the scan logs for the first time as they hand you <payment>.`
+			`The Heliarch agents have the engineers remove their scanners from your ship immediately when you land. They seem pleased with the results, looking at the scan logs for the first time as they hand you <payment>.`
 			`	"Survived, you thankfully have, Captain," the Saryd taps your arm.`
 			`	"Odd, it is, that attack the Captain, the Wardragon did not..." the Arach thinks out loud, looking at the scan data. "A fortunate thing, no doubt, but very odd of them."`
 			`	"Much more detailed, these scans are. Certain, I am, that pleased with the results, Consul Aulori will be," the Kimek tells you. "Assisted us greatly you have, Captain."`

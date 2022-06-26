@@ -970,8 +970,8 @@ mission "Heliarch Expedition 1"
 			choice
 				`	"Can you bring me to a higher-up? I have some information on ringworlds."`
 				`	"Is there anyone I can talk to about a broken ringworld?"`
-			`	The group discusses among themselves for a bit, then they bring you to a restricted section of the ringworld, reserved for Heliarchs. "Wait here, please," they tell you, offering you a seat on one end of a long table.`
-			`	Some ten minutes pass before anyone comes in, but after that many Heliarch members start filling up the room, taking their own seats at the table. When the door opens for the last of them to come in, the guard announces "Consul Aulori," to which all the Helliarchs stand up and salute, the noise of conversation giving room to hooves hitting the ground. He is an old Saryd of gray eyes, pale hairs, with a short, well-kept beard, wearing a peculiar necklace with four large gemstones hanging from it. He sits opposite to you, the other Heliarchs sitting back down when he does.`
+			`	The group discusses among themselves for a bit, then they bring you to a restricted section of the ringworld, reserved for Heliarchs. "Wait here, please," they tell you, offering you a seat at one end of a long table.`
+			`	Some ten minutes pass before anyone comes in, but after that many Heliarch members start filling up the room, taking their own seats at the table. When the door opens for the last of them to come in, the guard announces "Consul Aulori," to which all the Helliarchs stand up and salute, the noise of conversation giving room to hooves hitting the ground. He is an old Saryd with gray eyes, pale hairs, and a short, well-kept beard, wearing a peculiar necklace with four large gemstones hanging from it. He sits opposite to you, the other Heliarchs sitting back down when he does.`
 			`	"Forgive me for the delay you must, colleagues," he says to the other Heliarchs. "Caught up in my evening prayers, I was." He examines the room for a while, briefly glancing at each of the Heliarchs, until his eyes settle on yours. "Told, I was, that some valuable information for us, you have, Captain <last>."`
 			choice
 				`	"I know of a system where a broken Quarg ringworld is. I figured I should tell you."`
@@ -981,23 +981,28 @@ mission "Heliarch Expedition 1"
 			choice
 				`	"I didn't say incomplete, I said broken. I know the difference."`
 				`	"Is this some joke? If you don't care about the broken ringworld, just tell me. Don't waste my time."`
-			`	He leans forward lightly, staring at you. Looking around the table, the other Heliarchs are engaged in a what appears to be a quiet, heated discussion, gesticulating and occasionally tilting the table with their body weight amidst whispers.`
+			`	He leans forward lightly, staring at you. Looking around the table, the other Heliarchs are engaged in what appears to be a quiet, heated discussion, gesticulating and occasionally tilting the table with their body weight amidst whispers.`
 			`	"How?" Aulori asks, eyes still locked on you. You explain as best as you can about where Deneb is, and what you saw on the other side of the wormhole. When you get to explaining how the system was discovered, the Heliarchs seem to collectively gasp when you first utter the word "Pug." You pause, and many go back to the quiet, whispering discussions, some laughing it off, and others staying silent.`
-			`	One Saryd moves as if getting up, but sits back down once Aulori stands up, firmly pushing one hand against the table. Conversation around the table dies out, as he stares you down for a long minute. "Leave us for a moment, would you?" he finally says, having some guards bring you outside the room.`
+			`	One Saryd moves as if getting up, but sits back down as Aulori stands up, firmly pushing one hand against the table. Conversation around the table dies out, as he stares you down for a long minute. "Leave us for a moment, would you?" he finally says, having some guards bring you outside the room.`
 			`	The whispering discussion from earlier now becomes a much louder debate, though the door muffles it all enough that no translator outside the room manages to pick up what is being said. After half an hour, most voices are cut as someone rapidly hits the table, roughly, yelling something in what you think is the Saryd language.`
-			`	It all grows quiet for a while, and then the door opens again. Some of the other Heliarchs leave in a haste, and you're asked to head inside again. Consul Aulori is standing up still, giving you a nod as you come in.`
+			`	It all grows quiet for a while, and then the door opens again. Some of the other Heliarchs leave in a haste, and you're asked to head inside again. Consul Aulori, who is still standing, nods to you as you enter.`
 			`	"Adjusted, your ship's sensors will be. Better suited, they will become, for detailed tridimensional projections," he says. He has a guard bring you back to your ship, where some engineers go inside your ship and spend some time tinkering with it. After they're done, one of the Heliarchs that was in the room approaches you, telling you they need you to land on the planet you described, <stopovers>, and to travel to <waypoints> to scan the ringworld. He wishes you luck, then hurries back to the restricted areas.`
 				accept
+	on accept
+		log "People" "Aulori" "Consul Aulori is a Heliarch of the highest rank. He is an old Saryd stationed on th Ring of Wisdom. He has an interest in acquiring knowledge of Quarg worlds, stations, and ships."
+		log "People" "Aulori" "He seemed to have trouble believing that a Quarg ringworld could be broken, thinking it was  a mistranslation of 'incomplete'. He seems to have heard of the Pug but does not appear interested in discussing them openly."
+		log "Agreed to scan Ruin and the broken ringworld on the other side of the wormhole the Pug left behind in Deneb and deliver those scans to the Heliarchs. They seem incredulous at the idea of a broken ringworld, and mentions of the Pug seem to be some sort of taboo for them."
 	on stopover
 		dialog `You fly around the mysterious world for a while, until your sensors beep in an odd way, in what you guess is the signal that the Heliarch's modifications are done doing their read on the planet.`
 	on enter "World's End"
-		dialog `You fire up your ship's sensors, letting it collect the data the Heliarch want for hours on end. Eventually you hear a series of beeps in a dull rhythm, and look to see that their performance is back to normal.`
+		dialog `You fire up your ship's sensors, letting them collect the data the Heliarch want for hours on end. Eventually you hear a series of beeps in a dull rhythm, and look to see that their performance is back to normal.`
 	on complete
 		event "heliarch expedition break" 22 34
 		payment 3000000
+		log "Aulori wishes to send teams to investigate the broken ringworld, though it seems not all onthe council agree. He believes they wil lcome around and promises more work when they have and a team of investigators is ready."
 		conversation
 			`You're met by Aulori when you land, as well as several other Heliarchs. You transmit your scan logs, and they bring you to a separate room once again, where a model of the broken ringworld is being projected for all to see.`
-			`	"Skeptical of what you told us, we all were, Captain," Aulori says, gesturing for you to accompany him as he walks around the projection. "Claimed that insane, you were, some of those here did," he reaches down to tap a Kimek on her head, "Or that wasting our time with jokes, you were," he bumps another Saryd's arm, "Assured me, some of them had, that wholly impossible, it was, to break a ring," he pushes an Arach's leg with his hoof. He stops where the projection shows signs of greater damage, where a large chunk of the ring was cut off, littered with floating debris. "But not insane, neither a joker, you are. And impossible, this clearly is not. Invaluable information, what you've brought us is, Captain <last>. Investigate the site thoroughly, we must, so ask for your assistance again, we will, when a suitable crew for it, we have found."`
+			`	"Skeptical of what you told us, we all were, Captain," Aulori says, gesturing for you to accompany him as he walks around the projection. "Claimed that insane, you were, some of those here did," he reaches down to tap a Kimek on her head, "Or that our time with jokes, you were wasting," he bumps another Saryd's arm, "Assured me, some of them had, that wholly impossible, it was, to break a ring," he pushes an Arach's leg with his hoof. He stops where the projection shows signs of greater damage, where a large chunk of the ring was cut off, littered with floating debris. "But nor a joker, neither insane, you are. And impossible, this clearly is not. Invaluable information, what you've brought us is, Captain <last>. Investigate the site thoroughly, we must, so ask for your assistance again, we will, when a suitable crew for it, we have found."`
 			`	A Saryd rushes closer once Aulori says that, "Sir, against sending off anyone, the council is-".`
 			`	"Agree, the council will," Aulori cuts him off, still looking at the projection.`
 			`	The Saryd thinks for a while, then continues, "Take years, it would, to find and train someone willing to become an inspector. A dangerous task it-"`
@@ -1012,10 +1017,13 @@ mission "Heliarch Expedition 2"
 	landing
 	source
 		government "Coalition"
+		not "Ring of Wisdom"
 	destination "Ring of Wisdom"
 	to offer
 		has "event: heliarch expedition break"
+		not "Heliarch Expedition 3: offered"
 	on offer
+		log "Received a message from Consul Aulori. It was a request to meet him on the Ring of Wisdom, though it did not contain further details."
 		conversation
 			`A Heliarch delegation contacts you as you land on <origin>. "Greetings, Captain. Sent by Consul Aulori, we were," one of them says. "Requested, your presence is, at the <destination>."`
 			`	They tell you they weren't informed as to what the consul needs of you, but ask that you head to the <planet> when possible.`
@@ -1028,10 +1036,10 @@ mission "Heliarch Expedition 3"
 	source "Ring of Wisdom"
 	destination "Ablub's Invention"
 	to offer
-		has "Heliarch Expedition 2: done"
+		has "event: heliarch expedition break"
 	on offer
 		conversation
-			`Consul Aulori meets you when you land. "Carefully analyzing your findings, we have been, Captain. Much insight, they have brought us," he says. "Only so much can be gained from second hand observation, unfortunately. For that reason, to escort one of our own ships there, we ask of you."`
+			`Shortly after you land, Consul Aulori arrives at your ship. "Carefully analyzing your findings, we have been, Captain. Much insight, they have brought us," he says. "Only so much can be gained from second hand observation, unfortunately. For that reason, to escort one of our own ships there, we ask you."`
 			`	He points to a Heliarch Punisher, parked in the distance with its crew loading some cargo into it. He says this ship will go with you.`
 			choice
 				`	"Of course. I'll show them the way."`
@@ -1041,15 +1049,17 @@ mission "Heliarch Expedition 3"
 				`	"Well, I think they're probably good to get there on their own. Sorry, but I'm not interested."`
 					decline
 			label parts
-			`	"Too advanced, the composites that make up this and all other ringworlds are. Replicate them, we cannot. Not yet. If how this one was destroyed, we learn, maybe how to construct parts of our own, we could."`
+			`	"Too advanced, the composites that make up this and all other ringworlds are. Replicate them, we cannot. Not yet. If how this one was destroyed, we learn, maybe how to construct parts of our own, we could determine."`
 			choice
 				`	"Alright, I'll show them the way."`
 				`	"I'm no megastructure engineer. It won't help to have me go there. They can go on their own, I'm not interested."`
 					decline
 			label accept
-			`	"Excellent. Equipped with a jump drive, the ship is, and to reach this "Ruin" planet, enough fuel, it has. A few last scanners, the scientists have requested, so after quick stop at <destination>, to the ringworld, you may bring them."`
+			`	"Excellent. Equipped with a jump drive, the ship is, and to reach this "Ruin" planet, enough fuel, it has. A few last scanners, the scientists have requested, so after a quick stop at <destination>, to the ringworld, you may bring them."`
 			`	He introduces you to the Punisher's crew and the dozens of scientists and engineers, who will also be accompanying you, then he wishes you all good luck. Once the consul leaves, some among the Punisher's crew start fidgeting. Their Captain, an Arach, has them ready the ship to follow yours, and they prepare to depart.`
 				accept
+	on accept
+		log "Agreed to escrot a Heliarch Punisher loaded with scientists and scanners to Ruin and the broken Quarg ringworld."
 	npc accompany save
 		personality escort heroic opportunistic
 		government "Heliarch"
@@ -1065,7 +1075,7 @@ mission "Heliarch Expedition 4"
 		has "Heliarch Expedition 3: done"
 	on offer
 		conversation
-			`The Punisher's captain has some equipment loaded onto the ship, and the mechanics do one last maintenance check on the ship before it leaves home territory. The captain tells you they will follow your lead when you launch. Every other minute, he looks nervously at the sky.`
+			`The Punisher's captain has some equipment loaded onto the ship, and the mechanics do one last maintenance check on it before it leaves home territory. The captain tells you they will follow your lead when you launch. Every other minute, he looks nervously at the sky.`
 				accept
 	npc accompany save
 		personality escort heroic opportunistic
@@ -1074,9 +1084,10 @@ mission "Heliarch Expedition 4"
 	on visit
 		dialog `You've reached <planet> but left the Heliarch ship behind. Best depart and wait for them to arrive.`
 	on complete
+		log "Successfully escorted the Heliarch Punisher to Ruin. The captain wishes to meet in the spaceport soon."
 		conversation
 			`The Punisher's captain had you follow his ship all over the planet after they refueled in the planet's odd facilities. Apparently they want an isolated place to set up their camp here, somewhere they wouldn't be easily spotted.`
-			`	They settle for a cavern on the way up a mountain, overlooking a foggy valley. A river is faintly visible through the dense fog. As they unload the cargo and start setting up, the captain comes to you and says that they'll meet you in the spaceport in a few hours to discuss "the acquisition of supplies."`
+			`	They settle for a cavern partway up a mountain, overlooking a foggy valley. A river is faintly visible through the dense fog. As they unload the cargo and start setting up, the captain comes to you and says that they'll meet you in the spaceport in a few hours to discuss "the acquisition of supplies."`
 
 mission "Heliarch Expedition 5"
 	name "Settlement Supplies"
@@ -1085,12 +1096,13 @@ mission "Heliarch Expedition 5"
 	to offer
 		has "Heliarch Expedition 4: done"
 	on offer
+		log "The Heliarchs apparently sent the researchers to Ruin without many basic supplies, so the captain has requested a fuel cell, battery pack, and water coolant system purchased nearby to sustain their camp. He has also seemed worried about something coming from the sky since this mission began."
 		conversation
-			`You've been waiting around for hours in the "spaceport" here when the Punisher finally comes back. The captain, a young Arach, comes to meet you, taking worried glances at the sky on his way. "Ready to do some shopping, are you, Captain?"`
+			`You've been waiting around for hours in the "spaceport" here when the Punisher finally comes back. The young Arach captain comes to meet you, taking worried glances at the sky on his way. "Ready to do some shopping, are you, Captain?"`
 			choice
 				`	"Wasn't I gonna get some supplies for you? Figured you meant I just had to pick them up from Coalition space."`
 				`	"Why do you even need supplies? Wasn't your cargo full with those crates?"`
-			`	"A most... exquisite opportunity, this is. Very... excited, our researchers are. To keep them and the operation secure, I was tasked," he says. "Filled to the brim with only laboratory utensils and advanced equiment, our cargo was, unfortunately."`
+			`	"A most... exquisite opportunity, this is. Very... excited, our researchers are. To keep them and the operation secure, I was tasked," he says. "Filled to the brim with only laboratory utensils and advanced equipment, our cargo was, unfortunately."`
 			`	He goes over how they lack basic equipment to set up a proper camp and further details on how all the Punisher was carrying was the technology that will be used to study the ringworld, so they have no means of sustaining the camp here in the long run.`
 			choice
 				`	"You came here without supply or equipment? What the hell were you thinking?"`
@@ -1100,8 +1112,8 @@ mission "Heliarch Expedition 5"
 			label nosupply
 			`	"Decide on this plan, I did not. Determined it to be the best course of action, the consuls have," he explains. "Completely overhaul our understanding of the ringworlds, and maybe about these 'Pug' more information uncover, this project could."`
 			label needs
-			`	He says that the group will need a way to generate energy, and a sizeable battery to power the facilities that will be mounted on the planet. He also mentions that they will need something to make sure the water they get from the nearby river is in a drinkable state. "Compensated for your expenses, you would of course be."`
-			`	You two go inside your ship where you show him a list of outfits around human space and even beyond, but he says that he doesn't want you to go too far away, as you'd need to return soon. After giving him details of some outfits, he settles for a nGVF-CC Fuel Cell, a LP144a Battery Pack, and a Water Coolant System.`
+			`	He says that the group will need a way to generate energy, and a sizeable battery to power the facilities that will be stationed on the planet. He also mentions that they will need something to make sure the water they get from the nearby river is in a drinkable state. "Compensated for your expenses, you would of course be."`
+			`	You both go inside your ship where you show him a list of outfits around human space and even beyond, but he says that he doesn't want you to go too far away, as you'd need to return soon. After giving him details of some outfits, he settles for a nGVF-CC Fuel Cell, a LP144a Battery Pack, and a Water Coolant System.`
 			`	"For us to sleep, enough bunks, my ship has, and skilled with lichen cultivation, some of our Kimek crewmembers are, so all we need, that is," he says.`
 			`	You say you'll come back soon with the requested items, and he wishes you safe travels, going back inside his ship and leaving for the camp.`
 				accept
@@ -1110,8 +1122,9 @@ mission "Heliarch Expedition 5"
 		outfit "LP144a Battery Pack" -1
 		outfit "Water Coolant System" -1
 		payment 330000
+		log "Provided the researchers on Ruin with the necessary outfits. The captain says they will be able to make their own way back to the Coalition when they are finished rsearching the planet and broken ringworld nearby."
 		conversation
-			`You land back on the foggy valley to deliver the outfits, finding several large tents set up inside the cavern.`
+			`You land back in the foggy valley to deliver the outfits, finding several large tents set up inside the cavern.`
 			`	"Small enough debris, we found, that bring them here, we could. Analyzing and experimenting, the scientists are," the Heliarch captain tells you when you find him.`
 			`	After everything has been unloaded from your ship, he hands you <payment>, saying they will be fine on their own now. Soon the Water Coolant System will be altered to provide clean water, he says, and that the power systems will shortly be connected to the research facilities.`
 			`	"Back home within a few months, we should be," he says, before looking around at the sky. "If all goes well." He thanks you for all your help, and wishes you a safe trip back to the Milky Way.`

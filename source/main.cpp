@@ -20,6 +20,7 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include "DataNode.h"
 #include "Dialog.h"
 #include "Files.h"
+#include "Fleet.h"
 #include "text/Font.h"
 #include "FrameTimer.h"
 #include "GameData.h"
@@ -32,9 +33,11 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include "PlayerInfo.h"
 #include "Preferences.h"
 #include "Screen.h"
+#include "Set.h"
 #include "Ship.h"
 #include "SpriteSet.h"
 #include "SpriteShader.h"
+#include "System.h"
 #include "Test.h"
 #include "TestContext.h"
 #include "UI.h"
@@ -65,6 +68,7 @@ Conversation LoadConversation();
 void PrintShipTable();
 void PrintTestsTable();
 void PrintWeaponTable();
+void PrintFleetShipFrequencyTable(const string systemName);
 #ifdef _WIN32
 void InitConsole();
 #endif
@@ -85,6 +89,8 @@ int main(int argc, char *argv[])
 	bool printShips = false;
 	bool printTests = false;
 	bool printWeapons = false;
+	bool printFleetShipFrequency = false;
+	string system = "";
 	string testToRunName = "";
 
 	for(const char *const *it = argv + 1; *it; ++it)
@@ -114,12 +120,17 @@ int main(int argc, char *argv[])
 			printShips = true;
 		else if(arg == "-w" || arg == "--weapons")
 			printWeapons = true;
+		else if(arg == "--fleetshipfrequencies" && *++it)
+		{
+			printFleetShipFrequency = true;
+			system = *it;
+		}
 	}
 	Files::Init(argv);
 
 	try {
 		// Begin loading the game data.
-		bool isConsoleOnly = loadOnly || printShips || printTests || printWeapons;
+		bool isConsoleOnly = loadOnly || printShips || printTests || printWeapons || printFleetShipFrequency;
 		future<void> dataLoading = GameData::BeginLoad(isConsoleOnly, debugMode);
 
 		// If we are not using the UI, or performing some automated task, we should load
@@ -133,7 +144,7 @@ int main(int argc, char *argv[])
 			return 1;
 		}
 
-		if(printShips || printTests || printWeapons)
+		if(printShips || printTests || printWeapons || printFleetShipFrequency)
 		{
 			if(printShips)
 				PrintShipTable();
@@ -141,6 +152,10 @@ int main(int argc, char *argv[])
 				PrintTestsTable();
 			if(printWeapons)
 				PrintWeaponTable();
+			if(printFleetShipFrequency)
+				PrintFleetShipFrequencyTable(system);
+			string pause = "";
+			cin >> pause;
 			return 0;
 		}
 
@@ -419,6 +434,7 @@ void PrintHelp()
 	cerr << "    -p, --parse-save: load the most recent saved game and inspect it for content errors" << endl;
 	cerr << "    --tests: print table of available tests, then exit." << endl;
 	cerr << "    --test <name>: run given test from resources directory" << endl;
+	cerr << "    --fleetshipfrequencies <system>: print a comma separated list of ships and frequencies for all the ships that may appear in fleets spawned in this system" <<endl;
 	cerr << endl;
 	cerr << "Report bugs to: <https://github.com/endless-sky/endless-sky/issues>" << endl;
 	cerr << "Home page: <https://endless-sky.github.io>" << endl;
@@ -615,6 +631,18 @@ void PrintWeaponTable()
 		cout << strength << '\n';
 	}
 	cout.flush();
+}
+
+
+
+void PrintFleetShipFrequencyTable(const string systemName)
+{
+	cout << "ship" << ',' << "effective frequency" << '\n';
+	if(!GameData::Systems().Has(systemName))
+		return;
+	const auto &result = GameData::Systems().Get(systemName)->GetShipFrequencies();
+	for(const auto &it : result)
+		cout << it.first << ',' << it.second << '\n';
 }
 
 

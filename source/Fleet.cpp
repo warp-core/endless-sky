@@ -28,6 +28,7 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include <cmath>
 #include <functional>
 #include <iterator>
+#include <iostream>
 
 using namespace std;
 
@@ -532,6 +533,27 @@ void Fleet::Place(const System &system, Ship &ship)
 int64_t Fleet::Strength() const
 {
 	return variants.Average(std::mem_fn(&Variant::Strength));
+}
+
+
+
+//map<const Ship *, double> Fleet::GetShipChances() const
+map<const string, double> Fleet::GetShipChances() const
+{
+	map<const string, double> shipChances;
+	int totalWeight = variants.TotalWeight();
+	for(const Variant &variant : variants)
+	{
+		map<const string, double> shipCounts;
+		for(const auto ship : variant.Ships())
+		{
+			bool isVariant = !ship->VariantName().empty();
+			shipCounts[isVariant ? ship->VariantName() : ship->ModelName()]++;
+		}
+		for(const auto it : shipCounts)
+			shipChances[it.first] += (it.second * variant.Weight() / totalWeight);
+	}
+	return shipChances;
 }
 
 

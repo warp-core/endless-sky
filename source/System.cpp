@@ -22,10 +22,12 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include "Minable.h"
 #include "Planet.h"
 #include "Random.h"
+#include "Ship.h"
 #include "SpriteSet.h"
 
 #include <algorithm>
 #include <cmath>
+#include <iostream>
 
 using namespace std;
 
@@ -779,6 +781,20 @@ double System::Danger() const
 		if(fleet.Get()->GetGovernment()->IsEnemy())
 			danger += static_cast<double>(fleet.Get()->Strength()) / fleet.Period();
 	return danger;
+}
+
+
+
+map<const string, double> System::GetShipFrequencies() const
+{
+	map<const string, double> shipFrequencies;
+	for(const RandomEvent<Fleet> &fleetEvent : fleets)
+	{
+		double frequency = 60. / fleetEvent.Period();
+		for(const auto it : fleetEvent.Get()->GetShipChances())
+			shipFrequencies[it.first] += it.second * frequency;
+	}
+	return shipFrequencies;
 }
 
 

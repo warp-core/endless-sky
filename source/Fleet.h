@@ -70,6 +70,9 @@ public:
 
 	int64_t Strength() const;
 
+	//std::map<const Ship *, double> GetShipChances() const;
+	std::map<const std::string, double> GetShipChances() const;
+
 
 private:
 	static std::pair<Point, double> ChooseCenter(const System &system);

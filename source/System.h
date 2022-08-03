@@ -20,6 +20,7 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include "StellarObject.h"
 #include "WeightedList.h"
 
+#include <map>
 #include <set>
 #include <string>
 #include <vector>
@@ -150,6 +151,9 @@ public:
 	// Check how dangerous this system is (credits worth of enemy ships jumping
 	// in per frame).
 	double Danger() const;
+
+	//std::map<const Ship *, double> GetShipChances() const;
+	std::map<const std::string, double> GetShipFrequencies() const;
 
 
 private:

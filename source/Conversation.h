@@ -68,7 +68,14 @@ public:
 	// substitutions and instantiating any actions.
 	Conversation Instantiate(std::map<std::string, std::string> &subs, int jumps = 0, int payload = 0) const;
 
-	// The beginning of the conversation is node 0. Some nodes have choices for
+	// Proceed to the next point that requires player input.
+	// Return true if that point is a choice, false if it is an endpoint.
+	bool Proceed() const;
+	// Get the options of the current choice, if there is one, otherwise, get an empty vector.
+	const std::vector<const std::string> Choices() const;
+
+
+	/*// The beginning of the conversation is node 0. Some nodes have choices for
 	// the user to select; others just automatically continue to another node.
 	// Nodes may also display images or include conditional branches.
 	bool IsChoice(int node) const;
@@ -99,10 +106,11 @@ public:
 	// this Conversation *and* the given element index is in the range of valid
 	// elements for the given node.
 	bool ElementIsValid(int node, int element) const;
+	*/
 
 
 private:
-	// This serves multiple purposes:
+	/*// This serves multiple purposes:
 	// - In a regular text node, there's exactly one of these. It contains
 	//   the text data, the index of the next node to unconditionally visit,
 	//   and, optionally, a condition set which, if not met, prevents the text
@@ -125,34 +133,111 @@ private:
 		// Conditions for displaying the text:
 		ConditionSet conditions;
 	};
+	*/
 
+
+	enum class ConversationNodeType int_fast8_t {
+		TEXT,
+		SCENE,
+		BRANCH,
+		CHOICE,
+		ACTION,
+	};`
 
 	// The conversation is a network of "nodes" that you travel between by
 	// making choices (or by automatic branches that depend on the condition
 	// variable values for the current player).
-	class Node {
+	virtual class Node {
 	public:
-		// Construct a new node. Each paragraph of conversation that involves no
-		// choice can be merged into what came before it, to simplify things.
-		explicit Node(bool isChoice = false) noexcept : isChoice(isChoice), canMergeOnto(!isChoice) {}
+		// Construct a new node.
+		//explicit Node(DataNode &dataNode) noexcept;
 
-		// The condition expressions that determine the next node to load, or
-		// whether to display.
+		virtual void Save(DataWriter &out);
+
+		// The condition expressions that determine if this node should be displayed,
+		// if it is not a branch, or, if it is a branch, which branch to follow.
 		ConditionSet conditions;
 		// Tasks performed when this node is reached.
 		GameAction actions;
-		// See Element's comment above for what this actually entails.
-		std::vector<Element> elements;
+
+		/*// See Element's comment above for what this actually entails.
+		//std::vector<Element> elements;
 		// This distinguishes "choice" nodes from "branch" or text nodes. If
 		// this value is false, a one-element node is considered text, and a
 		// node with more than one element is considered is considered a
 		// "branch".
-		bool isChoice;
+		//bool isChoice;
 		// Keep track of whether it's possible to merge future nodes onto this.
-		bool canMergeOnto;
+		//bool canMergeOnto;
+		*/
 
 		// Image that should be shown along with this text.
 		const Sprite *scene = nullptr;
+
+		const ConversationNodeType nodeType;
+	};
+
+	class TextNode : public Node {
+	public:
+		explicit TextNode(DataNode &dataNode) noexcept;
+
+		virtual void Save(DataWriter &out) override;
+
+		void Merge(std::string toAdd);
+
+		const std::string text;
+	};
+
+	class SceneNode : public Node {
+	public:
+		explicit SceneNode(DataNode &dataNode) noexcept;
+
+		virtual void Save(DataNode &dataNode) override;
+
+
+	private:
+		const std::string sceneString;
+	};
+
+	class ChoiceNode : public Node {
+	public:
+		explicit ChoiceNode(DataNode &dataNode) noexcept;
+
+		virtual void Save(DataWriter &out) override;
+
+		int ChoiceCount() const;
+
+		std::vector<const TextNode> choices;
+	};
+
+	class LabelNode : public Node {
+	public:
+		explicit LabelNode(DataNode &dataNode) noexcept;
+
+		virtual void Save(DataWriter &out) override;
+
+		const std::string label;
+	};
+
+	class BranchNode : public Node {
+	public:
+		explicit BranchNode(DataNode &dataNode) noexcept;
+
+		virtual void Save(DataWriter &out) override;
+
+		const std::string BranchTo() const;
+
+		const std::string ifTrue;
+		const std::string ifFalse;
+	};
+
+	class ActionNode : public Node {
+	public:
+		explicit ActionNode(DataNode &dataNode) noexcept;
+
+		virtual void Save(DataWriter &out) override;
+
+		GameAction action;
 	};
 
 
@@ -177,8 +262,8 @@ private:
 	// While parsing the conversation, keep track of what labels link to what
 	// nodes. If a name appears in a goto before that label appears, remember
 	// what node and what element it appeared at in order to link it up later.
-	std::map<std::string, int> labels;
-	std::multimap<std::string, std::pair<int, int>> unresolved;
+	std::map<std::string, std::vector<Node>::iterator> labels;
+	// std::multimap<std::string, std::pair<int, int>> unresolved;
 	// The actual conversation data:
 	std::vector<Node> nodes;
 };

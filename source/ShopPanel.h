@@ -47,7 +47,7 @@ protected:
 	void DrawButtons();
 	void DrawMain();
 
-	void DrawShip(const Ship &ship, const Point &center, bool isSelected);
+	void DrawShip(const Ship &ship, const Point &center, bool isSelected, const std::string &name = "");
 
 	// These are for the individual shop panels to override.
 	virtual int TileSize() const = 0;

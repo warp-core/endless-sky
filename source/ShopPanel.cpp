@@ -493,7 +493,7 @@ void ShopPanel::DrawMain()
 
 
 
-void ShopPanel::DrawShip(const Ship &ship, const Point &center, bool isSelected)
+void ShopPanel::DrawShip(const Ship &ship, const Point &center, bool isSelected, const string &name)
 {
 	const Sprite *back = SpriteSet::Get(
 		isSelected ? "ui/shipyard selected" : "ui/shipyard unselected");
@@ -514,9 +514,9 @@ void ShopPanel::DrawShip(const Ship &ship, const Point &center, bool isSelected)
 
 	// Draw the ship name.
 	const Font &font = FontSet::Get(14);
-	const string &name = ship.Name().empty() ? ship.ModelName() : ship.Name();
+	const string &displayName = ship.Name().empty() ? name : ship.Name();
 	Point offset(-SIDEBAR_WIDTH / 2, -.5f * SHIP_SIZE + 10.f);
-	font.Draw({name, {SIDEBAR_WIDTH, Alignment::CENTER, Truncate::MIDDLE}},
+	font.Draw({displayName, {SIDEBAR_WIDTH, Alignment::CENTER, Truncate::MIDDLE}},
 		center + offset, *GameData::Colors().Get("bright"));
 }
 

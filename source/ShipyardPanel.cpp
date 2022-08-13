@@ -123,7 +123,7 @@ void ShipyardPanel::DrawItem(const string &name, const Point &point, int scrollY
 	if(point.Y() + SHIP_SIZE / 2 < Screen::Top() || point.Y() - SHIP_SIZE / 2 > Screen::Bottom())
 		return;
 
-	DrawShip(*ship, point, ship == selectedShip);
+	DrawShip(*ship, point, ship == selectedShip, name);
 }
 
 

@@ -99,20 +99,16 @@ void Conversation::Load(const DataNode &node, const string &missionName)
 	{
 		if(child.Token(0) == "scene" && child.Size() >= 2)
 		{
-			// A scene always starts a new text node.
-			AddNode();
-			nodes.back().scene = SpriteSet::Get(child.Token(1));
+			nodes.push_back(SceneNode(child));
 		}
 		else if(child.Token(0) == "label" && child.Size() >= 2)
 		{
-			// You cannot merge text above a label with text below it.
-			if(!nodes.empty())
-				nodes.back().canMergeOnto = false;
-			AddLabel(child.Token(1), child);
+			nodes.push_back(LabelNode(child));
 		}
 		else if(child.Token(0) == "choice")
 		{
-			// Create a new node with one or more choices in it.
+			nodes.push_back(ChoiceNode(child));
+			/*// Create a new node with one or more choices in it.
 			nodes.emplace_back(true);
 			bool foundErrors = false;
 			for(const DataNode &grand : child)
@@ -136,7 +132,7 @@ void Conversation::Load(const DataNode &node, const string &missionName)
 				if(!foundErrors)
 					child.PrintTrace("Warning: Conversation contains an empty \"choice\" node:");
 				nodes.pop_back();
-			}
+			}*/
 		}
 		else if(child.Token(0) == "name")
 		{
@@ -145,7 +141,8 @@ void Conversation::Load(const DataNode &node, const string &missionName)
 		}
 		else if(child.Token(0) == "branch")
 		{
-			// Don't merge "branch" nodes with any other nodes.
+			nodes.push_back(BranchNode(child));
+			/*// Don't merge "branch" nodes with any other nodes.
 			nodes.emplace_back();
 			nodes.back().canMergeOnto = false;
 			nodes.back().conditions.Load(child);
@@ -163,21 +160,19 @@ void Conversation::Load(const DataNode &node, const string &missionName)
 					else if(index < 0)
 						nodes.back().elements.back().next = index;
 				}
-			}
+			}*/
 		}
 		else if(child.Token(0) == "action" || child.Token(0) == "apply")
 		{
-			// Don't merge "action" nodes with any other nodes. Allow the legacy keyword "apply," too.
-			AddNode();
-			nodes.back().canMergeOnto = false;
-			nodes.back().actions.Load(child, missionName);
+			nodes.push_back(ActionNode(child, missionName));
 		}
 		// Check for common errors such as indenting a goto incorrectly:
 		else if(child.Size() > 1)
 			child.PrintTrace("Error: Conversation text should be a single token:");
 		else
 		{
-			// This is just an ordinary text node.
+			nodes.push_back(TextNode(child));
+			/*// This is just an ordinary text node.
 			// If the previous node is a choice, or if the previous node ended
 			// in a goto, or if the new node has a condition, then create a new
 			// node. Otherwise, just merge this new paragraph into the previous
@@ -191,7 +186,7 @@ void Conversation::Load(const DataNode &node, const string &missionName)
 			// Check whether there is a goto attached to this block of text. If
 			// so, future nodes can't merge onto this one.
 			if(LoadGotos(child))
-				nodes.back().canMergeOnto = false;
+				nodes.back().canMergeOnto = false;*/
 		}
 	}
 

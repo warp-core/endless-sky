@@ -24,7 +24,6 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include "Government.h"
 #include "Hardpoint.h"
 #include "Messages.h"
-#include "Mission.h"
 #include "Outfit.h"
 #include "Person.h"
 #include "Planet.h"
@@ -42,6 +41,7 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include <algorithm>
 #include <cmath>
 #include <ctime>
+#include <functional>
 #include <iterator>
 #include <limits>
 #include <sstream>
@@ -1002,41 +1002,16 @@ void PlayerInfo::ReorderShip(int fromIndex, int toIndex)
 
 
 
-int PlayerInfo::ReorderShips(const set<int> &fromIndices, int toIndex)
+void PlayerInfo::SetShipOrder(const vector<shared_ptr<Ship>> &newOrder)
 {
-	if(fromIndices.empty() || static_cast<unsigned>(toIndex) >= ships.size())
-		return -1;
-
-	// When shifting ships up in the list, move to the desired index. If
-	// moving down, move after the selected index.
-	int direction = (*fromIndices.begin() < toIndex) ? 1 : 0;
-
-	// Remove the ships from last to first, so that each removal leaves all the
-	// remaining indices in the set still valid.
-	vector<shared_ptr<Ship>> removed;
-	for(set<int>::const_iterator it = fromIndices.end(); it != fromIndices.begin(); )
+	// Check if the incoming vector contains the same elements
+	if(std::is_permutation(ships.begin(), ships.end(), newOrder.begin()))
 	{
-		// The "it" pointer doesn't point to the beginning of the list, so it is
-		// safe to decrement it here.
-		--it;
-
-		// Bail out if any invalid indices are encountered.
-		if(static_cast<unsigned>(*it) >= ships.size())
-			return -1;
-
-		removed.insert(removed.begin(), ships[*it]);
-		ships.erase(ships.begin() + *it);
-		// If this index is before the insertion point, removing it causes the
-		// insertion point to shift back one space.
-		if(*it < toIndex)
-			--toIndex;
+		ships = newOrder;
+		flagship.reset();
 	}
-	// Make sure the insertion index is within the list.
-	toIndex = min<int>(toIndex + direction, ships.size());
-	ships.insert(ships.begin() + toIndex, removed.begin(), removed.end());
-	flagship.reset();
-
-	return toIndex;
+	else
+		throw runtime_error("Cannot reorder ships because the new order does not contain the same ships");
 }
 
 
@@ -2576,14 +2551,13 @@ void PlayerInfo::ValidateLoad()
 
 	// Validate the missions that were loaded. Active-but-invalid missions are removed from
 	// the standard mission list, effectively pausing them until necessary data is restored.
-	missions.sort([](const Mission &lhs, const Mission &rhs) noexcept -> bool { return lhs.IsValid(); });
-	auto isInvalidMission = [](const Mission &m) noexcept -> bool { return !m.IsValid(); };
-	auto mit = find_if(missions.begin(), missions.end(), isInvalidMission);
+	auto mit = stable_partition(missions.begin(), missions.end(), mem_fn(&Mission::IsValid));
 	if(mit != missions.end())
 		inactiveMissions.splice(inactiveMissions.end(), missions, mit, missions.end());
 
 	// Invalid available jobs or missions are erased (since there is no guarantee
 	// the player will be on the correct planet when a plugin is re-added).
+	auto isInvalidMission = [](const Mission &m) noexcept -> bool { return !m.IsValid(); };
 	availableJobs.remove_if(isInvalidMission);
 	availableMissions.remove_if(isInvalidMission);
 }
@@ -2614,6 +2588,7 @@ void PlayerInfo::UpdateAutoConditions(bool isBoarding)
 	};
 	// Clear any existing ships: conditions. (Note: '!' = ' ' + 1.)
 	clearRange(conditions, "ships: ", "ships:!");
+	clearRange(conditions, "flagship model: ", "flagship model:!");
 	// Store special conditions for cargo and passenger space.
 	conditions["cargo space"] = 0;
 	conditions["passenger space"] = 0;
@@ -2624,6 +2599,8 @@ void PlayerInfo::UpdateAutoConditions(bool isBoarding)
 			conditions["passenger space"] += ship->Attributes().Get("bunks") - ship->RequiredCrew();
 			++conditions["ships: " + ship->Attributes().Category()];
 		}
+	if(flagship)
+		++conditions["flagship model: " + flagship->ModelName()];
 	// If boarding a ship, missions should not consider the space available
 	// in the player's entire fleet. The only fleet parameter offered to a
 	// boarding mission is the fleet composition (e.g. 4 Heavy Warships).
@@ -3102,6 +3079,18 @@ void PlayerInfo::Save(const string &path) const
 	out.Write();
 	out.WriteComment("How you began:");
 	startData.Save(out);
+
+	// Write plugins to player's save file for debugging.
+	if(!GameData::PluginAboutText().empty())
+	{
+		out.Write();
+		out.WriteComment("Installed plugins:");
+		out.Write("plugins");
+		out.BeginChild();
+		for(const auto &plugin : GameData::PluginAboutText())
+			out.Write(plugin.first);
+		out.EndChild();
+	}
 }
 
 

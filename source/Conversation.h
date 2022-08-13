@@ -73,6 +73,9 @@ public:
 	bool Proceed() const;
 	// Get the options of the current choice, if there is one, otherwise, get an empty vector.
 	const std::vector<const std::string> Choices() const;
+	// Returns the text to display since the last choice was selected.
+	std::string GetText() const;
+	// Returns the type of the endpoint that has been reached.
 
 
 	/*// The beginning of the conversation is node 0. Some nodes have choices for
@@ -142,7 +145,13 @@ private:
 		BRANCH,
 		CHOICE,
 		ACTION,
-	};`
+	};
+
+	enum class ConversationNodeNextStep int_fast8_t {
+		CHOICE,
+		GOTO,
+		ENDPOINT,
+	};
 
 	// The conversation is a network of "nodes" that you travel between by
 	// making choices (or by automatic branches that depend on the condition
@@ -175,6 +184,7 @@ private:
 		const Sprite *scene = nullptr;
 
 		const ConversationNodeType nodeType;
+		const ConversationNodeNextStep nextType;
 	};
 
 	class TextNode : public Node {

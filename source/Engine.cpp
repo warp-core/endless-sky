@@ -199,7 +199,7 @@ namespace {
 
 Engine::Engine(PlayerInfo &player)
 	: player(player), ai(ships, asteroids.Minables(), flotsam),
-	shipCollisions(256u, 32u)
+	secWeapons(player), shipCollisions(256u, 32u)
 {
 	zoom = Preferences::ViewZoom();
 
@@ -563,26 +563,9 @@ void Engine::Step(bool isActive)
 	targets.clear();
 
 	// Update the player's ammo amounts.
-	ammo.clear();
 	if(flagship)
-		for(const auto &it : flagship->Outfits())
-		{
-			if(!it.first->Icon())
-				continue;
+		secWeapons.Update(*flagship.get());
 
-			if(it.first->Ammo())
-				ammo.emplace_back(it.first,
-					flagship->OutfitCount(it.first->Ammo()));
-			else if(it.first->FiringFuel())
-			{
-				double remaining = flagship->Fuel()
-					* flagship->Attributes().Get("fuel capacity");
-				ammo.emplace_back(it.first,
-					remaining / it.first->FiringFuel());
-			}
-			else
-				ammo.emplace_back(it.first, -1);
-		}
 
 	// Display escort information for all ships of the "Escort" government,
 	// and all ships with the "escort" personality, except for fighters that
@@ -839,7 +822,7 @@ void Engine::Step(bool isActive)
 
 	if(doClick && !isRightClick)
 	{
-		doClick = !player.SelectShips(clickBox, hasShift);
+		doClick = !player.SelectShips(clickBox, hasShift) && !secWeapons.Click(clickPoint, SDL_GetModState() && KMOD_CTRL);
 		if(doClick)
 		{
 			const vector<const Ship *> &stack = escorts.Click(clickPoint);
@@ -1041,43 +1024,9 @@ void Engine::Draw() const
 		MapPanel::DrawMiniMap(player, .5f * min(1.f, jumpCount / 30.f), jumpInProgress, step);
 
 	// Draw ammo status.
-	static const double ICON_SIZE = 30.;
-	static const double AMMO_WIDTH = 80.;
-	Rectangle ammoBox = hud->GetBox("ammo");
-	// Pad the ammo list by the same amount on all four sides.
-	double ammoPad = .5 * (ammoBox.Width() - AMMO_WIDTH);
-	const Sprite *selectedSprite = SpriteSet::Get("ui/ammo selected");
-	const Sprite *unselectedSprite = SpriteSet::Get("ui/ammo unselected");
-	Color selectedColor = *colors.Get("bright");
-	Color unselectedColor = *colors.Get("dim");
-
-	// This is the top left corner of the ammo display.
-	Point pos(ammoBox.Left() + ammoPad, ammoBox.Bottom() - ammoPad);
-	// These offsets are relative to that corner.
-	Point boxOff(AMMO_WIDTH - .5 * selectedSprite->Width(), .5 * ICON_SIZE);
-	Point textOff(AMMO_WIDTH - .5 * ICON_SIZE, .5 * (ICON_SIZE - font.Height()));
-	Point iconOff(.5 * ICON_SIZE, .5 * ICON_SIZE);
-	for(const pair<const Outfit *, int> &it : ammo)
-	{
-		pos.Y() -= ICON_SIZE;
-		if(pos.Y() < ammoBox.Top() + ammoPad)
-			break;
-
-		const auto &playerSelectedWeapons = player.SelectedWeapons();
-		bool isSelected = (playerSelectedWeapons.find(it.first) != playerSelectedWeapons.end());
-
-		SpriteShader::Draw(it.first->Icon(), pos + iconOff);
-		SpriteShader::Draw(isSelected ? selectedSprite : unselectedSprite, pos + boxOff);
-
-		// Some secondary weapons may not have limited ammo. In that case, just
-		// show the icon without a number.
-		if(it.second < 0)
-			continue;
-
-		string amount = to_string(it.second);
-		Point textPos = pos + textOff + Point(-font.Width(amount), 0.);
-		font.Draw(amount, textPos, isSelected ? selectedColor : unselectedColor);
-	}
+	double ammoIconWidth = hud->GetValue("ammo icon width");
+	double ammoIconHeight = hud->GetValue("ammo icon height");
+	secWeapons.Draw(hud->GetBox("ammo"), Point(ammoIconWidth, ammoIconHeight));
 
 	// Draw escort status.
 	escorts.Draw(hud->GetBox("escorts"));

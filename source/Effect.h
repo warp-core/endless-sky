@@ -69,6 +69,8 @@ private:
 
 	// Allow the Visual class to access all these private members.
 	friend class Visual;
+	friend class Editor;
+	friend class EffectEditor;
 };
 
 

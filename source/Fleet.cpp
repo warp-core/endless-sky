@@ -227,6 +227,20 @@ void Fleet::Load(const DataNode &node)
 
 
 
+void Fleet::SetName(const string &name)
+{
+	fleetName = name;
+}
+
+
+
+const string &Fleet::Name() const
+{
+	return fleetName;
+}
+
+
+
 bool Fleet::IsValid(bool requireGovernment) const
 {
 	// Generally, a government is required for a fleet to be valid.
@@ -241,7 +255,7 @@ bool Fleet::IsValid(bool requireGovernment) const
 
 	// Any variant a fleet could choose should be valid.
 	if(any_of(variants.begin(), variants.end(),
-			[](const Variant &v) noexcept -> bool { return !v.IsValid(); }))
+			[](const auto &v) noexcept -> bool { return !v.item.IsValid(); }))
 		return false;
 
 	return true;
@@ -531,7 +545,7 @@ void Fleet::Place(const System &system, Ship &ship)
 
 int64_t Fleet::Strength() const
 {
-	return variants.Average(std::mem_fn(&Variant::Strength));
+	return variants.Average(&Variant::Strength);
 }
 
 

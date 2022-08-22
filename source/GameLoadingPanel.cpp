@@ -14,7 +14,6 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 #include "Angle.h"
 #include "Audio.h"
-#include "Conversation.h"
 #include "ConversationPanel.h"
 #include "GameData.h"
 #include "Information.h"
@@ -22,21 +21,18 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include "MaskManager.h"
 #include "MenuAnimationPanel.h"
 #include "MenuPanel.h"
-#include "PlayerInfo.h"
 #include "Point.h"
 #include "PointerShader.h"
 #include "Ship.h"
 #include "SpriteSet.h"
 #include "StarField.h"
-#include "System.h"
-#include "UI.h"
 
 #include "opengl.h"
 
 
 
-GameLoadingPanel::GameLoadingPanel(PlayerInfo &player, const Conversation &conversation, UI &gamePanels, bool &finishedLoading)
-	: player(player), conversation(conversation), gamePanels(gamePanels), finishedLoading(finishedLoading), ANGLE_OFFSET(360. / MAX_TICKS)
+GameLoadingPanel::GameLoadingPanel(std::function<void(GameLoadingPanel *)> done, bool &finishedLoading)
+	: done(std::move(done)), finishedLoading(finishedLoading), ANGLE_OFFSET(360. / MAX_TICKS)
 {
 	SetIsFullScreen(true);
 }
@@ -61,24 +57,7 @@ void GameLoadingPanel::Step()
 		// Set the game's initial internal state.
 		GameData::FinishLoading();
 
-		player.LoadRecent();
-
-		GetUI()->Pop(this);
-		if(conversation.IsEmpty())
-		{
-			GetUI()->Push(new MenuPanel(player, gamePanels));
-			GetUI()->Push(new MenuAnimationPanel());
-		}
-		else
-		{
-			GetUI()->Push(new MenuAnimationPanel());
-
-			auto *talk = new ConversationPanel(player, conversation);
-
-			UI *ui = GetUI();
-			talk->SetCallback([ui](int response) { ui->Quit(); });
-			GetUI()->Push(talk);
-		}
+		done(this);
 
 		finishedLoading = true;
 	}

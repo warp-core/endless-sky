@@ -214,7 +214,7 @@ void LocationFilter::Save(DataWriter &out) const
 			out.BeginChild();
 			{
 				for(const Government *government : governments)
-					out.Write(government->GetTrueName());
+					out.Write(government->TrueName());
 			}
 			out.EndChild();
 		}
@@ -618,4 +618,30 @@ bool LocationFilter::Matches(const System *system, const System *origin, bool di
 		return false;
 
 	return true;
+}
+
+
+
+bool operator==(const LocationFilter &lhs, const LocationFilter &rhs)
+{
+	return lhs.planets == rhs.planets
+		&& lhs.attributes == rhs.attributes
+		&& lhs.systems == rhs.systems
+		&& lhs.governments == rhs.governments
+		&& lhs.center == rhs.center
+		&& lhs.centerMinDistance == rhs.centerMinDistance
+		&& lhs.centerMaxDistance == rhs.centerMaxDistance
+		&& lhs.originMinDistance == rhs.originMinDistance
+		&& lhs.originMaxDistance == rhs.originMaxDistance
+		&& lhs.outfits == rhs.outfits
+		&& lhs.shipCategory == rhs.shipCategory
+		&& lhs.notFilters == rhs.notFilters
+		&& lhs.neighborFilters == rhs.neighborFilters;
+}
+
+
+
+bool operator!=(const LocationFilter &lhs, const LocationFilter &rhs)
+{
+	return !(lhs == rhs);
 }

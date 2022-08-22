@@ -42,6 +42,9 @@ public:
 	// the given fraction of its full brightness.
 	Color Additive(float alpha) const;
 
+	friend bool operator==(const Color &lhs, const Color &rhs);
+	friend bool operator!=(const Color &lhs, const Color &rhs);
+
 	// Compute a linear combination
 	static Color Combine(float a1, Color c1, float a2, Color c2);
 

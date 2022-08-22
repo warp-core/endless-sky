@@ -2247,7 +2247,7 @@ void AI::DoAppeasing(const shared_ptr<Ship> &ship, double *threshold) const
 			toDump -= dumped;
 		}
 
-	Messages::Add(ship->GetGovernment()->GetName() + " " + ship->Noun() + " \"" + ship->Name()
+	Messages::Add(ship->GetGovernment()->Name() + " " + ship->Noun() + " \"" + ship->Name()
 		+ "\": Please, just take my cargo and leave me alone.", Messages::Importance::Low);
 
 	*threshold = (1. - health) + .1;

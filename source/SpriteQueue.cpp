@@ -28,9 +28,11 @@ using namespace std;
 // Constructor, which allocates worker threads.
 SpriteQueue::SpriteQueue()
 {
+#ifndef ES_NO_THREADS
 	threads.resize(max(4u, thread::hardware_concurrency()));
 	for(thread &t : threads)
 		t = thread(ref(*this));
+#endif // ES_NO_THREADS
 }
 
 
@@ -39,12 +41,16 @@ SpriteQueue::SpriteQueue()
 SpriteQueue::~SpriteQueue()
 {
 	{
+#ifndef ES_NO_THREADS
 		lock_guard<mutex> lock(readMutex);
+#endif // ES_NO_THREADS
 		added = -1;
 	}
+#ifndef ES_NO_THREADS
 	readCondition.notify_all();
 	for(thread &t : threads)
 		t.join();
+#endif // ES_NO_THREADS
 }
 
 
@@ -53,7 +59,9 @@ SpriteQueue::~SpriteQueue()
 void SpriteQueue::Add(const shared_ptr<ImageSet> &images)
 {
 	{
+#ifndef ES_NO_THREADS
 		lock_guard<mutex> lock(readMutex);
+#endif // ES_NO_THREADS
 		// Do nothing if we are destroying the queue already.
 		if(added < 0)
 			return;
@@ -61,7 +69,11 @@ void SpriteQueue::Add(const shared_ptr<ImageSet> &images)
 		toRead.push(images);
 		++added;
 	}
+#ifndef ES_NO_THREADS
 	readCondition.notify_one();
+#else
+	this->operator()();
+#endif // ES_NO_THREADS
 }
 
 
@@ -69,7 +81,9 @@ void SpriteQueue::Add(const shared_ptr<ImageSet> &images)
 // Unload the texture for the given sprite (to free up memory).
 void SpriteQueue::Unload(const string &name)
 {
+#ifndef ES_NO_THREADS
 	unique_lock<mutex> lock(loadMutex);
+#endif // ES_NO_THREADS
 	toUnload.push(name);
 }
 
@@ -91,8 +105,12 @@ double SpriteQueue::GetProgress() const
 
 void SpriteQueue::UploadSprites()
 {
+#ifndef ES_NO_THREADS
 	unique_lock<mutex> lock(loadMutex);
 	DoLoad(lock);
+#else
+	DoLoad();
+#endif // ES_NO_THREADS
 }
 
 
@@ -100,6 +118,7 @@ void SpriteQueue::UploadSprites()
 // Finish loading.
 void SpriteQueue::Finish()
 {
+#ifndef ES_NO_THREADS
 	// Loop until done loading.
 	while(true)
 	{
@@ -114,6 +133,7 @@ void SpriteQueue::Finish()
 		// disk yet. Wait until one arrives.
 		loadCondition.wait(lock);
 	}
+#endif // ES_NO_THREADS
 }
 
 
@@ -121,6 +141,7 @@ void SpriteQueue::Finish()
 // Thread entry point.
 void SpriteQueue::operator()()
 {
+#ifndef ES_NO_THREADS
 	while(true)
 	{
 		unique_lock<mutex> lock(readMutex);
@@ -157,12 +178,30 @@ void SpriteQueue::operator()()
 
 		readCondition.wait(lock);
 	}
+#else
+	// To signal this thread that it is time for it to quit, we set
+	// "added" to -1.
+	if(added < 0)
+		return;
+	if(toRead.empty())
+		return;
+
+	// Extract the one item we should work on reading right now.
+	shared_ptr<ImageSet> imageSet = toRead.front();
+	toRead.pop();
+	imageSet->Load();
+	toLoad.push(imageSet);
+#endif // ES_NO_THREADS
 }
 
 
-
+#ifndef ES_NO_THREADS
 void SpriteQueue::DoLoad(unique_lock<mutex> &lock)
+#else
+void SpriteQueue::DoLoad()
+#endif // ES_NO_THREADS
 {
+#ifndef ES_NO_THREADS
 	while(!toUnload.empty())
 	{
 		Sprite *sprite = SpriteSet::Modify(toUnload.front());
@@ -187,4 +226,5 @@ void SpriteQueue::DoLoad(unique_lock<mutex> &lock)
 		lock.lock();
 		++completed;
 	}
+#endif
 }

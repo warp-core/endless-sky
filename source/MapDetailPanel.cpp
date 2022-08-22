@@ -478,7 +478,7 @@ void MapDetailPanel::DrawKey()
 		for(unsigned i = 0; i < 4 && i < distances.size(); ++i)
 		{
 			RingShader::Draw(pos, OUTER, INNER, GovernmentColor(distances[i].second));
-			font.Draw(distances[i].second->GetName(), pos + textOff, dim);
+			font.Draw(distances[i].second->Name(), pos + textOff, dim);
 			pos.Y() += 20.;
 		}
 	}
@@ -606,7 +606,7 @@ void MapDetailPanel::DrawInfo()
 
 	governmentY = uiPoint.Y() + textMargin;
 	string gov = player.HasVisited(*selectedSystem) ?
-		selectedSystem->GetGovernment()->GetName() : "Unknown Government";
+		selectedSystem->GetGovernment()->Name() : "Unknown Government";
 	font.Draw({gov, alignLeft}, uiPoint + Point(0., 13.), (commodity == SHOW_GOVERNMENT) ? medium : dim);
 	if(commodity == SHOW_GOVERNMENT)
 		PointerShader::Draw(uiPoint + Point(0., 20.), Point(1., 0.),

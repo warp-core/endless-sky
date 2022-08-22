@@ -109,7 +109,32 @@ private:
 	int burstCount = 0;
 	bool isFiring = false;
 	bool wasFiring = false;
+
+	friend bool operator==(const Hardpoint &lhs, const Hardpoint &rhs);
+	friend bool operator!=(const Hardpoint &lhs, const Hardpoint &rhs);
+
+	friend class ShipEditor;
 };
+
+
+
+inline bool operator==(const Hardpoint &lhs, const Hardpoint &rhs)
+{
+	return
+		lhs.outfit == rhs.outfit &&
+		lhs.point == rhs.point &&
+		lhs.baseAngle.Degrees() == rhs.baseAngle.Degrees() &&
+		lhs.isTurret == rhs.isTurret &&
+		lhs.isParallel == rhs.isParallel &&
+		lhs.isUnder == rhs.isUnder;
+}
+
+
+
+inline bool operator!=(const Hardpoint &lhs, const Hardpoint &rhs)
+{
+	return !(lhs == rhs);
+}
 
 
 

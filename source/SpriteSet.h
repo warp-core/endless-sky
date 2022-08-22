@@ -13,8 +13,11 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #ifndef SPRITE_SET_H_
 #define SPRITE_SET_H_
 
+#include "Set.h"
+
 #include <set>
 #include <string>
+#include <vector>
 
 class Sprite;
 
@@ -27,6 +30,11 @@ class SpriteSet {
 public:
 	// Get a pointer to the sprite data with the given name.
 	static const Sprite *Get(const std::string &name);
+	static const Set<Sprite> &GetSprites();
+	static const std::vector<const Sprite *> MoonSprites();
+	static const std::vector<const Sprite *> GiantSprites();
+	static const std::vector<const Sprite *> PlanetSprites();
+	static const std::vector<const Sprite *> StarSprites();
 
 	// Inspect the sprite map and warn if some images contain no data.
 	static void CheckReferences();

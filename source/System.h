@@ -54,11 +54,25 @@ public:
 		int Count() const;
 		double Energy() const;
 
+		bool operator==(const Asteroid &rhs) const
+		{
+			return name == rhs.name
+				&& type == rhs.type
+				&& count == rhs.count
+				&& energy == rhs.energy;
+		}
+		bool operator!=(const Asteroid &rhs) const
+		{
+			return !(*this == rhs);
+		}
+
 	private:
 		std::string name;
 		const Minable *type = nullptr;
 		int count;
 		double energy;
+
+		friend class SystemEditor;
 	};
 
 
@@ -170,6 +184,9 @@ private:
 		int price = 0;
 		double supply = 0.;
 		double exports = 0.;
+
+		bool operator==(const Price &rhs) const { return base == rhs.base; }
+		bool operator!=(const Price &rhs) const { return !(*this == rhs); }
 	};
 
 
@@ -220,6 +237,9 @@ private:
 
 	// Attributes, for use in location filters.
 	std::set<std::string> attributes;
+
+	friend class SystemEditor;
+	friend class MainEditorPanel;
 };
 
 

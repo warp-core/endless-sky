@@ -12,6 +12,8 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 #include "SpriteSet.h"
 
+#include "Set.h"
+#include "Files.h"
 #include "Logger.h"
 #include "Sprite.h"
 
@@ -21,7 +23,11 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 using namespace std;
 
 namespace {
-	map<string, Sprite> sprites;
+	Set<Sprite> sprites;
+	vector<const Sprite *> moonSprites;
+	vector<const Sprite *> giantSprites;
+	vector<const Sprite *> planetSprites;
+	vector<const Sprite *> starSprites;
 
 	mutex modifyMutex;
 }
@@ -35,15 +41,79 @@ const Sprite *SpriteSet::Get(const string &name)
 
 
 
+const Set<Sprite> &SpriteSet::GetSprites()
+{
+	return sprites;
+}
+
+
+
+const vector<const Sprite *> SpriteSet::MoonSprites()
+{
+	return moonSprites;
+}
+
+
+
+const vector<const Sprite *> SpriteSet::GiantSprites()
+{
+	return giantSprites;
+}
+
+
+const vector<const Sprite *> SpriteSet::PlanetSprites()
+{
+	return planetSprites;
+}
+
+
+
+const vector<const Sprite *> SpriteSet::StarSprites()
+{
+	return starSprites;
+}
+
+
+
 void SpriteSet::CheckReferences()
 {
 	for(const auto &pair : sprites)
 	{
+		const auto &name = pair.first;
 		const Sprite &sprite = pair.second;
 		if(sprite.Height() == 0 && sprite.Width() == 0)
 			// Landscapes are allowed to still be empty.
 			if(pair.first.compare(0, 5, "land/") != 0)
 				Logger::LogError("Warning: image \"" + pair.first + "\" is referred to, but has no pixels.");
+		// Sort the planet sprites for the system editor.
+		if(!name.compare(0, 7, "planet/"))
+		{
+			// Ignore ringworlds, panels, dyson and wormholes.
+			if(name.find("ringworld") != string::npos)
+				continue;
+			if(name.find("wormhole") != string::npos)
+				continue;
+			if(name.find("panels") != string::npos)
+				continue;
+			if(name.find("dyson") != string::npos)
+				continue;
+
+			auto radius = sprite.Width() / 2. - 4.;
+
+			// Sort the sprites based on radius. Stations are always moons.
+			if(radius <= 50. || name.find("station") != string::npos)
+				moonSprites.push_back(&sprite);
+			else if(radius >= 120.)
+				giantSprites.push_back(&sprite);
+			else
+				planetSprites.push_back(&sprite);
+		}
+		else if(!name.compare(0, 5, "star/"))
+		{
+			// Ignore novas.
+			if(name.find("nova") == string::npos)
+				starSprites.push_back(&sprite);
+		}
 	}
 }
 
@@ -53,8 +123,11 @@ Sprite *SpriteSet::Modify(const string &name)
 {
 	lock_guard<mutex> guard(modifyMutex);
 
-	auto it = sprites.find(name);
-	if(it == sprites.end())
-		it = sprites.emplace(name, Sprite(name)).first;
-	return &it->second;
+	auto it = sprites.Find(name);
+	if(!it)
+	{
+		it = sprites.Get(name);
+		*it = Sprite(name);
+	}
+	return it;
 }

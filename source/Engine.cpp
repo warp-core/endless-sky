@@ -163,7 +163,7 @@ namespace {
 
 		// If this ship has no name, show its model name instead.
 		string tag;
-		const string &gov = ship->GetGovernment()->GetName();
+		const string &gov = ship->GetGovernment()->Name();
 		if(!ship->Name().empty())
 			tag = gov + " " + ship->Noun() + " \"" + ship->Name() + "\": ";
 		else
@@ -203,8 +203,10 @@ Engine::Engine(PlayerInfo &player)
 {
 	zoom = Preferences::ViewZoom();
 
+#ifndef ES_NO_THREADS
 	// Start the thread for doing calculations.
 	calcThread = thread(&Engine::ThreadEntryPoint, this);
+#endif // ES_NO_THREADS
 
 	if(!player.IsLoaded() || !player.GetSystem())
 		return;
@@ -250,12 +252,14 @@ Engine::Engine(PlayerInfo &player)
 
 Engine::~Engine()
 {
+#ifndef ES_NO_THREADS
 	{
 		unique_lock<mutex> lock(swapMutex);
 		terminate = true;
 	}
 	condition.notify_all();
 	calcThread.join();
+#endif // ES_NO_THREADS
 }
 
 
@@ -427,12 +431,21 @@ void Engine::Place(const list<NPC> &npcs, shared_ptr<Ship> flagship)
 
 
 
+void Engine::Place(const shared_ptr<Ship> &ship)
+{
+	newShips.emplace_back(ship);
+}
+
+
+
 // Wait for the previous calculations (if any) to be done.
 void Engine::Wait()
 {
+#ifndef ES_NO_THREADS
 	unique_lock<mutex> lock(swapMutex);
 	condition.wait(lock, [this] { return hasFinishedCalculating; });
 	drawTickTock = calcTickTock;
+#endif // ES_NO_THREADS
 }
 
 
@@ -761,7 +774,7 @@ void Engine::Step(bool isActive)
 		if(!target->GetGovernment())
 			info.SetString("target government", "No Government");
 		else
-			info.SetString("target government", target->GetGovernment()->GetName());
+			info.SetString("target government", target->GetGovernment()->Name());
 		targetSwizzle = target->GetSwizzle();
 		info.SetString("mission target", target->GetPersonality().IsTarget() ? "(mission target)" : "");
 
@@ -890,6 +903,7 @@ void Engine::Step(bool isActive)
 // Begin the next step of calculations.
 void Engine::Go()
 {
+#ifndef ES_NO_THREADS
 	{
 		unique_lock<mutex> lock(swapMutex);
 		++step;
@@ -897,6 +911,12 @@ void Engine::Go()
 		hasFinishedCalculating = false;
 	}
 	condition.notify_all();
+#else
+	++step;
+	drawTickTock = !drawTickTock;
+	CalculateStep();
+	calcTickTock = drawTickTock;
+#endif // ES_NO_THREADS
 }
 
 
@@ -1291,7 +1311,7 @@ void Engine::EnterSystem()
 				{
 					raidFleet->Place(*system, newShips);
 					Messages::Add("Your fleet has attracted the interest of a "
-							+ raidGovernment->GetName() + " raiding party.", Messages::Importance::Highest);
+							+ raidGovernment->Name() + " raiding party.", Messages::Importance::Highest);
 				}
 	}
 
@@ -1319,6 +1339,7 @@ void Engine::EnterSystem()
 // Thread entry point.
 void Engine::ThreadEntryPoint()
 {
+#ifndef ES_NO_THREADS
 	while(true)
 	{
 		{
@@ -1338,6 +1359,7 @@ void Engine::ThreadEntryPoint()
 		}
 		condition.notify_one();
 	}
+#endif // ES_NO_THREADS
 }
 
 
@@ -2435,7 +2457,7 @@ void Engine::DoGrudge(const shared_ptr<Ship> &target, const Government *attacker
 	{
 		message = "Please assist us in destroying ";
 		message += (attackerCount == 1 ? "this " : "these ");
-		message += attacker->GetName();
+		message += attacker->Name();
 		message += (attackerCount == 1 ? " ship." : " ships.");
 	}
 	else
@@ -2443,7 +2465,7 @@ void Engine::DoGrudge(const shared_ptr<Ship> &target, const Government *attacker
 		message = "We are under attack by ";
 		if(attackerCount == 1)
 			message += "a ";
-		message += attacker->GetName();
+		message += attacker->Name();
 		message += (attackerCount == 1 ? " ship" : " ships");
 		message += ". Please assist us!";
 	}

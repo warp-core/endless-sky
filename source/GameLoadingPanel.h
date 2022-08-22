@@ -15,12 +15,11 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 #include "Panel.h"
 
+#include <functional>
 #include <string>
 #include <vector>
 
-class Conversation;
-class PlayerInfo;
-class UI;
+class Editor;
 
 
 
@@ -28,16 +27,14 @@ class UI;
 // (like game data and save files).
 class GameLoadingPanel final : public Panel {
 public:
-	GameLoadingPanel(PlayerInfo &player, const Conversation &conversation, UI &gamePanels, bool &finishedLoading);
+	GameLoadingPanel(std::function<void(GameLoadingPanel *)> done, bool &finishedLoading);
 
 	void Step() final;
 	void Draw() final;
 
 
 private:
-	PlayerInfo &player;
-	const Conversation &conversation;
-	UI &gamePanels;
+	std::function<void(GameLoadingPanel *)> done;
 	bool &finishedLoading;
 
 	// The circular loading indicator shows 60 tick marks when all game data is loaded.

@@ -27,6 +27,7 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include "GameLoadingPanel.h"
 #include "Hardpoint.h"
 #include "Logger.h"
+#include "MenuAnimationPanel.h"
 #include "MenuPanel.h"
 #include "Outfit.h"
 #include "Panel.h"
@@ -222,7 +223,26 @@ void GameLoop(PlayerInfo &player, const Conversation &conversation, const string
 	// Whether the game data is done loading. This is used to trigger any
 	// tests to run.
 	bool dataFinishedLoading = false;
-	menuPanels.Push(new GameLoadingPanel(player, conversation, gamePanels, dataFinishedLoading));
+	menuPanels.Push(new GameLoadingPanel([&player, &conversation, &menuPanels, &gamePanels] (GameLoadingPanel *This)
+		{
+			player.LoadRecent();
+
+			menuPanels.Pop(This);
+			if(conversation.IsEmpty())
+			{
+				menuPanels.Push(new MenuPanel(player, gamePanels));
+				menuPanels.Push(new MenuAnimationPanel());
+			}
+			else
+			{
+				menuPanels.Push(new MenuAnimationPanel());
+
+				auto *talk = new ConversationPanel(player, conversation);
+
+				talk->SetCallback([ui = &menuPanels](int response) { ui->Quit(); });
+				menuPanels.Push(talk);
+			}
+		}, dataFinishedLoading));
 
 	bool showCursor = true;
 	int cursorTime = 0;

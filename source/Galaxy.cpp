@@ -15,10 +15,13 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include "DataNode.h"
 #include "SpriteSet.h"
 
+using namespace std;
+
 
 
 void Galaxy::Load(const DataNode &node)
 {
+	name = node.Token(1);
 	for(const DataNode &child : node)
 	{
 		if(child.Token(0) == "pos" && child.Size() >= 3)
@@ -28,6 +31,13 @@ void Galaxy::Load(const DataNode &node)
 		else
 			child.PrintTrace("Skipping unrecognized attribute:");
 	}
+}
+
+
+
+const string &Galaxy::Name() const
+{
+	return name;
 }
 
 

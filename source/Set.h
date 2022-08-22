@@ -30,9 +30,12 @@ public:
 	const Type *Get(const std::string &name) const { return &data[name]; }
 	// If an item already exists in this set, get it. Otherwise, return a null
 	// pointer rather than creating the item.
+	Type *Find(const std::string &name);
 	const Type *Find(const std::string &name) const;
 
 	bool Has(const std::string &name) const { return data.count(name); }
+	void Rename(const std::string &name, const std::string &newName) const;
+	void Erase(const std::string &name) const { data[name] = {}; }
 
 	typename std::map<std::string, Type>::iterator begin() { return data.begin(); }
 	typename std::map<std::string, Type>::const_iterator begin() const { return data.begin(); }
@@ -41,6 +44,7 @@ public:
 	typename std::map<std::string, Type>::const_iterator end() const { return data.end(); }
 
 	int size() const { return data.size(); }
+	void clear() const { data.clear(); }
 	bool empty() const { return data.empty(); }
 	// Remove any objects in this set that are not in the given set, and for
 	// those that are in the given set, revert to their contents.
@@ -58,6 +62,24 @@ const Type *Set<Type>::Find(const std::string &name) const
 {
 	auto it = data.find(name);
 	return (it == data.end() ? nullptr : &it->second);
+}
+
+
+
+template <class Type>
+Type *Set<Type>::Find(const std::string &name)
+{
+	return const_cast<Type *>(const_cast<const Set<Type> *>(this)->Find(name));
+}
+
+
+
+template <typename T>
+void Set<T>::Rename(const std::string &name, const std::string &newName) const
+{
+	auto node = data.extract(name);
+	node.key() = newName;
+	data.insert(std::move(node));
 }
 
 

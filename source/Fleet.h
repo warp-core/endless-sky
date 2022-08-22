@@ -18,6 +18,7 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include "Variant.h"
 #include "WeightedList.h"
 
+#include <algorithm>
 #include <list>
 #include <memory>
 #include <set>
@@ -48,6 +49,9 @@ public:
 	Fleet(const DataNode &node);
 
 	void Load(const DataNode &node);
+
+	void SetName(const std::string &name);
+	const std::string &Name() const;
 
 	// Determine if this fleet template uses well-defined data.
 	bool IsValid(bool requireGovernment = true) const;
@@ -90,6 +94,8 @@ private:
 	std::set<const Sale<Outfit> *> outfitters;
 
 	Personality personality;
+
+	friend class FleetEditor;
 };
 
 

@@ -24,10 +24,6 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using namespace std;
 
-namespace {
-	unsigned nextID = 0;
-}
-
 
 
 // Default constructor.
@@ -43,8 +39,6 @@ Government::Government()
 	penaltyFor[ShipEvent::SCAN_CARGO] = 0.;
 	penaltyFor[ShipEvent::PROVOKE] = 0.;
 	penaltyFor[ShipEvent::ATROCITY] = 10.;
-
-	id = nextID++;
 }
 
 
@@ -105,8 +99,7 @@ void Government::Load(const DataNode &node)
 				if(grand.Size() >= 2)
 				{
 					const Government *gov = GameData::Governments().Get(grand.Token(0));
-					attitudeToward.resize(nextID, 0.);
-					attitudeToward[gov->id] = grand.Value(1);
+					attitudeToward[gov] = grand.Value(1);
 				}
 				else
 					grand.PrintTrace("Skipping unrecognized attribute:");
@@ -197,7 +190,7 @@ void Government::Load(const DataNode &node)
 
 
 // Get the display name of this government.
-const string &Government::GetName() const
+const string &Government::Name() const
 {
 	return displayName;
 }
@@ -212,7 +205,7 @@ void Government::SetName(const string &trueName)
 
 
 
-const string &Government::GetTrueName() const
+const string &Government::TrueName() const
 {
 	return name;
 }
@@ -244,10 +237,8 @@ double Government::AttitudeToward(const Government *other) const
 	if(other == this)
 		return 1.;
 
-	if(attitudeToward.size() <= other->id)
-		return 0.;
-
-	return attitudeToward[other->id];
+	auto it = attitudeToward.find(other);
+	return (it == attitudeToward.end() ? 0. : it->second);
 }
 
 

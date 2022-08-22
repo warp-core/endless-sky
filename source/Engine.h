@@ -29,7 +29,9 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include <list>
 #include <map>
 #include <memory>
+#ifndef ES_NO_THREADS
 #include <thread>
+#endif // ES_NO_THREADS
 #include <utility>
 #include <vector>
 
@@ -65,6 +67,7 @@ public:
 	void Place();
 	// Place NPCs spawned by a mission that offers when the player is not landed.
 	void Place(const std::list<NPC> &npcs, std::shared_ptr<Ship> flagship = nullptr);
+	void Place(const std::shared_ptr<Ship> &ship);
 
 	// Wait for the previous calculations (if any) to be done.
 	void Wait();
@@ -169,14 +172,16 @@ private:
 
 	AI ai;
 
+#ifndef ES_NO_THREADS
 	std::thread calcThread;
 	std::condition_variable condition;
 	std::mutex swapMutex;
+	bool hasFinishedCalculating = true;
+	bool terminate = false;
+#endif // ES_NO_THREADS
 
 	bool calcTickTock = false;
 	bool drawTickTock = false;
-	bool hasFinishedCalculating = true;
-	bool terminate = false;
 	bool wasActive = false;
 	DrawList draw[2];
 	BatchDrawList batchDraw[2];
@@ -245,6 +250,8 @@ private:
 	double load = 0.;
 	int loadCount = 0;
 	double loadSum = 0.;
+
+	friend class Editor;
 };
 
 

@@ -60,6 +60,7 @@ public:
 	static std::string Name(const std::string &path);
 
 	// File IO.
+	static void CreateNewDirectory(const std::string &path);
 	static FILE *Open(const std::string &path, bool write = false);
 	static std::string Read(const std::string &path);
 	static std::string Read(FILE *file);

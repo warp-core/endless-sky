@@ -13,6 +13,8 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #ifndef DATA_WRITER_H_
 #define DATA_WRITER_H_
 
+#include "WeightedList.h"
+
 #include <algorithm>
 #include <map>
 #include <sstream>
@@ -124,10 +126,34 @@ void WriteSorted(const C<T, Args...> &container, A sortFn, B writeFn)
 	for(const auto &sit : sorted)
 		writeFn(*sit);
 }
+template <class T, template<class, class...> class C, class... Args, typename A, typename B>
+void WriteSorted(const C<const T *, Args...> &container, A sortFn, B writeFn)
+{
+	std::vector<const T *> sorted;
+	sorted.reserve(container.size());
+	for(const auto &it : container)
+		sorted.emplace_back(it);
+	std::sort(sorted.begin(), sorted.end(), sortFn);
+
+	for(const auto &sit : sorted)
+		writeFn(*sit);
+}
 template <class K, class V, class... Args, typename A, typename B>
 void WriteSorted(const std::map<const K *, V, Args...> &container, A sortFn, B writeFn)
 {
 	std::vector<const std::pair<const K *const, V> *> sorted;
+	sorted.reserve(container.size());
+	for(const auto &it : container)
+		sorted.emplace_back(&it);
+	std::sort(sorted.begin(), sorted.end(), sortFn);
+
+	for(const auto &sit : sorted)
+		writeFn(*sit);
+}
+template <class T, typename A, typename B>
+void WriteSorted(const WeightedList<T> &container, A sortFn, B writeFn)
+{
+	std::vector<const typename WeightedList<T>::Item *> sorted;
 	sorted.reserve(container.size());
 	for(const auto &it : container)
 		sorted.emplace_back(&it);

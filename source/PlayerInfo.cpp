@@ -3009,20 +3009,20 @@ void PlayerInfo::Save(const string &path) const
 
 	// Save a list of systems the player has visited.
 	WriteSorted(visitedSystems,
-		[](const System *const *lhs, const System *const *rhs)
-			{ return (*lhs)->Name() < (*rhs)->Name(); },
-		[&out](const System *system)
+		[](const System *lhs, const System *rhs)
+			{ return lhs->Name() < rhs->Name(); },
+		[&out](const System &system)
 		{
-			out.Write("visited", system->Name());
+			out.Write("visited", system.Name());
 		});
 
 	// Save a list of planets the player has visited.
 	WriteSorted(visitedPlanets,
-		[](const Planet *const *lhs, const Planet *const *rhs)
-			{ return (*lhs)->TrueName() < (*rhs)->TrueName(); },
-		[&out](const Planet *planet)
+		[](const Planet *lhs, const Planet *rhs)
+			{ return lhs->TrueName() < rhs->TrueName(); },
+		[&out](const Planet &planet)
 		{
-			out.Write("visited planet", planet->TrueName());
+			out.Write("visited planet", planet.TrueName());
 		});
 
 	if(!harvested.empty())
@@ -3129,7 +3129,7 @@ void PlayerInfo::Fine(UI *ui)
 				ui->Push(new ConversationPanel(*this, *conversation));
 			else
 			{
-				message = "Before you can leave your ship, the " + gov->GetName()
+				message = "Before you can leave your ship, the " + gov->Name()
 					+ " authorities show up and begin scanning it. They say, \"Captain "
 					+ LastName()
 					+ ", we detect highly illegal material on your ship.\""

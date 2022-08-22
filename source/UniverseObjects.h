@@ -58,6 +58,21 @@ class Sprite;
 class UniverseObjects {
 	// GameData currently is the orchestrating controller for all game definitions.
 	friend class GameData;
+	friend class EffectEditor;
+	friend class FleetEditor;
+	friend class GalaxyEditor;
+	friend class GovernmentEditor;
+	friend class HazardEditor;
+	friend class OutfitEditor;
+	friend class OutfitterEditor;
+	friend class PlanetEditor;
+	friend class ShipEditor;
+	friend class ShipyardEditor;
+	friend class SystemEditor;
+
+	friend class MainEditorPanel;
+	friend class MapEditorPanel;
+
 public:
 	// Load game objects from the given directories of definitions.
 	std::future<void> Load(const std::vector<std::string> &sources, bool debugMode = false);
@@ -82,11 +97,6 @@ public:
 
 private:
 	void LoadFile(const std::string &path, bool debugMode = false);
-
-
-private:
-	// A value in [0, 1] representing how many source files have been processed for content.
-	std::atomic<double> progress;
 
 
 private:
@@ -126,10 +136,6 @@ private:
 	std::map<std::string, std::string> tooltips;
 	std::map<std::string, std::string> helpMessages;
 	std::map<std::string, std::set<std::string>> disabled;
-
-	// A local cache of the menu background interface for thread-safe access.
-	mutable std::mutex menuBackgroundMutex;
-	Interface menuBackgroundCache;
 };
 
 

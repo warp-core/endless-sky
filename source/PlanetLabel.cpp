@@ -40,8 +40,8 @@ namespace {
 
 
 
-PlanetLabel::PlanetLabel(const Point &position, const StellarObject &object, const System *system, double zoom)
-	: position(position * zoom), radius(object.Radius() * zoom)
+PlanetLabel::PlanetLabel(const Point &position, const StellarObject &object, const System *system, double zoom, bool alwaysVisisble)
+	: position(position * zoom), radius(object.RealRadius() * zoom)
 {
 	const Planet &planet = *object.GetPlanet();
 	name = planet.Name();
@@ -49,7 +49,7 @@ PlanetLabel::PlanetLabel(const Point &position, const StellarObject &object, con
 		color = Color(.8f, .3f, 1.f, 1.f);
 	else if(planet.GetGovernment())
 	{
-		government = "(" + planet.GetGovernment()->GetName() + ")";
+		government = "(" + planet.GetGovernment()->Name() + ")";
 		color = planet.GetGovernment()->GetColor();
 		color = Color(color.Get()[0] * .5f + .3f, color.Get()[1] * .5f + .3f, color.Get()[2] * .5f + .3f);
 		if(!planet.CanLand())
@@ -61,6 +61,8 @@ PlanetLabel::PlanetLabel(const Point &position, const StellarObject &object, con
 		government = "(No government)";
 	}
 	float alpha = static_cast<float>(min(.5, max(0., .6 - (position.Length() - object.Radius()) * .001 * zoom)));
+	if(alwaysVisisble)
+		alpha = .75f;
 	color = Color(color.Get()[0] * alpha, color.Get()[1] * alpha, color.Get()[2] * alpha, 0.);
 
 	if(!system)

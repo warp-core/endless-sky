@@ -47,6 +47,7 @@ public:
 	// The main panel allows fast-forward.
 	bool AllowsFastForward() const noexcept final;
 
+	Engine &GetEngine() { return engine; }
 
 protected:
 	// Only override the ones you need; the default action is to return false.
@@ -90,6 +91,8 @@ private:
 	bool hasShift = false;
 	bool canClick = false;
 	bool canDrag = false;
+
+	friend class Editor;
 };
 
 

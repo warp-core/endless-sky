@@ -194,6 +194,9 @@ private:
 		Color color;
 	};
 	std::vector<Link> links;
+
+	friend class Editor;
+	friend class SystemEditor;
 };
 
 

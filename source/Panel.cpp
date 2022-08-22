@@ -142,6 +142,13 @@ bool Panel::RClick(int x, int y)
 
 
 
+bool Panel::MClick(int x, int y)
+{
+	return false;
+}
+
+
+
 bool Panel::Hover(int x, int y)
 {
 	return false;

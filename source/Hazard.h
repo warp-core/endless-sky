@@ -27,6 +27,7 @@ public:
 
 	// Whether this hazard has a valid definition.
 	bool IsValid() const;
+	void SetName(const std::string &name);
 	// The name of the hazard in the data files.
 	const std::string &Name() const;
 	// Does the strength of this hazard deviate over time?
@@ -64,6 +65,8 @@ private:
 	bool deviates = true;
 
 	std::map<const Effect *, int> environmentalEffects;
+
+	friend class HazardEditor;
 };
 
 #endif

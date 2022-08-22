@@ -62,6 +62,9 @@ public:
 	const System *PickSystem(const System *origin) const;
 	const Planet *PickPlanet(const System *origin, bool hasClearance = false, bool requireSpaceport = true) const;
 
+	friend bool operator==(const LocationFilter &lhs, const LocationFilter &rhs);
+	friend bool operator!=(const LocationFilter &lhs, const LocationFilter &rhs);
+
 
 private:
 	// Load one particular line of conditions.

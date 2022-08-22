@@ -80,7 +80,27 @@ private:
 	// elements of this Armament itself).
 	std::map<const Outfit *, int> streamReload;
 	std::vector<Hardpoint> hardpoints;
+
+	friend bool operator==(const Armament &lhs, const Armament &rhs);
+	friend bool operator!=(const Armament &lhs, const Armament &rhs);
+
+	friend class ShipEditor;
 };
+
+
+
+
+inline bool operator==(const Armament &lhs, const Armament &rhs)
+{
+	return lhs.hardpoints == rhs.hardpoints;
+}
+
+
+
+inline bool operator!=(const Armament &lhs, const Armament &rhs)
+{
+	return !(lhs == rhs);
+}
 
 
 

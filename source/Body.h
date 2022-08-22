@@ -21,9 +21,14 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 class DataNode;
 class DataWriter;
+class Effect;
 class Government;
 class Mask;
+class Outfit;
+class Ship;
 class Sprite;
+class System;
+template <typename T> class TemplateEditor;
 
 
 
@@ -129,7 +134,38 @@ private:
 	// the same step over and over again.
 	mutable int currentStep = -1;
 	mutable float frame = 0.f;
+
+	friend bool operator==(const Body &lhs, const Body &rhs);
+	friend bool operator!=(const Body &lhs, const Body &rhs);
+
+	friend class EffectEditor;
+	friend class OutfitEditor;
+	friend class ShipEditor;
+	friend class SystemEditor;
+	friend class TemplateEditor<Effect>;
+	friend class TemplateEditor<Outfit>;
+	friend class TemplateEditor<Ship>;
+	friend class TemplateEditor<System>;
 };
+
+
+
+inline bool operator==(const Body &lhs, const Body &rhs)
+{
+	return
+		lhs.sprite == rhs.sprite &&
+		lhs.position == rhs.position &&
+		lhs.velocity == rhs.velocity &&
+		lhs.angle.Degrees() == rhs.angle.Degrees() &&
+		lhs.zoom == rhs.zoom;
+}
+
+
+
+inline bool operator!=(const Body &lhs, const Body &rhs)
+{
+	return !(lhs == rhs);
+}
 
 
 

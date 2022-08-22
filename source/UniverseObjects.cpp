@@ -38,6 +38,15 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using namespace std;
 
+namespace {
+	// A value in [0, 1] representing how many source files have been processed for content.
+	atomic<double> progress;
+
+	// A local cache of the menu background interface for thread-safe access.
+	mutex menuBackgroundMutex;
+	Interface menuBackgroundCache;
+}
+
 
 
 namespace {
@@ -245,7 +254,7 @@ void UniverseObjects::CheckReferences()
 	}
 	// Government names are used in mission NPC blocks and LocationFilters.
 	for(auto &&it : governments)
-		if(it.second.GetTrueName().empty() && !NameIfDeferred(deferred["government"], it))
+		if(it.second.TrueName().empty() && !NameIfDeferred(deferred["government"], it))
 			NameAndWarn("government", it);
 	// Minables are not serialized.
 	for(const auto &it : minables)

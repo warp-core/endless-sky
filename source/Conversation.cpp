@@ -99,6 +99,8 @@ void Conversation::Load(const DataNode &node, const string &missionName)
 	// Make sure this really is a conversation specification.
 	if(node.Token(0) != "conversation")
 		return;
+	if(node.Size() >= 2)
+		name = node.Token(1);
 
 	// Free any previously loaded data.
 	nodes.clear();
@@ -310,6 +312,13 @@ bool Conversation::IsValidIntro() const noexcept
 	return any_of(nodes.begin(), nodes.end(), [](const Node &node) noexcept -> bool {
 		return node.isChoice && node.data.empty();
 	});
+}
+
+
+
+const string &Conversation::Name() const noexcept
+{
+	return name;
 }
 
 

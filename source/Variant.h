@@ -46,6 +46,8 @@ public:
 private:
 	int weight = 1;
 	std::vector<const Ship *> ships;
+
+	friend class FleetEditor;
 };
 
 

@@ -77,6 +77,11 @@ void Files::Init(const char * const *argv)
 
 	}
 
+#ifdef __EMSCRIPTEN__
+	config = "/";
+	resources = "/";
+#endif
+
 	if(resources.empty())
 	{
 		// Find the path to the resource directory. This will depend on the
@@ -476,6 +481,18 @@ string Files::Name(const string &path)
 	// string::npos = -1, so if there is no '/' in the path this will
 	// return the entire string, i.e. path.substr(0).
 	return path.substr(path.rfind('/') + 1);
+}
+
+
+
+void Files::CreateNewDirectory(const string &path)
+{
+#if defined _WIN32
+	if(!CreateDirectoryW(Utf8::ToUTF16(path).c_str(), nullptr))
+		LogError("Failed to create directory at '" + path + "'.");
+#else
+	mkdir(path.c_str(), 0755);
+#endif
 }
 
 

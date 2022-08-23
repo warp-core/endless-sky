@@ -18,7 +18,6 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include "Screen.h"
 
 #include "opengl.h"
-#include <SDL2/SDL.h>
 
 #include <cstring>
 #include <string>
@@ -67,7 +66,7 @@ string GameWindow::SDLVersions()
 
 
 
-bool GameWindow::Init()
+bool GameWindow::Init(function<void(SDL_Window *, const SDL_GLContext &)> post)
 {
 	// This needs to be called before any other SDL commands.
 	if(SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -210,6 +209,8 @@ bool GameWindow::Init()
 	// want, because the ".icns" icon that is used automatically is prettier.
 	SetIcon();
 #endif
+
+	post(mainWindow, context);
 
 	return true;
 }

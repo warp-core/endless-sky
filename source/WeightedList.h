@@ -16,6 +16,7 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include "Random.h"
 
 #include <cstddef>
+#include <functional>
 #include <iterator>
 #include <numeric>
 #include <stdexcept>

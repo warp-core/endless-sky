@@ -50,6 +50,7 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include "Screen.h"
 #include "Ship.h"
 #include "ShipEvent.h"
+#include "SoundSet.h"
 #include "Sprite.h"
 #include "SpriteSet.h"
 #include "SpriteShader.h"
@@ -1051,7 +1052,7 @@ void Engine::Draw() const
 		int width = font.Width(info.GetString("target government"));
 		Point center = hud->GetPoint("faction markers");
 
-		const Sprite *mark[2] = {SpriteSet::Get("ui/faction left"), SpriteSet::Get("ui/faction right")};
+		const Sprite *mark[2] = {GameData::Sprites().Get("ui/faction left"), GameData::Sprites().Get("ui/faction right")};
 		// Round the x offsets to whole numbers so the icons are sharp.
 		double dx[2] = {(width + mark[0]->Width() + 1) / -2, (width + mark[1]->Width() + 1) / 2};
 		for(int i = 0; i < 2; ++i)
@@ -1066,8 +1067,8 @@ void Engine::Draw() const
 	Rectangle ammoBox = hud->GetBox("ammo");
 	// Pad the ammo list by the same amount on all four sides.
 	double ammoPad = .5 * (ammoBox.Width() - AMMO_WIDTH);
-	const Sprite *selectedSprite = SpriteSet::Get("ui/ammo selected");
-	const Sprite *unselectedSprite = SpriteSet::Get("ui/ammo unselected");
+	const Sprite *selectedSprite = GameData::Sprites().Get("ui/ammo selected");
+	const Sprite *unselectedSprite = GameData::Sprites().Get("ui/ammo unselected");
 	Color selectedColor = *colors.Get("bright");
 	Color unselectedColor = *colors.Get("dim");
 
@@ -1405,7 +1406,7 @@ void Engine::CalculateStep()
 		bool isJumping = flagship->IsUsingJumpDrive();
 		const map<const Sound *, int> &jumpSounds = isJumping ? flagship->Attributes().JumpSounds() : flagship->Attributes().HyperSounds();
 		if(jumpSounds.empty())
-			Audio::Play(Audio::Get(isJumping ? "jump drive" : "hyperdrive"));
+			Audio::Play(isJumping ? "jump drive" : "hyperdrive");
 		else
 			for(const auto &sound : jumpSounds)
 				Audio::Play(sound.first);
@@ -1630,7 +1631,7 @@ void Engine::MoveShip(const shared_ptr<Ship> &ship)
 		{
 			const map<const Sound *, int> &jumpSounds = isJump ? ship->Attributes().JumpOutSounds() : ship->Attributes().HyperOutSounds();
 			if(jumpSounds.empty())
-				Audio::Play(Audio::Get(isJump ? "jump out" : "hyperdrive out"), position);
+				Audio::Play(isJump ? "jump out" : "hyperdrive out", position);
 			else
 				for(const auto &sound : jumpSounds)
 					Audio::Play(sound.first, position);
@@ -1641,7 +1642,7 @@ void Engine::MoveShip(const shared_ptr<Ship> &ship)
 		{
 			const map<const Sound *, int> &jumpSounds = isJump ? ship->Attributes().JumpInSounds() : ship->Attributes().HyperInSounds();
 			if(jumpSounds.empty())
-				Audio::Play(Audio::Get(isJump ? "jump in" : "hyperdrive in"), position);
+				Audio::Play(isJump ? "jump in" : "hyperdrive in", position);
 			else
 				for(const auto &sound : jumpSounds)
 					Audio::Play(sound.first, position);
@@ -2298,7 +2299,7 @@ void Engine::FillRadar()
 	else if(hasHostiles && !hadHostiles)
 	{
 		if(Preferences::Has("Warning siren"))
-			Audio::Play(Audio::Get("alarm"));
+			Audio::Play("alarm");
 		alarmTime = 180;
 		hadHostiles = true;
 	}

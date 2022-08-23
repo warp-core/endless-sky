@@ -17,33 +17,28 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include "Logger.h"
 #include "Sprite.h"
 
-#include <map>
-#include <mutex>
-
 using namespace std;
 
-namespace {
-	Set<Sprite> sprites;
-	vector<const Sprite *> moonSprites;
-	vector<const Sprite *> giantSprites;
-	vector<const Sprite *> planetSprites;
-	vector<const Sprite *> starSprites;
 
-	mutex modifyMutex;
+
+const Sprite *SpriteSet::Get(const string &name) const
+{
+	lock_guard<mutex> guard(modifyMutex);
+
+	auto it = sprites.Find(name);
+	if(!it)
+	{
+		it = sprites.Get(name);
+		*it = Sprite(name);
+	}
+	return it;
 }
 
 
 
-const Sprite *SpriteSet::Get(const string &name)
+Sprite *SpriteSet::Modify(const string &name)
 {
-	return Modify(name);
-}
-
-
-
-const Set<Sprite> &SpriteSet::GetSprites()
-{
-	return sprites;
+	return const_cast<Sprite *>(Get(name));
 }
 
 
@@ -75,7 +70,7 @@ const vector<const Sprite *> SpriteSet::StarSprites()
 
 
 
-void SpriteSet::CheckReferences()
+void SpriteSet::CheckReferences() const
 {
 	for(const auto &pair : sprites)
 	{
@@ -115,19 +110,4 @@ void SpriteSet::CheckReferences()
 				starSprites.push_back(&sprite);
 		}
 	}
-}
-
-
-
-Sprite *SpriteSet::Modify(const string &name)
-{
-	lock_guard<mutex> guard(modifyMutex);
-
-	auto it = sprites.Find(name);
-	if(!it)
-	{
-		it = sprites.Get(name);
-		*it = Sprite(name);
-	}
-	return it;
 }

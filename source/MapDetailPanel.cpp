@@ -545,12 +545,12 @@ void MapDetailPanel::DrawInfo()
 
 	// Edges:
 	Point pos(Screen::Left(), Screen::Top() + startingY);
-	const Sprite *bottom = SpriteSet::Get("ui/bottom edge");
+	const Sprite *bottom = GameData::Sprites().Get("ui/bottom edge");
 	Point edgePos = pos + Point(.5 * size.X(), size.Y());
 	Point bottomOff(-30., .5 * bottom->Height());
 	SpriteShader::Draw(bottom, edgePos + bottomOff);
 
-	const Sprite *right = SpriteSet::Get("ui/right edge");
+	const Sprite *right = GameData::Sprites().Get("ui/right edge");
 	Point rightOff(.5 * (size.X() + right->Width()), -right->Height() / 2.);
 	SpriteShader::Draw(right, edgePos + rightOff);
 
@@ -595,7 +595,7 @@ void MapDetailPanel::DrawInfo()
 	uiPoint = Point(Screen::Left() + textMargin, Screen::Top() + startingGovernmentY);
 
 	// Draw the information for the government of this system at the top.
-	const Sprite *systemSprite = SpriteSet::Get("ui/map system");
+	const Sprite *systemSprite = GameData::Sprites().Get("ui/map system");
 	SpriteShader::Draw(systemSprite, uiPoint + Point(systemSprite->Width() / 2. - textMargin, 0.));
 
 	const Font &font = FontSet::Get(14);
@@ -618,7 +618,7 @@ void MapDetailPanel::DrawInfo()
 	tradeY = uiPoint.Y() - tradeHeight / 2.;
 
 	// Trade sprite goes after the rest.
-	const Sprite *tradeSprite = SpriteSet::Get("ui/map trade");
+	const Sprite *tradeSprite = GameData::Sprites().Get("ui/map trade");
 	SpriteShader::Draw(tradeSprite, uiPoint);
 
 	// Adapt the coordinates for the text (the sprite is drawn from a center coordinate).
@@ -674,7 +674,7 @@ void MapDetailPanel::DrawInfo()
 	{
 		static const int X_OFFSET = 240;
 		static const int WIDTH = 500;
-		const Sprite *panelSprite = SpriteSet::Get("ui/description panel");
+		const Sprite *panelSprite = GameData::Sprites().Get("ui/description panel");
 		Point pos(Screen::Right() - X_OFFSET - .5f * panelSprite->Width(),
 			Screen::Top() + .5f * panelSprite->Height());
 		SpriteShader::Draw(panelSprite, pos);
@@ -694,7 +694,7 @@ void MapDetailPanel::DrawInfo()
 // Draw the planet orbits in the currently selected system, on the current day.
 void MapDetailPanel::DrawOrbits()
 {
-	const Sprite *orbitSprite = SpriteSet::Get("ui/orbits and key");
+	const Sprite *orbitSprite = GameData::Sprites().Get("ui/orbits and key");
 	SpriteShader::Draw(orbitSprite, Screen::TopRight() + .5 * Point(-orbitSprite->Width(), orbitSprite->Height()));
 	Point orbitCenter = Screen::TopRight() + Point(-120., 160.);
 

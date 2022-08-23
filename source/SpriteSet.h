@@ -14,12 +14,13 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #define SPRITE_SET_H_
 
 #include "Set.h"
+#include "Sprite.h"
 
+#include <map>
+#include <mutex>
 #include <set>
 #include <string>
 #include <vector>
-
-class Sprite;
 
 
 
@@ -29,17 +30,25 @@ class Sprite;
 class SpriteSet {
 public:
 	// Get a pointer to the sprite data with the given name.
-	static const Sprite *Get(const std::string &name);
-	static const Set<Sprite> &GetSprites();
-	static const std::vector<const Sprite *> MoonSprites();
-	static const std::vector<const Sprite *> GiantSprites();
-	static const std::vector<const Sprite *> PlanetSprites();
-	static const std::vector<const Sprite *> StarSprites();
+	const Sprite *Get(const std::string &name) const;
+	Sprite *Modify(const std::string &name);
+
+	const std::vector<const Sprite *> MoonSprites();
+	const std::vector<const Sprite *> GiantSprites();
+	const std::vector<const Sprite *> PlanetSprites();
+	const std::vector<const Sprite *> StarSprites();
 
 	// Inspect the sprite map and warn if some images contain no data.
-	static void CheckReferences();
+	void CheckReferences() const;
 
-	static Sprite *Modify(const std::string &name);
+
+private:
+	mutable Set<Sprite> sprites;
+	mutable std::vector<const Sprite *> moonSprites;
+	mutable std::vector<const Sprite *> giantSprites;
+	mutable std::vector<const Sprite *> planetSprites;
+	mutable std::vector<const Sprite *> starSprites;
+	mutable std::mutex modifyMutex;
 };
 
 

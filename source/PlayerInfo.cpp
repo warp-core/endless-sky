@@ -34,6 +34,7 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include "SavedGame.h"
 #include "Ship.h"
 #include "ShipEvent.h"
+#include "SoundSet.h"
 #include "StartConditions.h"
 #include "StellarObject.h"
 #include "System.h"
@@ -1121,7 +1122,7 @@ void PlayerInfo::Land(UI *ui)
 
 	if(!freshlyLoaded)
 	{
-		Audio::Play(Audio::Get("landing"));
+		Audio::Play("landing");
 		Audio::PlayMusic(planet->MusicName());
 	}
 
@@ -1253,7 +1254,7 @@ bool PlayerInfo::TakeOff(UI *ui)
 	flagship->AllowCarried(false);
 
 	shouldLaunch = false;
-	Audio::Play(Audio::Get("takeoff"));
+	Audio::Play("takeoff");
 
 	// Jobs are only available when you are landed.
 	availableJobs.clear();

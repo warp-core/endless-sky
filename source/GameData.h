@@ -48,7 +48,9 @@ class Phrase;
 class Planet;
 class Politics;
 class Ship;
+class SoundSet;
 class Sprite;
+class SpriteSet;
 class StarField;
 class StartConditions;
 class System;
@@ -66,7 +68,7 @@ class TextReplacements;
 // universe.
 class GameData {
 public:
-	static std::future<void> BeginLoad(bool onlyLoadData, bool debugMode);
+	static std::future<void> BeginLoad(int options);
 	static void FinishLoading();
 	// Check for objects that are referred to but never defined.
 	static void CheckReferences();
@@ -77,9 +79,6 @@ public:
 	// Begin loading a sprite that was previously deferred. Currently this is
 	// done with all landscapes to speed up the program's startup.
 	static std::future<void> Preload(const Sprite *sprite);
-
-	// Get the list of resource sources (i.e. plugin folders).
-	static const std::vector<std::string> &Sources();
 
 	// Revert any changes that have been made to the universe.
 	static void Revert();
@@ -157,13 +156,16 @@ public:
 
 	static const TextReplacements &GetTextReplacements();
 
+	static const std::map<std::string, std::string> &Music();
+	static const SpriteSet &Sprites();
+	static const SoundSet &Sounds();
+
 	// Thread-safe way to draw the menu background.
 	static void DrawMenuBackground(Panel *panel);
 
 
 private:
 	static void LoadSources();
-	static std::map<std::string, std::shared_ptr<ImageSet>> FindImages();
 };
 
 

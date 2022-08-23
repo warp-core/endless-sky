@@ -13,11 +13,13 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include "Audio.h"
 
 #include "Files.h"
+#include "GameData.h"
 #include "Logger.h"
 #include "Music.h"
 #include "Point.h"
 #include "Random.h"
 #include "Sound.h"
+#include "SoundSet.h"
 
 #ifndef __APPLE__
 #include <AL/al.h>
@@ -70,10 +72,6 @@ namespace {
 		unsigned source = 0;
 	};
 
-	// Thread entry point for loading the sound files.
-	void Load();
-
-
 	// Mutex to make sure different threads don't modify the audio at the same time.
 	mutex audioMutex;
 
@@ -92,20 +90,12 @@ namespace {
 	thread::id mainThreadID;
 #endif // ES_NO_THREADS
 
-	// Sound resources that have been loaded from files.
-	Set<Sound> sounds;
 	// OpenAL "sources" available for playing sounds. There are a limited number
 	// of these, so they must be reused.
 	vector<Source> sources;
 	vector<unsigned> recycledSources;
 	vector<unsigned> endingSources;
 	unsigned maxSources = 255;
-
-	// Queue and thread for loading sound files in the background.
-	map<string, string> loadQueue;
-#ifndef ES_NO_THREADS
-	thread loadThread;
-#endif // ES_NO_THREADS
 
 	// The current position of the "listener," i.e. the center of the screen.
 	Point listener;
@@ -123,7 +113,7 @@ namespace {
 
 
 // Begin loading sounds (in a separate thread).
-void Audio::Init(const vector<string> &sources)
+void Audio::Init()
 {
 	device = alcOpenDevice(nullptr);
 	if(!device)
@@ -151,39 +141,6 @@ void Audio::Init(const vector<string> &sources)
 	alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
 	alDopplerFactor(0.);
 
-	// Get all the sound files in the game data and all plugins.
-	for(const string &source : sources)
-	{
-		string root = source + "sounds/";
-		vector<string> files = Files::RecursiveList(root);
-		for(const string &path : files)
-		{
-			if(!path.compare(path.length() - 4, 4, ".wav"))
-			{
-				// The "name" of the sound is its full path within the "sounds/"
-				// folder, without the ".wav" or "~.wav" suffix.
-				size_t end = path.length() - 4;
-				if(path[end - 1] == '~')
-					--end;
-				loadQueue[path.substr(root.length(), end - root.length())] = path;
-			}
-		}
-	}
-
-#ifndef ES_NO_THREADS
-	// Begin loading the files.
-	if(!loadQueue.empty())
-		loadThread = thread(&Load);
-#else
-	// emscripten-compiled code freezes here in the browser
-	// so just load synchronously
-	Load();
-#endif
-
-	// Create the music-streaming threads.
-#ifdef __EMSCRIPTEN__
-	return; // Return early because Emscripten doesn't like threads! (and uses a no-op libmad mock)
-#endif
 	currentTrack.reset(new Music());
 	previousTrack.reset(new Music());
 	alGenSources(1, &musicSource);
@@ -208,26 +165,7 @@ void Audio::CheckReferences()
 		return;
 	}
 
-	for(auto &&it : sounds)
-		if(it.second.Name().empty())
-			Logger::LogError("Warning: sound \"" + it.first + "\" is referred to, but does not exist.");
-}
-
-
-
-// Report the progress of loading sounds.
-double Audio::GetProgress()
-{
-#ifndef ES_NO_THREADS
-	unique_lock<mutex> lock(audioMutex);
-#endif // ES_NO_THREADS
-
-	if(loadQueue.empty())
-		return 1.;
-
-	double done = sounds.size();
-	double total = done + loadQueue.size();
-	return done / total;
+	GameData::Sounds().CheckReferences();
 }
 
 
@@ -246,35 +184,6 @@ void Audio::SetVolume(double level)
 	volume = min(1., max(0., level));
 	if(isInitialized)
 		alListenerf(AL_GAIN, volume);
-}
-
-
-
-// Get a pointer to the named sound. The name is the path relative to the
-// "sound/" folder, and without ~ if it's on the end, or the extension.
-const Sound *Audio::Get(const string &name)
-{
-#ifndef ES_NO_THREADS
-	unique_lock<mutex> lock(audioMutex);
-#endif // ES_NO_THREADS
-	return sounds.Get(name);
-}
-
-
-
-bool Audio::Has(const string &name)
-{
-#ifndef ES_NO_THREADS
-	unique_lock<mutex> lock(audioMutex);
-#endif // ES_NO_THREADS
-	return sounds.Has(name);
-}
-
-
-
-const Set<Sound> &Audio::GetSounds()
-{
-	return sounds;
 }
 
 
@@ -304,6 +213,13 @@ void Audio::Play(const Sound *sound)
 
 
 
+void Audio::Play(const string &sound)
+{
+	Play(GameData::Sounds().Get(sound));
+}
+
+
+
 // Play the given sound, as if it is at the given distance from the
 // "listener". This will make it softer and change the left / right balance.
 void Audio::Play(const Sound *sound, const Point &position)
@@ -324,6 +240,13 @@ void Audio::Play(const Sound *sound, const Point &position)
 #else
 	queue[sound].Add(position - listener);
 #endif // ES_NO_THREADS
+}
+
+
+
+void Audio::Play(const string &sound, const Point &position)
+{
+	Play(GameData::Sounds().Get(sound), position);
 }
 
 
@@ -493,22 +416,6 @@ void Audio::Step()
 // Shut down the audio system (because we're about to quit).
 void Audio::Quit()
 {
-	// First, check if sounds are still being loaded in a separate thread, and
-	// if so interrupt that thread and wait for it to quit.
-#ifndef ES_NO_THREADS
-	unique_lock<mutex> lock(audioMutex);
-#endif // ES_NO_THREADS
-	if(!loadQueue.empty())
-		loadQueue.clear();
-#ifndef ES_NO_THREADS
-	if(loadThread.joinable())
-	{
-		lock.unlock();
-		loadThread.join();
-		lock.lock();
-	}
-#endif // ES_NO_THREADS
-
 	// Now, stop and delete any OpenAL sources that are playing.
 	for(const Source &source : sources)
 	{
@@ -532,12 +439,11 @@ void Audio::Quit()
 	recycledSources.clear();
 
 	// Free the memory buffers for all the sound resources.
-	for(const auto &it : sounds)
+	for(const auto &it : GameData::Sounds())
 	{
 		ALuint id = it.second.Buffer();
 		alDeleteBuffers(1, &id);
 	}
-	sounds.Revert({});
 
 	// Clean up the music source and buffers.
 #ifndef __EMSCRIPTEN__
@@ -630,40 +536,5 @@ namespace {
 	const Sound *Source::GetSound() const
 	{
 		return sound;
-	}
-
-
-
-	// Thread entry point for loading sounds.
-	void Load()
-	{
-		string name;
-		string path;
-		Sound *sound;
-		while(true)
-		{
-			{
-#ifndef ES_NO_THREADS
-				unique_lock<mutex> lock(audioMutex);
-#endif // ES_NO_THREADS
-				// If this is not the first time through, remove the previous item
-				// in the queue. This is a signal that it has been loaded, so we
-				// must not remove it until after loading the file.
-				if(!path.empty() && !loadQueue.empty())
-					loadQueue.erase(loadQueue.begin());
-				if(loadQueue.empty())
-					return;
-				name = loadQueue.begin()->first;
-				path = loadQueue.begin()->second;
-
-				// Since we need to unlock the mutex below, create the map entry to
-				// avoid a race condition when accessing sounds' size.
-				sound = sounds.Get(name);
-			}
-
-			// Unlock the mutex for the time-intensive part of the loop.
-			if(!sound->Load(path, name))
-				Logger::LogError("Unable to load sound \"" + name + "\" from path: " + path);
-		}
 	}
 }

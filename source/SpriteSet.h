@@ -33,6 +33,8 @@ public:
 	const Sprite *Get(const std::string &name) const;
 	Sprite *Modify(const std::string &name);
 
+	explicit operator const Set<Sprite> &() const { return sprites; }
+
 	const std::vector<const Sprite *> MoonSprites();
 	const std::vector<const Sprite *> GiantSprites();
 	const std::vector<const Sprite *> PlanetSprites();

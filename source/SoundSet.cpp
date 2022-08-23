@@ -25,7 +25,7 @@ const Sound *SoundSet::Get(const string &name) const
 
 	auto it = sounds.find(name);
 	if(it == sounds.end())
-		it = sounds.emplace(name, Sound()).first;
+		return sounds.Get(name);
 	return &it->second;
 }
 

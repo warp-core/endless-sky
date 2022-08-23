@@ -13,6 +13,7 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #ifndef SOUND_SET_H_
 #define SOUND_SET_H_
 
+#include "Set.h"
 #include "Sound.h"
 
 #include <map>
@@ -31,6 +32,8 @@ public:
 	const Sound *Get(const std::string &name) const;
 	Sound *Modify(const std::string &name);
 
+	explicit operator const Set<Sound> &() const { return sounds; }
+
 	// Inspect the sound map and warn if some sounds contain no data.
 	void CheckReferences() const;
 
@@ -40,7 +43,7 @@ public:
 
 
 private:
-	mutable std::map<std::string, Sound> sounds;
+	mutable Set<Sound> sounds;
 	mutable std::mutex modifyMutex;
 };
 

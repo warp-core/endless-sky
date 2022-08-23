@@ -24,7 +24,7 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 class GameWindow {
 public:
 	static std::string SDLVersions();
-	static bool Init(std::function<void(SDL_Window *, const SDL_GLContext &)> post);
+	static bool Init(std::function<void(SDL_Window *, const SDL_GLContext &)> post = {});
 	static void Quit();
 
 	// Paint the next frame in the main window.

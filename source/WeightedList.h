@@ -224,7 +224,7 @@ auto WeightedList<Type>::erase(iterator first, iterator last) noexcept -> iterat
 template <class Type>
 void WeightedList<Type>::RecalculateWeight()
 {
-	total = std::reduce(items.begin(), items.end(), 0, [](int lhs, const auto &rhs) { return lhs + rhs.weight; });
+	total = std::accumulate(items.begin(), items.end(), 0, [](int lhs, const auto &rhs) { return lhs + rhs.weight; });
 }
 
 

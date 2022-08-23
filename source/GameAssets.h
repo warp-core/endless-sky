@@ -31,6 +31,7 @@ class ImageSet;
 class GameAssets {
 	// GameData currently is the orchestrating controller for all game definitions.
 	friend class GameData;
+	friend class Editor;
 public:
 	static constexpr int None = 0x0;
 	static constexpr int Debug = 0x1;

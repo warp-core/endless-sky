@@ -142,10 +142,8 @@ private:
 	friend class OutfitEditor;
 	friend class ShipEditor;
 	friend class SystemEditor;
-	friend class TemplateEditor<Effect>;
-	friend class TemplateEditor<Outfit>;
-	friend class TemplateEditor<Ship>;
-	friend class TemplateEditor<System>;
+	template <typename T>
+	friend class TemplateEditor;
 };
 
 

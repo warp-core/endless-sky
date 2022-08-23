@@ -35,10 +35,10 @@ public:
 
 	explicit operator const Set<Sprite> &() const { return sprites; }
 
-	const std::vector<const Sprite *> MoonSprites();
-	const std::vector<const Sprite *> GiantSprites();
-	const std::vector<const Sprite *> PlanetSprites();
-	const std::vector<const Sprite *> StarSprites();
+	const std::vector<const Sprite *> &MoonSprites() const;
+	const std::vector<const Sprite *> &GiantSprites() const;
+	const std::vector<const Sprite *> &PlanetSprites() const;
+	const std::vector<const Sprite *> &StarSprites() const;
 
 	// Inspect the sprite map and warn if some images contain no data.
 	void CheckReferences() const;

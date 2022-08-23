@@ -43,27 +43,27 @@ Sprite *SpriteSet::Modify(const string &name)
 
 
 
-const vector<const Sprite *> SpriteSet::MoonSprites()
+const vector<const Sprite *> &SpriteSet::MoonSprites() const
 {
 	return moonSprites;
 }
 
 
 
-const vector<const Sprite *> SpriteSet::GiantSprites()
+const vector<const Sprite *> &SpriteSet::GiantSprites() const
 {
 	return giantSprites;
 }
 
 
-const vector<const Sprite *> SpriteSet::PlanetSprites()
+const vector<const Sprite *> &SpriteSet::PlanetSprites() const
 {
 	return planetSprites;
 }
 
 
 
-const vector<const Sprite *> SpriteSet::StarSprites()
+const vector<const Sprite *> &SpriteSet::StarSprites() const
 {
 	return starSprites;
 }

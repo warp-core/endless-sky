@@ -32,6 +32,7 @@ class Date;
 class Effect;
 class Fleet;
 class Galaxy;
+class GameAssets;
 class GameEvent;
 class Government;
 class Hazard;
@@ -159,6 +160,7 @@ public:
 	static const std::map<std::string, std::string> &Music();
 	static const SpriteSet &Sprites();
 	static const SoundSet &Sounds();
+	static GameAssets &Assets();
 
 	// Thread-safe way to draw the menu background.
 	static void DrawMenuBackground(Panel *panel);

@@ -703,6 +703,13 @@ const SoundSet &GameData::Sounds()
 
 
 
+GameAssets &GameData::Assets()
+{
+	return assets;
+}
+
+
+
 void GameData::LoadSources()
 {
 	sources.clear();

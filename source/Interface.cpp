@@ -60,15 +60,6 @@ namespace {
 
 
 
-// Destructor, which frees the memory used by the polymorphic list of elements.
-Interface::~Interface()
-{
-	for(Element *element : elements)
-		delete element;
-}
-
-
-
 // Load an interface.
 void Interface::Load(const DataNode &node)
 {
@@ -111,13 +102,13 @@ void Interface::Load(const DataNode &node)
 		{
 			// Check if this node specifies a known element type.
 			if(child.Token(0) == "sprite" || child.Token(0) == "image" || child.Token(0) == "outline")
-				elements.push_back(new ImageElement(child, anchor));
+				elements.emplace_back(new ImageElement(child, anchor));
 			else if(child.Token(0) == "label" || child.Token(0) == "string" || child.Token(0) == "button")
-				elements.push_back(new TextElement(child, anchor));
+				elements.emplace_back(new TextElement(child, anchor));
 			else if(child.Token(0) == "bar" || child.Token(0) == "ring")
-				elements.push_back(new BarElement(child, anchor));
+				elements.emplace_back(new BarElement(child, anchor));
 			else if(child.Token(0) == "line")
-				elements.push_back(new LineElement(child, anchor));
+				elements.emplace_back(new LineElement(child, anchor));
 			else
 			{
 				child.PrintTrace("Skipping unrecognized element:");
@@ -135,7 +126,7 @@ void Interface::Load(const DataNode &node)
 // Draw this interface.
 void Interface::Draw(const Information &info, Panel *panel) const
 {
-	for(const Element *element : elements)
+	for(const auto &element : elements)
 		element->Draw(info, panel);
 }
 

@@ -134,6 +134,70 @@ future<void> GameAssets::Preload(const Sprite *sprite)
 
 
 
+auto GameAssets::SaveSnapshot() const -> Snapshot
+{
+	Snapshot snapshot;
+	snapshot.colors = objects.colors;
+	snapshot.conversations = objects.conversations;
+	snapshot.effects = objects.effects;
+	snapshot.events = objects.events;
+	snapshot.fleets = objects.fleets;
+	snapshot.galaxies = objects.galaxies;
+	snapshot.governments = objects.governments;
+	snapshot.hazards = objects.hazards;
+	snapshot.interfaces = objects.interfaces;
+	snapshot.minables = objects.minables;
+	snapshot.missions = objects.missions;
+	snapshot.news = objects.news;
+	snapshot.outfits = objects.outfits;
+	snapshot.persons = objects.persons;
+	snapshot.phrases = objects.phrases;
+	snapshot.planets = objects.planets;
+	snapshot.ships = objects.ships;
+	snapshot.systems = objects.systems;
+	snapshot.tests = objects.tests;
+	snapshot.testDataSets = objects.testDataSets;
+	snapshot.shipSales = objects.shipSales;
+	snapshot.outfitSales = objects.outfitSales;
+	snapshot.sounds = static_cast<const Set<Sound> &>(sounds);
+	snapshot.sprites = static_cast<const Set<Sprite> &>(sprites);
+	snapshot.music = music;
+	return snapshot;
+}
+
+
+
+void GameAssets::Revert(const Snapshot &snapshot)
+{
+	objects.colors.Revert(snapshot.colors);
+	objects.conversations.Revert(snapshot.conversations);
+	objects.effects.Revert(snapshot.effects);
+	objects.events.Revert(snapshot.events);
+	objects.fleets.Revert(snapshot.fleets);
+	objects.galaxies.Revert(snapshot.galaxies);
+	objects.governments.Revert(snapshot.governments);
+	objects.hazards.Revert(snapshot.hazards);
+	objects.interfaces.Revert(snapshot.interfaces);
+	objects.minables.Revert(snapshot.minables);
+	objects.missions.Revert(snapshot.missions);
+	objects.news.Revert(snapshot.news);
+	objects.outfits.Revert(snapshot.outfits);
+	objects.persons.Revert(snapshot.persons);
+	objects.phrases.Revert(snapshot.phrases);
+	objects.planets.Revert(snapshot.planets);
+	objects.ships.Revert(snapshot.ships);
+	objects.systems.Revert(snapshot.systems);
+	objects.tests.Revert(snapshot.tests);
+	objects.testDataSets.Revert(snapshot.testDataSets);
+	objects.shipSales.Revert(snapshot.shipSales);
+	objects.outfitSales.Revert(snapshot.outfitSales);
+	static_cast<Set<Sound> &>(sounds).Revert(snapshot.sounds);
+	static_cast<Set<Sprite> &>(sprites).Revert(snapshot.sprites);
+	music.Revert(snapshot.music);
+}
+
+
+
 void GameAssets::LoadImages(const std::vector<std::string> &sources)
 {
 	// Now, read all the images in all the path directories. For each unique
@@ -180,7 +244,7 @@ void GameAssets::LoadSounds(const std::vector<std::string> &sources)
 			if(ext == ".mp3" || ext == ".MP3")
 			{
 				string name = path.substr(root.length(), path.length() - root.length() - 4);
-				music[name] = path;
+				*music.Get(name) = path;
 			}
 			// Regular sound files are loaded into memory for faster access.
 			else if(ext == ".wav" || ext == ".WAV")

@@ -682,7 +682,7 @@ const TextReplacements &GameData::GetTextReplacements()
 }
 
 
-const map<string, string> &GameData::Music()
+const Set<string> &GameData::Music()
 {
 	return assets.music;
 }

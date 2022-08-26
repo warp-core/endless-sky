@@ -37,6 +37,38 @@ public:
 	static constexpr int Debug = 0x1;
 	static constexpr int OnlyData = 0x2;
 
+	// A snapshot of the current assets. The only valid use case for one
+	// is to pass it to Revert to revert the current assets to the snapshot.
+	// Don't use it for anything else!
+	struct Snapshot {
+		Set<Color> colors;
+		Set<Conversation> conversations;
+		Set<Effect> effects;
+		Set<GameEvent> events;
+		Set<Fleet> fleets;
+		Set<Galaxy> galaxies;
+		Set<Government> governments;
+		Set<Hazard> hazards;
+		Set<Interface> interfaces;
+		Set<Minable> minables;
+		Set<Mission> missions;
+		Set<News> news;
+		Set<Outfit> outfits;
+		Set<Person> persons;
+		Set<Phrase> phrases;
+		Set<Planet> planets;
+		Set<Ship> ships;
+		Set<System> systems;
+		Set<Test> tests;
+		Set<TestData> testDataSets;
+		Set<Sale<Ship>> shipSales;
+		Set<Sale<Outfit>> outfitSales;
+
+		Set<std::string> music;
+		Set<Sound> sounds;
+		Set<Sprite> sprites;
+	};
+
 
 public:
 	GameAssets() noexcept = default;
@@ -56,6 +88,11 @@ public:
 	// done with all landscapes to speed up the program's startup.
 	std::future<void> Preload(const Sprite *sprite);
 
+	// Saves the current state of the assets as a snapshot.
+	Snapshot SaveSnapshot() const;
+	// Reverts to the state as specified in the snapshot.
+	void Revert(const Snapshot &snapshot);
+
 
 private:
 	void LoadImages(const std::vector<std::string> &sources);
@@ -64,7 +101,7 @@ private:
 
 private:
 	// The game assets.
-	std::map<std::string, std::string> music;
+	Set<std::string> music;
 	SoundSet sounds;
 	SpriteSet sprites;
 	UniverseObjects objects;

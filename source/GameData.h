@@ -157,7 +157,7 @@ public:
 
 	static const TextReplacements &GetTextReplacements();
 
-	static const std::map<std::string, std::string> &Music();
+	static const Set<std::string> &Music();
 	static const SpriteSet &Sprites();
 	static const SoundSet &Sounds();
 	static GameAssets &Assets();

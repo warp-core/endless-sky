@@ -32,6 +32,7 @@ public:
 	const Sound *Get(const std::string &name) const;
 	Sound *Modify(const std::string &name);
 
+	explicit operator Set<Sound> &() { return sounds; }
 	explicit operator const Set<Sound> &() const { return sounds; }
 
 	// Inspect the sound map and warn if some sounds contain no data.

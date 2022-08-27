@@ -439,11 +439,8 @@ void Audio::Quit()
 	recycledSources.clear();
 
 	// Free the memory buffers for all the sound resources.
-	for(const auto &it : GameData::Sounds())
-	{
-		ALuint id = it.second.Buffer();
-		alDeleteBuffers(1, &id);
-	}
+	for(auto &it : GameData::Sounds())
+		it.second.Unload();
 
 	// Clean up the music source and buffers.
 #ifndef __EMSCRIPTEN__

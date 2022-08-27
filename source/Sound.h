@@ -22,8 +22,10 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 class Sound {
 public:
 	bool Load(const std::string &path, const std::string &name);
+	void Unload() const;
 
 	const std::string &Name() const;
+	const std::string &Path() const;
 
 	unsigned Buffer() const;
 	bool IsLooping() const;
@@ -31,6 +33,8 @@ public:
 
 private:
 	std::string name;
+	std::string path;
+	mutable bool isLoaded = false;
 	unsigned buffer = 0;
 	bool isLooped = false;
 };

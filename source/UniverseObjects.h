@@ -41,7 +41,6 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include "TextReplacements.h"
 #include "Trade.h"
 
-#include <future>
 #include <map>
 #include <set>
 #include <string>
@@ -77,7 +76,8 @@ class UniverseObjects {
 
 public:
 	// Load game objects from the given directories of definitions.
-	std::future<void> Load(const std::vector<std::string> &sources, bool debugMode = false);
+	void Load(const std::vector<std::string> &sources, bool debugMode = false);
+	void LoadFrom(const std::string &path, bool debugMode = false);
 	// Determine the fraction of data files read from disk.
 	double GetProgress() const;
 	// Resolve every game object dependency.
@@ -98,6 +98,7 @@ public:
 
 
 private:
+	void LoadFolder(const std::vector<std::string> &files, bool debugMode = false);
 	void LoadFile(const std::string &path, bool debugMode = false);
 
 

@@ -42,6 +42,7 @@ bool Sound::Load(const string &path, const string &name)
 	if(path.length() < 5 || path.compare(path.length() - 4, 4, ".wav"))
 		return false;
 	this->name = name;
+	this->path = path;
 
 	isLooped = path[path.length() - 5] == '~';
 
@@ -61,12 +62,29 @@ bool Sound::Load(const string &path, const string &name)
 		alGenBuffers(1, &buffer);
 	alBufferData(buffer, AL_FORMAT_MONO16, &data.front(), bytes, frequency);
 
+	isLoaded = true;
 	return true;
 }
 
 
 
+void Sound::Unload() const
+{
+	ALuint id = buffer;
+	alDeleteBuffers(1, &id);
+	isLoaded = false;
+}
+
+
+
 const string &Sound::Name() const
+{
+	return name;
+}
+
+
+
+const string &Sound::Path() const
 {
 	return name;
 }

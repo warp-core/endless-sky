@@ -152,6 +152,13 @@ string ImageSet::Name(const string &path)
 
 
 
+const vector<string> &ImageSet::Path(bool is2x) const
+{
+	return paths[is2x];
+}
+
+
+
 // Determine whether the given path or name is for a sprite whose loading
 // should be deferred until needed.
 bool ImageSet::IsDeferred(const string &path)
@@ -271,9 +278,11 @@ void ImageSet::Load() noexcept(false)
 // the paths are saved in case the sprite needs to be loaded again.
 void ImageSet::Upload(Sprite *sprite)
 {
+	sprite->Unload();
+
 	// Load the frames (this will clear the buffers).
-	sprite->AddFrames(buffer[0], false);
-	sprite->AddFrames(buffer[1], true);
+	sprite->AddFrames(buffer[0], false, std::move(paths[0]));
+	sprite->AddFrames(buffer[1], true, std::move(paths[1]));
 	GameData::GetMaskManager().SetMasks(sprite, std::move(masks));
 	masks.clear();
 }

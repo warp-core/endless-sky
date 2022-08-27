@@ -69,6 +69,9 @@ public:
 		Set<Sprite> sprites;
 	};
 
+	using ImageMap = std::map<std::string, std::shared_ptr<ImageSet>>;
+	using SoundMap = std::map<std::string, std::string>;
+
 
 public:
 	GameAssets() noexcept = default;
@@ -81,6 +84,11 @@ public:
 
 	// Load all the assets from the given sources.
 	std::future<void> Load(const std::vector<std::string> &sources, int options = None);
+	std::future<void> LoadObjects(const std::string &path, int options = None);
+	void LoadSounds(const std::string &path, SoundMap sounds = {});
+	void LoadSprites(const std::string &path, ImageMap images = {});
+	void FindImages(ImageMap &images, const std::string &path);
+	void FindSounds(SoundMap &sounds, const std::string &path);
 	// Determine the fraction of assets read from disk.
 	double GetProgress() const;
 
@@ -95,8 +103,8 @@ public:
 
 
 private:
-	void LoadImages(const std::vector<std::string> &sources);
-	void LoadSounds(const std::vector<std::string> &sources);
+	void LoadSounds(const SoundMap &sounds);
+	void LoadImages(const ImageMap &images);
 
 
 private:

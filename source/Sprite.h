@@ -13,12 +13,13 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #ifndef SPRITE_H_
 #define SPRITE_H_
 
+#include "ImageBuffer.h"
 #include "Point.h"
 
+#include <array>
 #include <cstdint>
 #include <string>
-
-class ImageBuffer;
+#include <vector>
 
 
 
@@ -33,9 +34,10 @@ public:
 	const std::string &Name() const;
 
 	// Upload the given frames. The given buffer will be cleared afterwards.
-	void AddFrames(ImageBuffer &buffer, bool is2x);
+	void AddFrames(ImageBuffer &buffer, bool is2x, std::vector<std::string> path);
 	// Free up all textures loaded for this sprite.
 	void Unload();
+	const std::vector<std::string> &Path(bool is2x) const;
 
 	// Image dimensions, in pixels.
 	float Width() const;
@@ -56,6 +58,8 @@ public:
 
 private:
 	std::string name;
+	std::array<std::vector<std::string>, 2> paths;
+	bool isLoaded = false;
 
 	uint32_t texture[2] = {0, 0};
 

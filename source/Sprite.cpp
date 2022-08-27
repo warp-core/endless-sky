@@ -40,7 +40,7 @@ const string &Sprite::Name() const
 
 
 // Upload the given frames. The given buffer will be cleared afterwards.
-void Sprite::AddFrames(ImageBuffer &buffer, bool is2x)
+void Sprite::AddFrames(ImageBuffer &buffer, bool is2x, vector<string> path)
 {
 	// Do nothing if the buffer is empty.
 	if(!buffer.Pixels())
@@ -76,8 +76,10 @@ void Sprite::AddFrames(ImageBuffer &buffer, bool is2x)
 	// Unbind the texture.
 	glBindTexture(GL_TEXTURE_2D_ARRAY, 0);
 
-	// Free the ImageBuffer memory.
-	buffer.Clear();
+	// Save path to textures
+	paths[is2x] = std::move(path);
+
+	isLoaded = true;
 }
 
 
@@ -91,6 +93,15 @@ void Sprite::Unload()
 	width = 0.f;
 	height = 0.f;
 	frames = 0;
+
+	isLoaded = false;
+}
+
+
+
+const vector<string> &Sprite::Path(bool is2x) const
+{
+	return paths[is2x];
 }
 
 

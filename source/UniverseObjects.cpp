@@ -78,41 +78,32 @@ namespace {
 
 
 
-future<void> UniverseObjects::Load(const vector<string> &sources, bool debugMode)
+void UniverseObjects::Load(const vector<string> &sources, bool debugMode)
 {
 	progress = 0.;
 
-	// We need to copy any variables used for loading to avoid a race condition.
-	// 'this' is not copied, so 'this' shouldn't be accessed after calling this
-	// function (except for calling GetProgress which is safe due to the atomic).
-	return async(launch::async, [this, sources, debugMode]() noexcept -> void
-		{
-			vector<string> files;
-			for(const string &source : sources)
-			{
-				// Iterate through the paths starting with the last directory given. That
-				// is, things in folders near the start of the path have the ability to
-				// override things in folders later in the path.
-				auto list = Files::RecursiveList(source + "data/");
-				files.reserve(files.size() + list.size());
-				files.insert(files.end(),
-						make_move_iterator(list.begin()),
-						make_move_iterator(list.end()));
-			}
+	vector<string> files;
+	for(const string &source : sources)
+	{
+		// Iterate through the paths starting with the last directory given. That
+		// is, things in folders near the start of the path have the ability to
+		// override things in folders later in the path.
+		auto list = Files::RecursiveList(source + "data/");
+		files.reserve(files.size() + list.size());
+		files.insert(files.end(),
+				make_move_iterator(list.begin()),
+				make_move_iterator(list.end()));
+	}
 
-			const double step = 1. / (static_cast<int>(files.size()) + 1);
-			for(const auto &path : files)
-			{
-				LoadFile(path, debugMode);
+	LoadFolder(files, debugMode);
+}
 
-				// Increment the atomic progress by one step.
-				// We use acquire + release to prevent any reordering.
-				auto val = progress.load(memory_order_acquire);
-				progress.store(val + step, memory_order_release);
-			}
-			FinishLoading();
-			progress = 1.;
-		});
+
+
+void UniverseObjects::LoadFrom(const string &path, bool debugMode)
+{
+	progress = 0.;
+	LoadFolder(Files::RecursiveList(path), debugMode);
 }
 
 
@@ -303,6 +294,24 @@ void UniverseObjects::CheckReferences()
 	for(const auto &it : hazards)
 		if(!it.second.IsValid())
 			Warn("hazard", it.first);
+}
+
+
+
+void UniverseObjects::LoadFolder(const vector<string> &files, bool debugMode)
+{
+	const double step = 1. / (static_cast<int>(files.size()) + 1);
+	for(const auto &path : files)
+	{
+		LoadFile(path, debugMode);
+
+		// Increment the atomic progress by one step.
+		// We use acquire + release to prevent any reordering.
+		auto val = progress.load(memory_order_acquire);
+		progress.store(val + step, memory_order_release);
+	}
+	FinishLoading();
+	progress = 1.;
 }
 
 

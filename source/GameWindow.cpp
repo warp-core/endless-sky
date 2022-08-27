@@ -210,7 +210,8 @@ bool GameWindow::Init(function<void(SDL_Window *, const SDL_GLContext &)> post)
 	SetIcon();
 #endif
 
-	post(mainWindow, context);
+	if(post)
+		post(mainWindow, context);
 
 	return true;
 }

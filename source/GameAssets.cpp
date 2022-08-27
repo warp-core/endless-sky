@@ -28,30 +28,7 @@ using namespace std;
 
 
 namespace {
-	map<string, shared_ptr<ImageSet>> FindImages(const vector<string> &sources)
-	{
-		auto images = map<string, shared_ptr<ImageSet>>{};
-		for(const string &source : sources)
-		{
-			// All names will only include the portion of the path that comes after
-			// this directory prefix.
-			string directoryPath = source + "images/";
-			size_t start = directoryPath.size();
 
-			vector<string> imageFiles = Files::RecursiveList(directoryPath);
-			for(string &path : imageFiles)
-				if(ImageSet::IsImage(path))
-				{
-					string name = ImageSet::Name(path.substr(start));
-
-					shared_ptr<ImageSet> &imageSet = images[name];
-					if(!imageSet)
-						imageSet.reset(new ImageSet(name));
-					imageSet->Add(std::move(path));
-				}
-		}
-		return images;
-	}
 }
 
 
@@ -62,12 +39,95 @@ future<void> GameAssets::Load(const vector<string> &sources, int options)
 		{
 			if(!(options & OnlyData))
 			{
-				LoadImages(sources);
-				LoadSounds(sources);
+				ImageMap images;
+				SoundMap sounds;
+
+				for(const string &source : sources)
+				{
+					FindImages(images, source + "images/");
+					FindSounds(sounds, source + "sounds/");
+				}
+				LoadImages(images);
+				LoadSounds(sounds);
 			}
 
-			auto future = objects.Load(sources, options & Debug);
+			objects.Load(sources, options & Debug);
 		});
+}
+
+
+
+future<void> GameAssets::LoadObjects(const string &path, int options)
+{
+	return TaskQueue::Run([this, path, options]
+		{
+			objects.LoadFrom(path, options & Debug);
+		});
+}
+
+
+
+void GameAssets::LoadSounds(const string &path, SoundMap sounds)
+{
+	FindSounds(sounds, path);
+	LoadSounds(sounds);
+}
+
+
+
+void GameAssets::LoadSprites(const string &path, ImageMap images)
+{
+	FindImages(images, path);
+	LoadImages(images);
+}
+
+
+
+void GameAssets::FindImages(ImageMap &images, const string &path)
+{
+	for(string &file : Files::RecursiveList(path))
+		if(ImageSet::IsImage(file))
+		{
+			// All names will only include the portion of the path that comes after
+			// this directory prefix.
+			string name = ImageSet::Name(file.substr(path.size()));
+
+			shared_ptr<ImageSet> &imageSet = images[name];
+			if(!imageSet)
+				imageSet.reset(new ImageSet(name));
+			imageSet->Add(std::move(file));
+		}
+}
+
+
+
+void GameAssets::FindSounds(SoundMap &sounds, const string &path)
+{
+	for(const auto &file : Files::RecursiveList(path))
+	{
+		// Sanity check on the path length.
+		if(file.length() < path.length() + 4)
+			continue;
+		string ext = file.substr(file.length() - 4);
+
+		// Music sound files are loaded when needed.
+		if(ext == ".mp3" || ext == ".MP3")
+		{
+			string name = file.substr(path.length(), file.length() - path.length() - 4);
+			sounds[name + ext] = file;
+		}
+		// Regular sound files are loaded into memory for faster access.
+		else if(ext == ".wav" || ext == ".WAV")
+		{
+			// The "name" of the sound is its full path within the "sounds/"
+			// folder, without the ".wav" or "~.wav" suffix.
+			size_t end = file.length() - 4;
+			if(file[end - 1] == '~')
+				--end;
+			auto name = file.substr(path.length(), end - path.length());
+			sounds[name + ext] = file;
+		}
+	}
 }
 
 
@@ -191,20 +251,51 @@ void GameAssets::Revert(const Snapshot &snapshot)
 	objects.testDataSets.Revert(snapshot.testDataSets);
 	objects.shipSales.Revert(snapshot.shipSales);
 	objects.outfitSales.Revert(snapshot.outfitSales);
-	static_cast<Set<Sound> &>(sounds).Revert(snapshot.sounds);
-	static_cast<Set<Sprite> &>(sprites).Revert(snapshot.sprites);
 	music.Revert(snapshot.music);
+
+	// Sounds and sprites need to be unloaded before they are removed or replaced.
+	// They need to be manually loaded!
+	static_cast<Set<Sound> &>(sounds).RevertNoOverwrite(snapshot.sounds);
+	static_cast<Set<Sprite> &>(sprites).RevertNoOverwrite(snapshot.sprites);
 }
 
 
 
-void GameAssets::LoadImages(const std::vector<std::string> &sources)
+void GameAssets::LoadSounds(const SoundMap &sounds)
+{
+	for(const auto &[name, sound]: sounds)
+	{
+		string ext = name.substr(name.length() - 4);
+
+		// Music sound files are loaded when needed.
+		if(ext == ".mp3" || ext == ".MP3")
+			*music.Get(name.substr(0, name.length() - 4)) = sound;
+		// Regular sound files are loaded into memory for faster access.
+		else if(ext == ".wav" || ext == ".WAV")
+		{
+			// The "name" of the sound is its full path within the "sounds/"
+			// folder, without the ".wav" or "~.wav" suffix.
+			auto filename = name.substr(0, name.length() - 4);
+			TaskQueue::Run([this, name = std::move(filename), file = sound]
+				{
+					if(!this->sounds.Modify(name)->Load(file, name))
+						Logger::LogError("Unable to load sound \"" + name + "\" from: " + file);
+					++soundProgress.first;
+				});
+			++soundProgress.second;
+		}
+	}
+}
+
+
+
+void GameAssets::LoadImages(const ImageMap &images)
 {
 	// Now, read all the images in all the path directories. For each unique
 	// name, only remember one instance, letting things on the higher priority
 	// paths override the default images.
 	// From the name, strip out any frame number, plus the extension.
-	for(const auto &it : FindImages(sources))
+	for(const auto &it : images)
 	{
 		// This should never happen, but just in case:
 		if(!it.second)
@@ -212,6 +303,12 @@ void GameAssets::LoadImages(const std::vector<std::string> &sources)
 
 		// Reduce the set of images to those that are valid.
 		it.second->ValidateFrames();
+
+		// If this image is already loaded, don't load it again.
+		if(it.second->Path(false) == sprites.Get(it.second->Name())->Path(false)
+				&& it.second->Path(true) == sprites.Get(it.second->Name())->Path(true))
+			continue;
+
 		// For landscapes, remember all the source files but don't load them yet.
 		if(ImageSet::IsDeferred(it.first))
 			deferred[sprites.Get(it.first)] = it.second;
@@ -220,49 +317,6 @@ void GameAssets::LoadImages(const std::vector<std::string> &sources)
 			TaskQueue::Run([image = it.second] { image->Load(); },
 					[this, image = it.second] { image->Upload(sprites.Modify(image->Name())); ++spriteProgress.first; });
 			++spriteProgress.second;
-		}
-	}
-}
-
-
-
-void GameAssets::LoadSounds(const std::vector<std::string> &sources)
-{
-	for(const string &source : sources)
-	{
-		string root = source + "sounds/";
-		vector<string> files = Files::RecursiveList(root);
-
-		for(const string &path : files)
-		{
-			// Sanity check on the path length.
-			if(path.length() < root.length() + 4)
-				continue;
-			string ext = path.substr(path.length() - 4);
-
-			// Music sound files are loaded when needed.
-			if(ext == ".mp3" || ext == ".MP3")
-			{
-				string name = path.substr(root.length(), path.length() - root.length() - 4);
-				*music.Get(name) = path;
-			}
-			// Regular sound files are loaded into memory for faster access.
-			else if(ext == ".wav" || ext == ".WAV")
-			{
-				// The "name" of the sound is its full path within the "sounds/"
-				// folder, without the ".wav" or "~.wav" suffix.
-				size_t end = path.length() - 4;
-				if(path[end - 1] == '~')
-					--end;
-				auto name = path.substr(root.length(), end - root.length());
-				TaskQueue::Run([this, name = std::move(name), path = path]
-					{
-						if(!sounds.Modify(name)->Load(path, name))
-							Logger::LogError("Unable to load sound \"" + name + "\" from path: " + path);
-						++soundProgress.first;
-					});
-				++soundProgress.second;
-			}
 		}
 	}
 }

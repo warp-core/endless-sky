@@ -33,15 +33,8 @@ namespace {
 
 
 ImageBuffer::ImageBuffer(int frames)
-	: width(0), height(0), frames(frames), pixels(nullptr)
+	: width(0), height(0), frames(frames)
 {
-}
-
-
-
-ImageBuffer::~ImageBuffer()
-{
-	Clear();
 }
 
 
@@ -49,8 +42,7 @@ ImageBuffer::~ImageBuffer()
 // Set the number of frames. This must be called before allocating.
 void ImageBuffer::Clear(int frames)
 {
-	delete [] pixels;
-	pixels = nullptr;
+	pixels.clear();
 	this->frames = frames;
 }
 
@@ -62,10 +54,11 @@ void ImageBuffer::Allocate(int width, int height)
 {
 	// Do nothing if the buffer is already allocated or if any of the dimensions
 	// is set to zero.
-	if(pixels || !width || !height || !frames)
+	if(!pixels.empty() || !width || !height || !frames)
 		return;
 
-	pixels = new uint32_t[width * height * frames];
+	pixels.resize(width * height * frames);
+	pixels.shrink_to_fit();
 	this->width = width;
 	this->height = height;
 }
@@ -95,28 +88,28 @@ int ImageBuffer::Frames() const
 
 const uint32_t *ImageBuffer::Pixels() const
 {
-	return pixels;
+	return pixels.data();
 }
 
 
 
 uint32_t *ImageBuffer::Pixels()
 {
-	return pixels;
+	return pixels.data();
 }
 
 
 
 const uint32_t *ImageBuffer::Begin(int y, int frame) const
 {
-	return pixels + width * (y + height * frame);
+	return pixels.data() + width * (y + height * frame);
 }
 
 
 
 uint32_t *ImageBuffer::Begin(int y, int frame)
 {
-	return pixels + width * (y + height * frame);
+	return pixels.data() + width * (y + height * frame);
 }
 
 
@@ -126,8 +119,8 @@ void ImageBuffer::ShrinkToHalfSize()
 	ImageBuffer result(frames);
 	result.Allocate(width / 2, height / 2);
 
-	unsigned char *begin = reinterpret_cast<unsigned char *>(pixels);
-	unsigned char *out = reinterpret_cast<unsigned char *>(result.pixels);
+	unsigned char *begin = reinterpret_cast<unsigned char *>(pixels.data());
+	unsigned char *out = reinterpret_cast<unsigned char *>(result.pixels.data());
 	// Loop through every line of every frame of the buffer.
 	for(int y = 0; y < result.height * frames; ++y)
 	{

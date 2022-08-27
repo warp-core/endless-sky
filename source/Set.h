@@ -49,6 +49,7 @@ public:
 	// Remove any objects in this set that are not in the given set, and for
 	// those that are in the given set, revert to their contents.
 	void Revert(const Set<Type> &other);
+	void RevertNoOverwrite(const Set<Type> &other);
 
 
 private:
@@ -99,6 +100,30 @@ void Set<Type>::Revert(const Set<Type> &other)
 			// If this is an entry that is in the set we are reverting to, copy
 			// the state we are reverting to.
 			it->second = oit->second;
+			++it;
+			++oit;
+		}
+
+		// There should never be a case when an entry in the set we are
+		// reverting to has a name that is not also in this set.
+	}
+}
+
+
+
+template <class Type>
+void Set<Type>::RevertNoOverwrite(const Set<Type> &other)
+{
+	auto it = data.begin();
+	auto oit = other.data.begin();
+
+	while(it != data.end())
+	{
+		if(oit == other.data.end() || it->first < oit->first)
+			it = data.erase(it);
+		else if(it->first == oit->first)
+		{
+			// Don't overwrite!
 			++it;
 			++oit;
 		}

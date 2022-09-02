@@ -744,6 +744,11 @@ void Ship::FinishLoading(bool isNewInstance)
 		warning += "Defaulting " + string(attributes.Get("drag") ? "invalid" : "missing") + " \"drag\" attribute to 100.0\n";
 		attributes.Set("drag", 100.);
 	}
+	if(attributes.Get("moment of inertia") <= 0.)
+	{
+		warning += "Defaulting " + string(attributes.Get("moment of inertia") ? "invalid" : "missing") + " \"moment of inertia\" attribute to 1.0\n";
+		attributes.Set("drag", 1.);
+	}
 	if(!warning.empty())
 	{
 		// This check is mostly useful for variants and stock ships, which have
@@ -3336,9 +3341,16 @@ double Ship::Mass() const
 
 
 
+double Ship::MomentOfInertia() const
+{
+	return Mass() * attributes.Get("moment of inertia");
+}
+
+
+
 double Ship::TurnRate() const
 {
-	return attributes.Get("turn") / Mass();
+	return attributes.Get("turn") / MomentOfInertia();
 }
 
 

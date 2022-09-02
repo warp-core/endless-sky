@@ -747,7 +747,7 @@ void Ship::FinishLoading(bool isNewInstance)
 	if(attributes.Get("moment of inertia") <= 0.)
 	{
 		warning += "Defaulting " + string(attributes.Get("moment of inertia") ? "invalid" : "missing") + " \"moment of inertia\" attribute to 1.0\n";
-		attributes.Set("drag", 1.);
+		attributes.Set("moment of inertia", 1.);
 	}
 	if(!warning.empty())
 	{

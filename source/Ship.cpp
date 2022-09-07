@@ -215,7 +215,7 @@ void Ship::Load(const DataNode &node)
 			else
 			{
 				addAttributes = true;
-				attributes.Load(child);
+				addAttributesList.Load(child);
 			}
 		}
 		else if((key == "engine" || key == "reverse engine" || key == "steering engine") && child.Size() >= 3)
@@ -597,8 +597,9 @@ void Ship::FinishLoading(bool isNewInstance)
 	{
 		// Store attributes from an "add attributes" node in the ship's
 		// baseAttributes so they can be written to the save file.
-		baseAttributes.Add(attributes);
+		baseAttributes.Add(addAttributesList);
 		addAttributes = false;
+		addAttributesList = {};
 	}
 	// Add the attributes of all your outfits to the ship's base attributes.
 	attributes = baseAttributes;

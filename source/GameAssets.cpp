@@ -27,12 +27,6 @@ using namespace std;
 
 
 
-namespace {
-
-}
-
-
-
 future<void> GameAssets::Load(const vector<string> &sources, int options)
 {
 	return TaskQueue::Run([this, sources, options]
@@ -263,6 +257,9 @@ void GameAssets::Revert(const Snapshot &snapshot)
 
 void GameAssets::LoadSounds(const SoundMap &sounds)
 {
+	// Reset current progress.
+	soundProgress = {};
+
 	for(const auto &[name, sound]: sounds)
 	{
 		string ext = name.substr(name.length() - 4);
@@ -291,6 +288,9 @@ void GameAssets::LoadSounds(const SoundMap &sounds)
 
 void GameAssets::LoadImages(const ImageMap &images)
 {
+	// Reset current progress.
+	spriteProgress = {};
+
 	// Now, read all the images in all the path directories. For each unique
 	// name, only remember one instance, letting things on the higher priority
 	// paths override the default images.

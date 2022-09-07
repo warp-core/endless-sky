@@ -128,8 +128,12 @@ void GameAssets::FindSounds(SoundMap &sounds, const string &path)
 
 double GameAssets::GetProgress() const
 {
-	double sound = static_cast<double>(soundProgress.first) / soundProgress.second;
-	double sprite = static_cast<double>(spriteProgress.first) / spriteProgress.second;
+	double sound = soundProgress.second
+		? static_cast<double>(soundProgress.first) / soundProgress.second
+		: 1.;
+	double sprite = spriteProgress.second
+		? static_cast<double>(spriteProgress.first) / spriteProgress.second
+		: 1.;
 	double data = objects.GetProgress();
 
 	if(sound == 1. && sprite == 1. && data == 1.)

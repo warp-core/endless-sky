@@ -277,6 +277,10 @@ void GameAssets::LoadSounds(const SoundMap &sounds)
 			// The "name" of the sound is its full path within the "sounds/"
 			// folder, without the ".wav" or "~.wav" suffix.
 			auto filename = name.substr(0, name.length() - 4);
+
+			if(this->sounds.Get(filename)->Path() == sound)
+				continue;
+
 			TaskQueue::Run([this, name = std::move(filename), file = sound]
 				{
 					if(!this->sounds.Modify(name)->Load(file, name))

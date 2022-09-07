@@ -7,7 +7,10 @@ Foundation, either version 3 of the License, or (at your option) any later versi
 
 Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
 WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "GameWindow.h"
@@ -20,8 +23,8 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include "opengl.h"
 
 #include <cstring>
-#include <string>
 #include <sstream>
+#include <string>
 
 using namespace std;
 
@@ -69,7 +72,8 @@ string GameWindow::SDLVersions()
 bool GameWindow::Init(function<void(SDL_Window *, const SDL_GLContext &)> post)
 {
 	// This needs to be called before any other SDL commands.
-	if(SDL_Init(SDL_INIT_VIDEO) != 0) {
+	if(SDL_Init(SDL_INIT_VIDEO) != 0)
+	{
 		checkSDLerror();
 		return false;
 	}
@@ -82,14 +86,16 @@ bool GameWindow::Init(function<void(SDL_Window *, const SDL_GLContext &)> post)
 		return false;
 	}
 	if(mode.refresh_rate && mode.refresh_rate < 60)
-		Logger::LogError("Warning: low monitor frame rate detected (" + to_string(mode.refresh_rate) + "). The game will run more slowly.");
+		Logger::LogError("Warning: low monitor frame rate detected (" + to_string(mode.refresh_rate) + ")."
+			" The game will run more slowly.");
 
 	// Make the window just slightly smaller than the monitor resolution.
 	int minWidth = 640;
 	int minHeight = 480;
 	int maxWidth = mode.w;
 	int maxHeight = mode.h;
-	if(maxWidth < minWidth || maxHeight < minHeight){
+	if(maxWidth < minWidth || maxHeight < minHeight)
+	{
 #ifndef __EMSCRIPTEN__
 		ExitWithError("Monitor resolution is too small!");
 		return false;
@@ -119,7 +125,8 @@ bool GameWindow::Init(function<void(SDL_Window *, const SDL_GLContext &)> post)
 	mainWindow = SDL_CreateWindow("Endless Sky", SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED, windowWidth, windowHeight, flags);
 
-	if(!mainWindow){
+	if(!mainWindow)
+	{
 		ExitWithError("Unable to create window!");
 		return false;
 	}
@@ -140,12 +147,14 @@ bool GameWindow::Init(function<void(SDL_Window *, const SDL_GLContext &)> post)
 	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 
 	context = SDL_GL_CreateContext(mainWindow);
-	if(!context){
+	if(!context)
+	{
 		ExitWithError("Unable to create OpenGL context! Check if your system supports OpenGL 3.0.");
 		return false;
 	}
 
-	if(SDL_GL_MakeCurrent(mainWindow, context)){
+	if(SDL_GL_MakeCurrent(mainWindow, context))
+	{
 		ExitWithError("Unable to set the current OpenGL context!");
 		return false;
 	}
@@ -153,7 +162,13 @@ bool GameWindow::Init(function<void(SDL_Window *, const SDL_GLContext &)> post)
 	// Initialize GLEW.
 #if !defined(__APPLE__) && !defined(ES_GLES)
 	glewExperimental = GL_TRUE;
-	if(glewInit() != GLEW_OK){
+	GLenum err = glewInit();
+#ifdef GLEW_ERROR_NO_GLX_DISPLAY
+	if(err != GLEW_OK && err != GLEW_ERROR_NO_GLX_DISPLAY)
+#else
+	if(err != GLEW_OK)
+#endif
+	{
 		ExitWithError("Unable to initialize GLEW!");
 		return false;
 	}
@@ -161,7 +176,8 @@ bool GameWindow::Init(function<void(SDL_Window *, const SDL_GLContext &)> post)
 
 	// Check that the OpenGL version is high enough.
 	const char *glVersion = reinterpret_cast<const char *>(glGetString(GL_VERSION));
-	if(!glVersion || !*glVersion){
+	if(!glVersion || !*glVersion)
+	{
 		ExitWithError("Unable to query the OpenGL version!");
 		return false;
 	}
@@ -427,5 +443,3 @@ void GameWindow::ExitWithError(const string &message, bool doPopUp)
 
 	GameWindow::Quit();
 }
-
-

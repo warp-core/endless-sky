@@ -40,6 +40,7 @@ public:
 	explicit operator const Set<Sprite> &() const { return sprites; }
 
 	const std::vector<const Sprite *> &MoonSprites() const;
+	const std::vector<const Sprite *> &StationSprites() const;
 	const std::vector<const Sprite *> &GiantSprites() const;
 	const std::vector<const Sprite *> &PlanetSprites() const;
 	const std::vector<const Sprite *> &StarSprites() const;
@@ -51,6 +52,7 @@ public:
 private:
 	mutable Set<Sprite> sprites;
 	mutable std::vector<const Sprite *> moonSprites;
+	mutable std::vector<const Sprite *> stationSprites;
 	mutable std::vector<const Sprite *> giantSprites;
 	mutable std::vector<const Sprite *> planetSprites;
 	mutable std::vector<const Sprite *> starSprites;

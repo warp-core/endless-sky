@@ -53,6 +53,13 @@ const vector<const Sprite *> &SpriteSet::MoonSprites() const
 
 
 
+const vector<const Sprite *> &SpriteSet::StationSprites() const
+{
+	return stationSprites;
+}
+
+
+
 const vector<const Sprite *> &SpriteSet::GiantSprites() const
 {
 	return giantSprites;
@@ -75,6 +82,11 @@ const vector<const Sprite *> &SpriteSet::StarSprites() const
 
 void SpriteSet::CheckReferences() const
 {
+	moonSprites.clear();
+	stationSprites.clear();
+	giantSprites.clear();
+	starSprites.clear();
+
 	for(const auto &pair : sprites)
 	{
 		const auto &name = pair.first;
@@ -101,11 +113,16 @@ void SpriteSet::CheckReferences() const
 				starSprites.push_back(&sprite);
 				continue;
 			}
+			if(name.find("station") != string::npos)
+			{
+				stationSprites.push_back(&sprite);
+				continue;
+			}
 
 			auto radius = sprite.Width() / 2. - 4.;
 
-			// Sort the sprites based on radius. Stations are always moons.
-			if(radius <= 50. || name.find("station") != string::npos)
+			// Sort the sprites based on radius.
+			if(radius <= 50.)
 				moonSprites.push_back(&sprite);
 			else if(radius >= 120.)
 				giantSprites.push_back(&sprite);

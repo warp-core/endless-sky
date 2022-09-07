@@ -95,6 +95,12 @@ void SpriteSet::CheckReferences() const
 				continue;
 			if(name.find("dyson") != string::npos)
 				continue;
+			if(name.find("-rouge") != string::npos)
+			{
+				// This is actually a star!
+				starSprites.push_back(&sprite);
+				continue;
+			}
 
 			auto radius = sprite.Width() / 2. - 4.;
 

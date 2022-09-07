@@ -288,7 +288,7 @@ void GameWindow::SetIcon()
 
 
 
-void GameWindow::AdjustViewport()
+void GameWindow::AdjustViewport(int topBar)
 {
 	if(!mainWindow)
 		return;
@@ -320,7 +320,7 @@ void GameWindow::AdjustViewport()
 	// everything pixel-aligned.
 	drawWidth = (drawWidth * roundWidth) / windowWidth;
 	drawHeight = (drawHeight * roundHeight) / windowHeight;
-	glViewport(0, 0, drawWidth, drawHeight);
+	glViewport(0, 0, drawWidth, drawHeight - topBar);
 }
 
 

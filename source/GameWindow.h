@@ -37,7 +37,7 @@ public:
 	static void SetIcon();
 
 	// Handle resize events of the main window.
-	static void AdjustViewport();
+	static void AdjustViewport(int topBar = 0);
 
 	// Attempt to set the game's VSync setting.
 	static bool SetVSync(Preferences::VSync state);

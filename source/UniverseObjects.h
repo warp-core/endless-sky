@@ -61,6 +61,7 @@ class UniverseObjects {
 	// GameData currently is the orchestrating controller for all game definitions.
 	friend class GameData;
 	friend class GameAssets;
+	friend class Editor;
 	friend class Plugin;
 	friend class EffectEditor;
 	friend class FleetEditor;

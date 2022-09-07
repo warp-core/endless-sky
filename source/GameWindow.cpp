@@ -146,6 +146,8 @@ bool GameWindow::Init(function<void(SDL_Window *, const SDL_GLContext &)> post)
 #endif
 	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 
+	SDL_SetHint(SDL_HINT_WINDOWS_DPI_AWARENESS, "permonitorv2");
+
 	context = SDL_GL_CreateContext(mainWindow);
 	if(!context)
 	{

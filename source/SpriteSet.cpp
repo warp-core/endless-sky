@@ -107,6 +107,9 @@ void SpriteSet::CheckReferences() const
 				continue;
 			if(name.find("dyson") != string::npos)
 				continue;
+			if(name.find("gas3-c") != string::npos)
+				// This is the Coalition satellite planet bruh.
+				continue;
 			if(name.find("-rouge") != string::npos)
 			{
 				// This is actually a star!

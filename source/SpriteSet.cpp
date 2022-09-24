@@ -131,9 +131,17 @@ void SpriteSet::CheckReferences() const
 		}
 		else if(!name.compare(0, 5, "star/"))
 		{
-			// Ignore novas.
-			if(name.find("nova") == string::npos)
-				starSprites.push_back(&sprite);
+			// Ignore novas, blackholes, neutron stars, etc.
+			if(name.find("nova") != string::npos)
+				continue;
+			if(name.find("black-hole") != string::npos)
+				continue;
+			if(name.find("neutron") != string::npos)
+				continue;
+			if(name.find("wr") != string::npos)
+				continue;
+
+			starSprites.push_back(&sprite);
 		}
 	}
 }

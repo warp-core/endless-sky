@@ -143,6 +143,8 @@ void SpriteSet::CheckReferences() const
 				continue;
 			if(name.find("wr") != string::npos)
 				continue;
+			if(name.find("carbon") != string::npos)
+				continue;
 
 			starSprites.push_back(&sprite);
 		}

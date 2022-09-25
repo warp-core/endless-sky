@@ -108,7 +108,7 @@ void DataWriter::WriteToken(const A &a)
 	static_assert(std::is_arithmetic<A>::value,
 		"DataWriter cannot output anything but strings and arithmetic types.");
 
-	out << *before << a;
+	out << std::defaultfloat << *before << a;
 	before = &space;
 }
 

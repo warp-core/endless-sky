@@ -19,6 +19,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "WeightedList.h"
 
 #include <algorithm>
+#include <iomanip>
 #include <map>
 #include <sstream>
 #include <string>

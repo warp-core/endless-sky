@@ -113,10 +113,29 @@ void DataWriter::WriteToken(const A &a)
 		"DataWriter cannot output anything but strings and arithmetic types.");
 
 	static std::string str(32, '\0');
-	auto[ptr, ec] = std::to_chars(str.data(), str.data() + str.size(), a);
+	char *ptr;
+
+	if constexpr(std::is_floating_point_v<A>)
+		ptr = std::to_chars(str.data(), str.data() + str.size(), a, std::chars_format::fixed, 3).ptr;
+	else
+		ptr = std::to_chars(str.data(), str.data() + str.size(), a).ptr;
+
 	assert(ptr != str.data() + str.size() && "a number with 32 digits wtf");
 	*ptr = '\0';
-	out << str.c_str();
+
+	if constexpr(std::is_floating_point_v<A>)
+	{
+		auto *orig = ptr;
+		bool isDecimal = false;
+		// Remove any trailing digits.
+		do {
+			--ptr;
+		}
+		while(*ptr == '0');
+		*++ptr = '\0';
+	}
+
+	out << *before << str.c_str();
 	before = &space;
 }
 

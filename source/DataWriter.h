@@ -19,7 +19,8 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "WeightedList.h"
 
 #include <algorithm>
-#include <iomanip>
+#include <cassert>
+#include <charconv>
 #include <map>
 #include <sstream>
 #include <string>
@@ -72,6 +73,8 @@ public:
 	// Write a token of any arithmetic type.
 	template <class A>
 	void WriteToken(const A &a);
+	// Write a token of a bool;
+	void WriteToken(bool b);
 
 
 private:
@@ -109,7 +112,11 @@ void DataWriter::WriteToken(const A &a)
 	static_assert(std::is_arithmetic<A>::value,
 		"DataWriter cannot output anything but strings and arithmetic types.");
 
-	out << std::defaultfloat << std::setprecision(3) << *before << a;
+	static std::string str(32, '\0');
+	auto[ptr, ec] = std::to_chars(str.data(), str.data() + str.size(), a);
+	assert(ptr != str.data() + str.size() && "a number with 32 digits wtf");
+	*ptr = '\0';
+	out << str;
 	before = &space;
 }
 

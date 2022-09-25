@@ -133,3 +133,11 @@ void DataWriter::WriteToken(const string &a)
 {
 	WriteToken(a.c_str());
 }
+
+
+
+// Write a token of a bool;
+void DataWriter::WriteToken(bool b)
+{
+	WriteToken(static_cast<int>(b));
+}

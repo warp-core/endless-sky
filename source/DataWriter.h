@@ -125,8 +125,6 @@ void DataWriter::WriteToken(const A &a)
 
 	if constexpr(std::is_floating_point_v<A>)
 	{
-		auto *orig = ptr;
-		bool isDecimal = false;
 		// Remove any trailing digits.
 		do {
 			--ptr;

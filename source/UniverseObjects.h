@@ -77,6 +77,7 @@ class UniverseObjects {
 
 	friend class MainEditorPanel;
 	friend class MapEditorPanel;
+	friend class OutfitterEditorPanel;
 
 public:
 	// Load game objects from the given directories of definitions.

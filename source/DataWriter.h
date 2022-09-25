@@ -131,6 +131,10 @@ void DataWriter::WriteToken(const A &a)
 		}
 		while(*ptr == '0');
 		*++ptr = '\0';
+
+		// Remove trailing dot.
+		if(*--ptr == '.')
+			*ptr = '\0';
 	}
 
 	out << *before << str.c_str();

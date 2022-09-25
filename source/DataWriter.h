@@ -116,7 +116,7 @@ void DataWriter::WriteToken(const A &a)
 	auto[ptr, ec] = std::to_chars(str.data(), str.data() + str.size(), a);
 	assert(ptr != str.data() + str.size() && "a number with 32 digits wtf");
 	*ptr = '\0';
-	out << str;
+	out << str.c_str();
 	before = &space;
 }
 

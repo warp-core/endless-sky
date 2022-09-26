@@ -19,8 +19,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "WeightedList.h"
 
 #include <algorithm>
-#include <cassert>
-#include <charconv>
+#include <iomanip>
 #include <map>
 #include <sstream>
 #include <string>
@@ -112,32 +111,22 @@ void DataWriter::WriteToken(const A &a)
 	static_assert(std::is_arithmetic<A>::value,
 		"DataWriter cannot output anything but strings and arithmetic types.");
 
-	static std::string str(32, '\0');
-	char *ptr;
-
-	if constexpr(std::is_floating_point_v<A>)
-		ptr = std::to_chars(str.data(), str.data() + str.size(), a, std::chars_format::fixed, 3).ptr;
-	else
-		ptr = std::to_chars(str.data(), str.data() + str.size(), a).ptr;
-
-	assert(ptr != str.data() + str.size() && "a number with 32 digits wtf");
-	*ptr = '\0';
+	std::ostringstream stream;
+	stream << std::fixed << std::setprecision(3) << a;
+	std::string str = std::move(stream).str();
 
 	if constexpr(std::is_floating_point_v<A>)
 	{
 		// Remove any trailing digits.
-		do {
-			--ptr;
-		}
-		while(*ptr == '0');
-		*++ptr = '\0';
+		while(str.back() == '0')
+			str.pop_back();
 
 		// Remove trailing dot.
-		if(*--ptr == '.')
-			*ptr = '\0';
+		if(str.back() == '.')
+			str.pop_back();
 	}
 
-	out << *before << str.c_str();
+	out << *before << str;
 	before = &space;
 }
 

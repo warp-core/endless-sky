@@ -2166,6 +2166,20 @@ void Ship::DoGeneration()
 		shieldDelay = max(0, shieldDelay - 1);
 		hullDelay = max(0, hullDelay - 1);
 	}
+	else
+	{
+		const double hullAvailable = attributes.Get("disabled hull repair rate")
+			* (1. + attributes.Get("disabled hull repair multiplier"));
+		const double hullEnergy = (attributes.Get("disabled hull energy")
+			* (1. + attributes.Get("disabled hull energy multiplier"))) / hullAvailable;
+		const double hullFuel = (attributes.Get("disabled hull fuel")
+			* (1. + attributes.Get("disabled hull fuel multiplier"))) / hullAvailable;
+		const double hullHeat = (attributes.Get("disabled hull heat")
+			* (1. + attributes.Get("disabled hull heat multiplier"))) / hullAvailable;
+		double hullRemaining = hullAvailable;
+		if(!hullDelay)
+			DoRepair(hull, hullRemaining, attributes.Get("hull"), energy, hullEnergy, fuel, hullFuel, heat, hullHeat);
+	}
 
 	// Handle ionization effects, etc.
 	shields -= discharge;

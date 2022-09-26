@@ -74,7 +74,7 @@ public:
 
 
 public:
-	GameAssets() noexcept = default;
+	GameAssets() = default;
 
 	// Asset objects cannot be copied.
 	GameAssets(const GameAssets &) = delete;

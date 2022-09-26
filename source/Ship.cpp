@@ -469,6 +469,8 @@ void Ship::Load(const DataNode &node)
 			shields = child.Value(1);
 		else if(key == "hull" && child.Size() >= 2)
 			hull = child.Value(1);
+		else if(key == "self recovery" && child.Size() >= 2)
+			allowSelfRecovery = child.Value(1);
 		else if(key == "position" && child.Size() >= 3)
 			position = Point(child.Value(1), child.Value(2));
 		else if(key == "system" && child.Size() >= 2)
@@ -905,6 +907,7 @@ void Ship::Save(DataWriter &out) const
 		out.Write("fuel", fuel);
 		out.Write("shields", shields);
 		out.Write("hull", hull);
+		out.Write("self recovery", allowSelfRecovery);
 		out.Write("position", position.X(), position.Y());
 
 		for(const EnginePoint &point : enginePoints)
@@ -2087,6 +2090,7 @@ void Ship::DoGeneration()
 	// previous frame, so that it will not steal energy from movement, etc.
 	if(!isDisabled)
 	{
+		disabledTime = 0;
 		// Priority of repairs:
 		// 1. Ship's own hull
 		// 2. Ship's own shields
@@ -2165,6 +2169,15 @@ void Ship::DoGeneration()
 		// and hull repair have been skipped over.
 		shieldDelay = max(0, shieldDelay - 1);
 		hullDelay = max(0, hullDelay - 1);
+	}
+	else if(allowSelfRecovery)
+	{
+		disabledTime++;
+		if(disabledTime > 3600)
+		{
+			hull = min(max(hull, MinimumHull() * 1.5), attributes.Get("hull"));
+			isDisabled = false;
+		}
 	}
 
 	// Handle ionization effects, etc.

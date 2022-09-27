@@ -17,6 +17,7 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include "SpriteSet.h"
 #include "UniverseObjects.h"
 
+#include <atomic>
 #include <future>
 #include <map>
 #include <memory>
@@ -116,7 +117,7 @@ private:
 
 	// Tracks the progress of loading the sprites and sounds when the game starts.
 	std::pair<int, int> spriteProgress{};
-	std::pair<int, int> soundProgress{};
+	std::pair<std::atomic<int>, int> soundProgress{};
 
 	// Deferred sprite loading support.
 	std::map<const Sprite *, std::shared_ptr<ImageSet>> deferred;

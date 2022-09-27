@@ -262,7 +262,8 @@ void GameAssets::Revert(const Snapshot &snapshot)
 void GameAssets::LoadSounds(const SoundMap &sounds)
 {
 	// Reset current progress.
-	soundProgress = {};
+	soundProgress.first = 0;
+	soundProgress.second = 0;
 
 	for(const auto &[name, sound]: sounds)
 	{

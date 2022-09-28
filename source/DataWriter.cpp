@@ -101,10 +101,10 @@ void DataWriter::WriteComment(const string &str)
 
 
 // Write a token, given as a character string.
-void DataWriter::WriteToken(const char *a)
+void DataWriter::WriteToken(const char *a, bool needsQuoting)
 {
 	// Figure out what kind of quotation marks need to be used for this string.
-	bool needsQuoting = !*a || *a == '#';
+	needsQuoting |= !*a || *a == '#';
 	bool hasQuote = false;
 	for(const char *it = a; *it; ++it)
 	{
@@ -129,9 +129,9 @@ void DataWriter::WriteToken(const char *a)
 
 
 // Write a token, given as a string object.
-void DataWriter::WriteToken(const string &a)
+void DataWriter::WriteToken(const string &a, bool needsQuoting)
 {
-	WriteToken(a.c_str());
+	WriteToken(a.c_str(), needsQuoting);
 }
 
 

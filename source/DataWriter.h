@@ -69,8 +69,8 @@ public:
 	void WriteComment(const std::string &str);
 
 	// Write a token, without writing a whole line. Use this very carefully.
-	void WriteToken(const char *a);
-	void WriteToken(const std::string &a);
+	void WriteToken(const char *a, bool needsQuoting = false);
+	void WriteToken(const std::string &a, bool needsQuoting = false);
 	// Write a token of any arithmetic type.
 	template <class A>
 	void WriteToken(const A &a);
@@ -109,7 +109,7 @@ void DataWriter::Write(const A &a, const B &...others)
 template <typename ...As>
 void DataWriter::WriteQuoted(const std::string &a, const As &...others)
 {
-	WriteToken("\"" + a + "\"");
+	WriteToken(a, true);
 	Write(others...);
 }
 

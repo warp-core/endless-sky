@@ -49,7 +49,9 @@ public:
 	// The Write() function can take any number of arguments. Each argument is
 	// converted to a token. Arguments may be strings or numeric values.
 	template <class A, class ...B>
-	void Write(const A &a, B... others);
+	void Write(const A &a, const B &...others);
+	template <typename ...As>
+	void WriteQuoted(const std::string &a, const As &...others);
 	// Write the entire structure represented by a DataNode, including any
 	// children that it has.
 	void Write(const DataNode &node);
@@ -96,9 +98,18 @@ private:
 // The Write() function can take any number of arguments, each of which becomes
 // a token. They must be either strings or numeric types.
 template <class A, class ...B>
-void DataWriter::Write(const A &a, B... others)
+void DataWriter::Write(const A &a, const B &...others)
 {
 	WriteToken(a);
+	Write(others...);
+}
+
+
+
+template <typename ...As>
+void DataWriter::WriteQuoted(const std::string &a, const As &...others)
+{
+	WriteToken("\"" + a + "\"");
 	Write(others...);
 }
 

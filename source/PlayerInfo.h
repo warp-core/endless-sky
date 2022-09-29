@@ -306,6 +306,8 @@ private:
 
 
 private:
+	friend class ArenaPanel;
+
 	std::string firstName;
 	std::string lastName;
 	std::string filePath;

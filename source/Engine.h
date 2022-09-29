@@ -159,6 +159,8 @@ private:
 
 
 private:
+	friend class ArenaPanel;
+
 	PlayerInfo &player;
 	std::optional<Point> customCenter;
 

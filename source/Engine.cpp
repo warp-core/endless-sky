@@ -468,7 +468,6 @@ void Engine::Step(bool isActive)
 	{
 		center = *customCenter;
 		centerVelocity = Point();
-		customCenter = newCustomCenter;
 	}
 	else if(object)
 	{
@@ -499,6 +498,7 @@ void Engine::Step(bool isActive)
 		else if(jumpCount > 0)
 			--jumpCount;
 	}
+	customCenter = newCustomCenter;
 	ai.UpdateEvents(events);
 	if(isActive)
 	{

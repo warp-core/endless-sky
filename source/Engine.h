@@ -32,6 +32,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include <list>
 #include <map>
 #include <memory>
+#include <optional>
 #ifndef ES_NO_THREADS
 #include <thread>
 #endif // ES_NO_THREADS
@@ -100,6 +101,8 @@ public:
 	// projectiles stop targeting gov.
 	void BreakTargeting(const Government *gov);
 
+	void SetCustomCenter(std::optional<Point> center) { customCenter = std::move(center); }
+
 
 private:
 	void EnterSystem();
@@ -157,6 +160,7 @@ private:
 
 private:
 	PlayerInfo &player;
+	std::optional<Point> customCenter;
 
 	std::list<std::shared_ptr<Ship>> ships;
 	std::vector<Projectile> projectiles;

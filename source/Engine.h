@@ -101,7 +101,7 @@ public:
 	// projectiles stop targeting gov.
 	void BreakTargeting(const Government *gov);
 
-	void SetCustomCenter(std::optional<Point> center) { customCenter = std::move(center); }
+	void SetCustomCenter(std::optional<Point> center) { newCustomCenter = std::move(center); }
 
 
 private:
@@ -162,7 +162,9 @@ private:
 	friend class ArenaPanel;
 
 	PlayerInfo &player;
+
 	std::optional<Point> customCenter;
+	std::optional<Point> newCustomCenter;
 
 	std::list<std::shared_ptr<Ship>> ships;
 	std::vector<Projectile> projectiles;

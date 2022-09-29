@@ -465,7 +465,11 @@ void Engine::Step(bool isActive)
 	const shared_ptr<Ship> flagship = player.FlagshipPtr();
 	const StellarObject *object = player.GetStellarObject();
 	if(customCenter)
+	{
 		center = *customCenter;
+		centerVelocity = Point();
+		customCenter = newCustomCenter;
+	}
 	else if(object)
 	{
 		center = object->Position();
@@ -1507,7 +1511,7 @@ void Engine::CalculateStep()
 	// Draw the objects. Start by figuring out where the view should be centered:
 	Point newCenter = center;
 	Point newCenterVelocity;
-	if(customCenter)
+	if(newCustomCenter)
 		newCenter =  *customCenter;
 	else if(flagship)
 	{

@@ -271,12 +271,16 @@ void System::Load(const DataNode &node, Set<Planet> &planets)
 			if(remove)
 			{
 				StellarObject toRemoveTemplate;
+				if(child.Size() >= 3)
+					toRemoveTemplate.planet = planets.Get(child.Token(2));
 				for(const DataNode &grand : child)
 					LoadObjectHelper(grand, toRemoveTemplate, true);
 
 				auto removeIt = find_if(objects.begin(), objects.end(),
 					[&toRemoveTemplate](const StellarObject &object)
 					{
+						if(toRemoveTemplate.planet)
+							return toRemoveTemplate.planet == object.planet;
 						if(toRemoveTemplate.GetSprite() != object.GetSprite())
 							return false;
 						if(toRemoveTemplate.distance != object.distance)

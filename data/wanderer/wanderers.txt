@@ -929,8 +929,6 @@ event "wanderers: the eye opens"
 		add fleet "Wanderer Freight" 2000
 		remove object
 			sprite planet/wisp
-			distance 2331.95
-			period 2518.05
 		add object "The Eye"
 			sprite planet/wormhole
 			distance 2331.95

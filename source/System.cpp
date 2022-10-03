@@ -271,21 +271,20 @@ void System::Load(const DataNode &node, Set<Planet> &planets)
 			if(remove)
 			{
 				StellarObject toRemoveTemplate;
+				if(child.Size() >= 3)
+					toRemoveTemplate.planet = planets.Get(child.Token(2));
 				for(const DataNode &grand : child)
 					LoadObjectHelper(grand, toRemoveTemplate, true);
 
+				// This was previously comparing sprite, distance, period, and offset, but that can lead to issues when
+				// those properties are changed for an object in the base data and "changes" added to the save file from
+				// before that change are loaded. So, only compare planet, or if none is given, sprite, now.
 				auto removeIt = find_if(objects.begin(), objects.end(),
 					[&toRemoveTemplate](const StellarObject &object)
 					{
-						if(toRemoveTemplate.GetSprite() != object.GetSprite())
-							return false;
-						if(toRemoveTemplate.distance != object.distance)
-							return false;
-						if(toRemoveTemplate.speed != object.speed)
-							return false;
-						if(toRemoveTemplate.offset != object.offset)
-							return false;
-						return true;
+						if(toRemoveTemplate.planet)
+							return toRemoveTemplate.planet == object.planet;
+						return toRemoveTemplate.GetSprite() == object.GetSprite();
 					}
 				);
 

@@ -99,6 +99,13 @@ Personality::Personality() noexcept
 
 
 
+Personality::Personality(int personality) noexcept
+	: flags(personality), confusionMultiplier(DEFAULT_CONFUSION), aimMultiplier(1.)
+{
+}
+
+
+
 void Personality::Load(const DataNode &node)
 {
 	bool add = (node.Token(0) == "add");

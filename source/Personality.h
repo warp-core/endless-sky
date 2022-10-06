@@ -62,6 +62,7 @@ public :
 
 public:
 	Personality() noexcept;
+	Personality(int personality) noexcept;
 
 	void Load(const DataNode &node);
 	void Save(DataWriter &out) const;

@@ -464,12 +464,7 @@ void Engine::Step(bool isActive)
 	// The calculation thread was paused by MainPanel before calling this function, so it is safe to access things.
 	const shared_ptr<Ship> flagship = player.FlagshipPtr();
 	const StellarObject *object = player.GetStellarObject();
-	if(customCenter)
-	{
-		center = *customCenter;
-		centerVelocity = Point();
-	}
-	else if(object)
+	if(object)
 	{
 		center = object->Position();
 		centerVelocity = Point();
@@ -497,6 +492,11 @@ void Engine::Step(bool isActive)
 		}
 		else if(jumpCount > 0)
 			--jumpCount;
+	}
+	else if(customCenter)
+	{
+		center = *customCenter;
+		centerVelocity = Point();
 	}
 	customCenter = newCustomCenter;
 	ai.UpdateEvents(events);
@@ -754,6 +754,8 @@ void Engine::Step(bool isActive)
 			for(const auto &it : targetAsteroid->Payload())
 				player.Harvest(it.first);
 	}
+	else if(targetShip)
+		target = targetShip;
 	if(!target)
 		targetSwizzle = -1;
 	if(!target && !targetAsteroid)
@@ -810,8 +812,9 @@ void Engine::Step(bool isActive)
 			targetVector = target->Position() - center;
 
 			// Check if the target is close enough to show tactical information.
-			double tacticalRange = 100. * sqrt(flagship->Attributes().Get("tactical scan power"));
-			double targetRange = target->Position().Distance(flagship->Position());
+			double tacticalRange = flagship ? 100. * sqrt(flagship->Attributes().Get("tactical scan power")) : numeric_limits<double>::max();
+			double targetRange = flagship ? target->Position().Distance(flagship->Position())
+				: target->Position().Length();
 			if(tacticalRange)
 			{
 				info.SetCondition("range display");
@@ -833,7 +836,7 @@ void Engine::Step(bool isActive)
 			}
 		}
 	}
-	if(target && target->IsTargetable() && target->GetSystem() == currentSystem
+	if(target && flagship && target->IsTargetable() && target->GetSystem() == currentSystem
 		&& (flagship->CargoScanFraction() || flagship->OutfitScanFraction()))
 	{
 		double width = max(target->Width(), target->Height());
@@ -890,6 +893,9 @@ void Engine::Step(bool isActive)
 				4});
 		}
 	}
+
+	if(!flagship)
+		return;
 
 	// Draw crosshairs on any minables in range of the flagship's scanners.
 	double scanRange = flagship ? 100. * sqrt(flagship->Attributes().Get("asteroid scan power")) : 0.;
@@ -993,35 +999,38 @@ void Engine::Draw() const
 	// Draw messages. Draw the most recent messages first, as some messages
 	// may be wrapped onto multiple lines.
 	const Font &font = FontSet::Get(14);
-	const vector<Messages::Entry> &messages = Messages::Get(step);
-	Rectangle messageBox = hud->GetBox("messages");
-	WrappedText messageLine(font);
-	messageLine.SetWrapWidth(messageBox.Width());
-	messageLine.SetParagraphBreak(0.);
-	Point messagePoint = Point(messageBox.Left(), messageBox.Bottom());
-	for(auto it = messages.rbegin(); it != messages.rend(); ++it)
+	if(Preferences::Has("editor - show chat"))
 	{
-		messageLine.Wrap(it->message);
-		messagePoint.Y() -= messageLine.Height();
-		if(messagePoint.Y() < messageBox.Top())
-			break;
-		float alpha = (it->step + 1000 - step) * .001f;
-		const Color *color = nullptr;
-		switch(it->importance)
+		const vector<Messages::Entry> &messages = Messages::Get(step);
+		Rectangle messageBox = hud->GetBox("messages");
+		WrappedText messageLine(font);
+		messageLine.SetWrapWidth(messageBox.Width());
+		messageLine.SetParagraphBreak(0.);
+		Point messagePoint = Point(messageBox.Left(), messageBox.Bottom());
+		for(auto it = messages.rbegin(); it != messages.rend(); ++it)
 		{
-			case Messages::Importance::Highest:
-				color = GameData::Colors().Find("message importance highest");
+			messageLine.Wrap(it->message);
+			messagePoint.Y() -= messageLine.Height();
+			if(messagePoint.Y() < messageBox.Top())
 				break;
-			case Messages::Importance::High:
-				color = GameData::Colors().Find("message importance high");
-				break;
-			case Messages::Importance::Low:
-				color = GameData::Colors().Find("message importance low");
-				break;
+			float alpha = (it->step + 1000 - step) * .001f;
+			const Color *color = nullptr;
+			switch(it->importance)
+			{
+				case Messages::Importance::Highest:
+					color = GameData::Colors().Find("message importance highest");
+					break;
+				case Messages::Importance::High:
+					color = GameData::Colors().Find("message importance high");
+					break;
+				case Messages::Importance::Low:
+					color = GameData::Colors().Find("message importance low");
+					break;
+			}
+			if(!color)
+				color = GameData::Colors().Get("message importance default");
+			messageLine.Draw(messagePoint, color->Additive(alpha));
 		}
-		if(!color)
-			color = GameData::Colors().Get("message importance default");
-		messageLine.Draw(messagePoint, color->Additive(alpha));
 	}
 
 	// Draw crosshairs around anything that is targeted.
@@ -1511,13 +1520,13 @@ void Engine::CalculateStep()
 	// Draw the objects. Start by figuring out where the view should be centered:
 	Point newCenter = center;
 	Point newCenterVelocity;
-	if(newCustomCenter)
-		newCenter =  *customCenter;
-	else if(flagship)
+	if(flagship)
 	{
 		newCenter = flagship->Position();
 		newCenterVelocity = flagship->Velocity();
 	}
+	else if(newCustomCenter)
+		newCenter =  *customCenter;
 	draw[calcTickTock].SetCenter(newCenter, newCenterVelocity);
 	batchDraw[calcTickTock].SetCenter(newCenter);
 	radar[calcTickTock].SetCenter(newCenter);
@@ -1706,6 +1715,9 @@ void Engine::FillCollisionSets()
 // mission NPCs are only spawned in or adjacent to the player's system.
 void Engine::SpawnFleets()
 {
+	if(!Preferences::Has("editor - fleet spawn"))
+		return;
+
 	// If the player has a pending boarding mission, spawn its NPCs.
 	if(player.ActiveBoardingMission())
 	{
@@ -1738,7 +1750,7 @@ void Engine::SpawnFleets()
 // At random intervals, create new special "persons" who enter the current system.
 void Engine::SpawnPersons()
 {
-	if(Random::Int(36000) || player.GetSystem()->Links().empty())
+	if(!Preferences::Has("editor - person spawn") || Random::Int(36000) || player.GetSystem()->Links().empty())
 		return;
 
 	// Loop through all persons once to see if there are any who can enter
@@ -1902,13 +1914,10 @@ void Engine::HandleKeyboardInputs()
 // in the main UI thread to avoid race conditions.
 void Engine::HandleMouseClicks()
 {
-	// Mouse clicks can't be issued if your flagship is dead.
 	Ship *flagship = player.Flagship();
-	if(!flagship)
-		return;
 
 	// Handle escort travel orders sent via the Map.
-	if(player.HasEscortDestination())
+	if(flagship && player.HasEscortDestination())
 	{
 		auto moveTarget = player.GetEscortDestination();
 		ai.IssueMoveTarget(player, moveTarget.second, moveTarget.first);
@@ -1923,7 +1932,7 @@ void Engine::HandleMouseClicks()
 	// flagship must not be in the process of landing or taking off.
 	bool clickedPlanet = false;
 	const System *playerSystem = player.GetSystem();
-	if(!isRightClick && flagship->Zoom() == 1.)
+	if(flagship && !isRightClick && flagship->Zoom() == 1.)
 		for(const StellarObject &object : playerSystem->Objects())
 			if(object.HasSprite() && object.HasValidPlanet())
 			{
@@ -1957,7 +1966,7 @@ void Engine::HandleMouseClicks()
 	for(shared_ptr<Ship> &ship : ships)
 		if(ship->GetSystem() == playerSystem && &*ship != flagship && ship->IsTargetable())
 		{
-			Point position = ship->Position() - flagship->Position();
+			Point position = ship->Position() - center;
 			const Mask &mask = ship->GetMask(step);
 			double range = mask.Range(clickPoint - position, ship->Facing());
 			if(range <= clickRange)
@@ -1971,6 +1980,18 @@ void Engine::HandleMouseClicks()
 					break;
 			}
 		}
+
+	if(!flagship)
+	{
+		if(clickTarget)
+		{
+			if(clickTarget == targetShip)
+				targetShip = nullptr;
+			else
+				targetShip = clickTarget;
+		}
+		return;
+	}
 
 	bool clickedAsteroid = false;
 	if(clickTarget)

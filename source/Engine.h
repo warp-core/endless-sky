@@ -163,6 +163,7 @@ private:
 
 	PlayerInfo &player;
 
+	std::shared_ptr<Ship> targetShip;
 	std::optional<Point> customCenter;
 	std::optional<Point> newCustomCenter;
 
@@ -264,6 +265,7 @@ private:
 	double loadSum = 0.;
 
 	friend class Editor;
+	friend class ArenaControl;
 };
 
 

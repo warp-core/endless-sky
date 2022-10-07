@@ -23,12 +23,6 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include <sstream>
 #include <vector>
 
-#ifdef ES_GLES
-// ES_GLES always uses the shader, not this, so use a dummy value to compile.
-// (the correct value is usually 0x8E46, so don't use that)
-#define GL_TEXTURE_SWIZZLE_RGBA 0xBEEF
-#endif
-
 using namespace std;
 
 namespace {

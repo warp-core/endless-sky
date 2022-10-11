@@ -111,7 +111,7 @@ set<const System *> DistanceMap::Systems() const
 // Get the planned route from center to this system.
 vector<const System *> DistanceMap::Plan(const System &system) const
 {
-	auto plan = vector<const System *> {};
+	auto plan = vector<const System *>{};
 	if(!HasRoute(system))
 		return plan;
 
@@ -343,6 +343,7 @@ bool DistanceMap::CheckLink(const System &from, const System &to, bool useJump) 
 }
 
 
+
 // RoutePlan is a wrapper on DistanceMap that uses destination
 RoutePlan::RoutePlan(const System &center, const System &destination)
 {
@@ -365,7 +366,7 @@ RoutePlan::RoutePlan(const Ship &ship, const System &destination)
 
 
 
-void RoutePlan::Init(const DistanceMap& distance)
+void RoutePlan::Init(const DistanceMap &distance)
 {
 	auto it = distance.route.find(distance.destination);
 	if(it == distance.route.end())
@@ -423,11 +424,10 @@ int RoutePlan::RequiredFuel() const
 
 
 
-
 // Get the list of jumps to take to get to the destination.
 vector<const System *> RoutePlan::Plan() const
 {
-	auto steps = vector<const System *> {};
+	auto steps = vector<const System *>{};
 	for(const auto &it : plan)
 		steps.push_back(it.first);
 	return steps;
@@ -438,7 +438,7 @@ vector<const System *> RoutePlan::Plan() const
 // How much fuel is needed to travel to this system along the route.
 vector<pair<const System *, int>> RoutePlan::FuelCosts() const
 {
-	auto steps = vector<pair<const System *, int>> {};
+	auto steps = vector<pair<const System *, int>>{};
 	for(const auto &it : plan)
 		steps.emplace_back(it.first, it.second.fuel);
 	return steps;

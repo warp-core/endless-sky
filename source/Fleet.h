@@ -99,6 +99,7 @@ private:
 	Personality personality;
 
 	friend class FleetEditor;
+	friend class ArenaControl;
 };
 
 

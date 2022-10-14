@@ -23,10 +23,10 @@ namespace {
 #ifndef ES_NO_THREADS
 	struct Task {
 		// The function to execute in parallel.
-		function<void()> async;
+		mfunction<void()> async;
 		// If specified, this function is called in the main thread after
 		// the function above has finished executing.
-		function<void()> sync;
+		mfunction<void()> sync;
 
 		promise<void> futurePromise;
 	};
@@ -38,7 +38,7 @@ namespace {
 	bool shouldQuit = false;
 
 	// The secondary task queue for tasks that need to be executed on the main thread.
-	queue<function<void()>> syncTasks;
+	queue<mfunction<void()>> syncTasks;
 	mutex syncMutex;
 
 	// Worker threads for executing tasks.
@@ -126,16 +126,16 @@ TaskQueue::~TaskQueue()
 
 
 // Queue a function to execute in parallel.
-future<void> TaskQueue::Run(function<void()> f)
+future<void> TaskQueue::Run(mfunction<void()> f)
 {
-	return Run(std::move(f), function<void()>());
+	return Run(std::move(f), mfunction<void()>());
 }
 
 
 
 // Queue a function to execute in parallel and another function that
 // will get executed on the main thread after the first function finishes.
-future<void> TaskQueue::Run(function<void()> f, function<void()> g)
+future<void> TaskQueue::Run(mfunction<void()> f, mfunction<void()> g)
 {
 	future<void> result;
 #ifndef ES_NO_THREADS

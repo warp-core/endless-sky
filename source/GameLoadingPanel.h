@@ -16,9 +16,9 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #ifndef GAME_LOADING_PANEL_H_
 #define GAME_LOADING_PANEL_H_
 
+#include "mfunction.h"
 #include "Panel.h"
 
-#include <functional>
 #include <string>
 #include <vector>
 
@@ -30,14 +30,14 @@ class Editor;
 // (like game data and save files).
 class GameLoadingPanel final : public Panel {
 public:
-	GameLoadingPanel(std::function<void(GameLoadingPanel *)> done, bool &finishedLoading);
+	GameLoadingPanel(mfunction<void(GameLoadingPanel *)> done, bool &finishedLoading);
 
 	void Step() final;
 	void Draw() final;
 
 
 private:
-	std::function<void(GameLoadingPanel *)> done;
+	mfunction<void(GameLoadingPanel *)> done;
 	bool &finishedLoading;
 
 	// The circular loading indicator shows 60 tick marks when all game data is loaded.

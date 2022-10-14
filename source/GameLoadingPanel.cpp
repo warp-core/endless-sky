@@ -34,7 +34,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 
 
-GameLoadingPanel::GameLoadingPanel(std::function<void(GameLoadingPanel *)> done, bool &finishedLoading)
+GameLoadingPanel::GameLoadingPanel(mfunction<void(GameLoadingPanel *)> done, bool &finishedLoading)
 	: done(std::move(done)), finishedLoading(finishedLoading), ANGLE_OFFSET(360. / MAX_TICKS)
 {
 	SetIsFullScreen(true);

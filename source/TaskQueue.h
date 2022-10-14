@@ -13,6 +13,8 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #ifndef TASK_QUEUE_H_
 #define TASK_QUEUE_H_
 
+#include "mfunction.h"
+
 #include <functional>
 #include <future>
 
@@ -27,10 +29,10 @@ public:
 	~TaskQueue();
 
 	// Queue a function to execute in parallel.
-	static std::future<void> Run(std::function<void()> f);
+	static std::future<void> Run(mfunction<void()> f);
 	// Queue a function to execute in parallel and another function that
 	// will get executed on the main thread after the first function finishes.
-	static std::future<void> Run(std::function<void()> f, std::function<void()> g);
+	static std::future<void> Run(mfunction<void()> f, mfunction<void()> g);
 
 	// Process any tasks scheduled to be executed on the main thread.
 	static void ProcessTasks();

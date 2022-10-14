@@ -1215,37 +1215,42 @@ void Engine::BreakTargeting(const Government *gov)
 
 
 
-void Engine::EnterSystem()
+void Engine::EnterSystem(const System *system)
 {
 	ai.Clean();
 
 	Ship *flagship = player.Flagship();
-	if(!flagship)
+	if(!flagship && !system)
 		return;
 
 	doEnter = true;
 	player.IncrementDate();
 	const Date &today = player.GetDate();
 
-	const System *system = flagship->GetSystem();
+	if(flagship)
+		system = flagship->GetSystem();
 	Audio::PlayMusic(system->MusicName());
 	GameData::SetHaze(system->Haze(), false);
 
-	Messages::Add("Entering the " + system->Name() + " system on "
-		+ today.ToString() + (system->IsInhabited(flagship) ?
-			"." : ". No inhabited planets detected."), Messages::Importance::High);
+	if(flagship)
+		Messages::Add("Entering the " + system->Name() + " system on "
+			+ today.ToString() + (system->IsInhabited(flagship) ?
+				"." : ". No inhabited planets detected."), Messages::Importance::High);
 
 	// Preload landscapes and determine if the player used a wormhole.
 	// (It is allowed for a wormhole's exit point to have no sprite.)
 	const StellarObject *usedWormhole = nullptr;
-	for(const StellarObject &object : system->Objects())
-		if(object.HasValidPlanet())
-		{
-			GameData::Preload(object.GetPlanet()->Landscape());
-			if(object.GetPlanet()->IsWormhole() && !usedWormhole
-					&& flagship->Position().Distance(object.Position()) < 1.)
-				usedWormhole = &object;
-		}
+	if(flagship)
+	{
+		for(const StellarObject &object : system->Objects())
+			if(object.HasValidPlanet())
+			{
+				GameData::Preload(object.GetPlanet()->Landscape());
+				if(object.GetPlanet()->IsWormhole() && !usedWormhole
+						&& flagship->Position().Distance(object.Position()) < 1.)
+					usedWormhole = &object;
+			}
+	}
 
 	// Advance the positions of every StellarObject and update politics.
 	// Remove expired bribes, clearance, and grace periods from past fines.
@@ -1318,7 +1323,7 @@ void Engine::EnterSystem()
 
 	const Fleet *raidFleet = system->GetGovernment()->RaidFleet();
 	const Government *raidGovernment = raidFleet ? raidFleet->GetGovernment() : nullptr;
-	if(raidGovernment && raidGovernment->IsEnemy())
+	if(flagship && raidGovernment && raidGovernment->IsEnemy())
 	{
 		pair<double, double> factors = player.RaidFleetFactors();
 		double attraction = .005 * (factors.first - factors.second - 2.);
@@ -1344,7 +1349,7 @@ void Engine::EnterSystem()
 
 	// Help message for new players. Show this message for the first four days,
 	// since the new player ships can make at most four jumps before landing.
-	if(today <= player.StartData().GetDate() + 4)
+	if(flagship && today <= player.StartData().GetDate() + 4)
 	{
 		Messages::Add(GameData::HelpMessage("basics 1"), Messages::Importance::High);
 		Messages::Add(GameData::HelpMessage("basics 2"), Messages::Importance::High);

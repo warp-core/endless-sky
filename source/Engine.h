@@ -105,7 +105,7 @@ public:
 
 
 private:
-	void EnterSystem();
+	void EnterSystem(const System *system = nullptr);
 
 	void ThreadEntryPoint();
 	void CalculateStep();

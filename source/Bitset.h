@@ -42,6 +42,8 @@ public:
 	bool Test(size_t index) const noexcept;
 	// Sets the bit at the specified index.
 	void Set(size_t index) noexcept;
+	// Resets the bit at the specified index.
+	void Reset(size_t index) noexcept;
 	// Resets all bits in the bitset.
 	void Reset() noexcept;
 	// Whether any bits are set.
@@ -51,6 +53,11 @@ public:
 
 	// Fills the current bitset with the bits of other.
 	void UpdateWith(const Bitset &other);
+
+
+private:
+	// Gives the bit at the specified index the specified value.
+	void SetHelper(size_t index, bool value) noexcept;
 
 
 private:

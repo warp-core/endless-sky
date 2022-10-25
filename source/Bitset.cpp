@@ -80,9 +80,15 @@ bool Bitset::Test(size_t index) const noexcept
 // Sets the bit at the specified index.
 void Bitset::Set(size_t index) noexcept
 {
-	const auto blockIndex = index / BITS_PER_BLOCK;
-	const auto pos = index % BITS_PER_BLOCK;
-	bits[blockIndex] |= (uint64_t(1) << pos);
+	SetHelper(index, true);
+}
+
+
+
+// Rests the bit at the specified index.
+void Bitset::Reset(size_t index) noexcept
+{
+	SetHelper(index, false);
 }
 
 
@@ -121,4 +127,17 @@ void Bitset::UpdateWith(const Bitset &other)
 	const auto size = min(bits.size(), other.bits.size());
 	for(size_t i = 0; i < size; ++i)
 		bits[i] = other.bits[i];
+}
+
+
+
+// Gives the bit at the specified index the specified value.
+void Bitset::SetHelper(size_t index, bool value) noexcept
+{
+	const auto blockIndex = index / BITS_PER_BLOCK;
+	const auto pos = index % BITS_PER_BLOCK;
+	if(value)
+		bits[blockIndex] |= (uint64_t(1) << pos);
+	else
+		bits[blockIndex] &= ~(uint64_t(1) << pos);
 }

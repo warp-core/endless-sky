@@ -29,8 +29,8 @@ using namespace std;
 // Constructor.
 CaptureOdds::CaptureOdds(const Ship &attacker, const Ship &defender)
 {
-	powerA = Power(attacker, false);
-	powerD = Power(defender, true);
+	Power(powerA, attacker, false);
+	Power(powerD, defender, true);
 	Calculate();
 }
 
@@ -166,16 +166,17 @@ int CaptureOdds::Index(int attackingCrew, int defendingCrew) const
 
 // Generate a vector with the total power of the given ship's crew when any
 // number of them are left, either for attacking or for defending.
-vector<double> CaptureOdds::Power(const Ship &ship, bool isDefender)
+void CaptureOdds::Power(vector<double> &power, const Ship &ship, bool isDefender)
 {
-	vector<double> power;
 	if(!ship.Crew())
-		return power;
+		return;
 
 	// Check for any outfits that assist with attacking or defending:
 	const string attribute = (isDefender ? "capture defense" : "capture attack");
 	const double crewPower = (isDefender ?
 		ship.GetGovernment()->CrewDefense() : ship.GetGovernment()->CrewAttack());
+	
+	power.reserve(ship.Crew());
 
 	// Each crew member can wield one weapon. They use the most powerful ones
 	// that can be wielded by the remaining crew.
@@ -196,6 +197,4 @@ vector<double> CaptureOdds::Power(const Ship &ship, bool isDefender)
 	power.front() += crewPower;
 	for(unsigned i = 1; i < power.size(); ++i)
 		power[i] += power[i - 1] + crewPower;
-
-	return power;
 }

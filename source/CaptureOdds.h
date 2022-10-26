@@ -58,7 +58,7 @@ private:
 
 	// Calculate attack or defense power for each number of crew members up to
 	// the given ship's full complement.
-	static std::vector<double> Power(const Ship &ship, bool isDefender);
+	static void Power(std::vector<double> &power, const Ship &ship, bool isDefender);
 
 
 private:

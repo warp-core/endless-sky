@@ -16,7 +16,6 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "Galaxy.h"
 
 #include "DataNode.h"
-#include "SpriteSet.h"
 
 
 
@@ -27,22 +26,8 @@ void Galaxy::Load(const DataNode &node)
 		if(child.Token(0) == "pos" && child.Size() >= 3)
 			position = Point(child.Value(1), child.Value(2));
 		else if(child.Token(0) == "sprite" && child.Size() >= 2)
-			sprite = SpriteSet::Get(child.Token(1));
+			LoadSprite(child);
 		else
 			child.PrintTrace("Skipping unrecognized attribute:");
 	}
-}
-
-
-
-const Point &Galaxy::Position() const
-{
-	return position;
-}
-
-
-
-const Sprite *Galaxy::GetSprite() const
-{
-	return sprite;
 }

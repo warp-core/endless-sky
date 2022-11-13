@@ -145,52 +145,50 @@ private:
 	*/
 
 
-	enum class ConversationNodeType int_fast8_t {
+	/*enum class ConversationNodeType : int_fast8_t {
 		TEXT,
 		SCENE,
 		BRANCH,
 		CHOICE,
 		ACTION,
-	};
+	};*/
 
-	enum class ConversationNodeNextStep int_fast8_t {
+	/*enum class ConversationNodeNextStep : int_fast8_t {
 		CHOICE,
 		GOTO,
 		ENDPOINT,
-	};
+	};*/
 
 	// The conversation is a network of "nodes" that you travel between by
 	// making choices (or by automatic branches that depend on the condition
 	// variable values for the current player).
-	virtual class Node {
+	class Node {
+	public:
+		static const int TEXT = 0;
+		static const int SCENE = 1;
+		static const int BRANCH = 2;
+		static const int CHOICE = 3;
+		static const int ACTION = 4;
+
+
 	public:
 		// Construct a new node.
 		//explicit Node(DataNode &dataNode) noexcept;
 
+		Node() = default;
+		virtual ~Node() = default;
+
+		void Load(DataNode &node);
 		virtual void Save(DataWriter &out);
 
 		// The condition expressions that determine if this node should be displayed,
 		// if it is not a branch, or, if it is a branch, which branch to follow.
 		ConditionSet conditions;
-		// Tasks performed when this node is reached.
-		GameAction actions;
 
-		/*// See Element's comment above for what this actually entails.
-		//std::vector<Element> elements;
-		// This distinguishes "choice" nodes from "branch" or text nodes. If
-		// this value is false, a one-element node is considered text, and a
-		// node with more than one element is considered is considered a
-		// "branch".
-		//bool isChoice;
-		// Keep track of whether it's possible to merge future nodes onto this.
-		//bool canMergeOnto;
-		*/
 
-		// Image that should be shown along with this text.
-		const Sprite *scene = nullptr;
-
-		const ConversationNodeType nodeType;
-		const ConversationNodeNextStep nextType;
+	protected:
+		const int nodeType = TEXT;
+		const int nextNode = 0;
 	};
 
 	class TextNode : public Node {
@@ -208,10 +206,12 @@ private:
 	public:
 		explicit SceneNode(DataNode &dataNode) noexcept;
 
-		virtual void Save(DataNode &dataNode) override;
+		virtual void Save(DataWriter &out) override;
 
 
 	private:
+		// Image that should be shown along with this text.
+		const Sprite *scene = nullptr;
 		const std::string sceneString;
 	};
 
@@ -242,7 +242,9 @@ private:
 		virtual void Save(DataWriter &out) override;
 
 		const std::string BranchTo() const;
+	
 
+	private:
 		const std::string ifTrue;
 		const std::string ifFalse;
 	};
@@ -253,7 +255,8 @@ private:
 
 		virtual void Save(DataWriter &out) override;
 
-		GameAction action;
+		// Tasks performed when this node is reached.
+		GameAction actions;
 	};
 
 
@@ -281,7 +284,7 @@ private:
 	std::map<std::string, std::vector<Node>::iterator> labels;
 	// std::multimap<std::string, std::pair<int, int>> unresolved;
 	// The actual conversation data:
-	std::vector<Node> nodes;
+	std::vector<Node *> nodes;
 };
 
 

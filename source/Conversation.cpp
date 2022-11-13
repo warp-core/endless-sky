@@ -363,7 +363,7 @@ Conversation Conversation::Instantiate(map<string, string> &subs, int jumps, int
 }
 
 
-
+/*
 // Check if the given conversation node is a choice node.
 bool Conversation::IsChoice(int node) const
 {
@@ -507,7 +507,7 @@ bool Conversation::ElementIsValid(int node, int element) const
 	else
 		return static_cast<unsigned>(element) < nodes[node].elements.size();
 }
-
+*/
 
 
 // Parse the children of the given node to see if then contain any "gotos," or

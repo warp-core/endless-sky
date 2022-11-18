@@ -1,0 +1,123 @@
+test-data "on enter"
+	category "savegame"
+	contents
+		pilot Bobbi Bughunter
+		date 16 11 3013
+		system "Terra Incognita"
+		planet Ruin
+		clearance
+		ship "Star Barge"
+			name "Buggy Barge"
+			sprite "ship/star barge"
+			attributes
+				category "Light Freighter"
+				cost 190000
+				mass 10
+				bunks 3
+				"cargo space" 50
+				drag 1
+				"engine capacity" 400
+				"fuel capacity" 300
+				"heat dissipation" 0.8
+				hull 1000
+				"outfit space" 1300
+				"required crew" 1
+				shields 600
+				"turret mounts" 1
+				"weapon capacity" 200
+			outfits
+				"X1700 Ion Thruster"
+				"X1200 Ion Steering"
+				Hyperdrive
+				"nGVF-BB Fuel Cell"
+				"LP036a Battery Pack"
+			crew 1
+			fuel 300
+			shields 600
+			hull 1000
+			position 0 0
+			engine -9 38 1
+			engine 9 38 1
+			turret 0 -8
+			leak leak 60 50
+			explode "tiny explosion" 10
+			explode "small explosion" 10
+			system "Terra Incognita"
+			planet Ruin
+		account
+			credits 100000000
+			score 400
+			history
+		visited "Terra Incognita"
+		"visited planet" Ruin
+		conditions
+			# to skip the landing on ruin conversation
+			"Ruin: Landing: offered"
+
+
+mission "%TEST%: ON ENTER MISSION"
+	entering
+	source "Terra Incognita"
+	to offer
+		has "%TEST%: ON ENTER MISSION"
+	on offer
+		conversation
+			`Hello!`
+				accept
+	on complete
+		"finish in flight" = not "flagship planet: Ruin"
+
+mission "%TEST%: ON ENTER MISSION COMPLETION"
+	entering
+	source "Terra Incognita"
+	"destination system" "Terra Incognita"
+	to offer
+		has "%TEST%: ON ENTER MISSION COMPLETION"
+	on offer
+		conversation
+			`Hello!`
+				accept
+	on complete
+		"finish in flight" = not "flagship planet: Ruin"
+
+
+test "Entering Mission Triggers"
+	status active
+	description "Test if a mission shows up when entering the system."
+	sequence
+		inject "mission on enter"
+		call "Load First Savegame"
+		apply
+			"%TEST%: ON ENTER MISSION" = 1
+		call "Depart"
+		call "Land On Ruin helper"
+		# use a test-data temporary variable for debugging in case of errors
+		apply
+			"test: finish in flight" = "finish in flight"
+			"test: %TEST%: ON ENTER MISSION: offered" = "%TEST%: ON ENTER MISSION: offered"
+			"test: %TEST%: ON ENTER MISSION: completed" = "%TEST%: ON ENTER MISSION: completed"
+		assert
+			"%TEST%: ON ENTER MISSION: offered" == 1
+			"%TEST%: ON ENTER MISSION: completed" == 1
+			"finish in flight" == 0
+
+
+test "Entering Mission Finishes"
+	status active
+	description "Test if a mission shows up when entering the system."
+	sequence
+		inject "mission on enter"
+		call "Load First Savegame"
+		apply
+			"%TEST%: ON ENTER MISSION COMPLETION" = 1
+		call "Depart"
+		call "Land On Ruin helper"
+		# use a test-data temporary variable for debugging in case of errors
+		apply
+			"test: finish in flight" = "finish in flight"
+			"test: %TEST%: ON ENTER MISSION COMPLETION: offered" = "%TEST%: ON ENTER MISSION COMPLETION: offered"
+			"test: %TEST%: ON ENTER MISSION COMPLETION: completed" = "%TEST%: ON ENTER MISSION COMPLETION: completed"
+		assert
+			"%TEST%: ON ENTER MISSION COMPLETION: offered" == 1
+			"%TEST%: ON ENTER MISSION COMPLETION: completed" == 1
+			"finish in flight" == 1

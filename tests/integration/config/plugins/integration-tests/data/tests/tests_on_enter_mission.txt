@@ -1,4 +1,4 @@
-test-data "on enter"
+test-data "mission on enter"
 	category "savegame"
 	contents
 		pilot Bobbi Bughunter
@@ -58,6 +58,7 @@ test-data "on enter"
 mission "%TEST%: ON ENTER MISSION"
 	entering
 	source "Terra Incognita"
+	destination "Ruin"
 	to offer
 		has "%TEST%: ON ENTER MISSION"
 	on offer
@@ -79,6 +80,20 @@ mission "%TEST%: ON ENTER MISSION COMPLETION"
 				accept
 	on complete
 		"finish in flight" = not "flagship planet: Ruin"
+
+
+# TO BE REMOVED BECAUSE IT IS DUPLICATE OF THE SAME ONE IN TESTS_ILLEGAL_ATROCITY.txt
+test "Land On Ruin helper"
+	status partial
+	description "Helper for landing on Ruin."
+	sequence
+		input
+			command land
+		label "landing"
+		# empty input to make time pass
+		input
+		branch "landing"
+			"flagship planet: Ruin" == 0
 
 
 test "Entering Mission Triggers"
@@ -114,9 +129,9 @@ test "Entering Mission Finishes"
 		call "Land On Ruin helper"
 		# use a test-data temporary variable for debugging in case of errors
 		apply
-			"test: finish in flight" = "finish in flight"
 			"test: %TEST%: ON ENTER MISSION COMPLETION: offered" = "%TEST%: ON ENTER MISSION COMPLETION: offered"
 			"test: %TEST%: ON ENTER MISSION COMPLETION: completed" = "%TEST%: ON ENTER MISSION COMPLETION: completed"
+			"test: finish in flight" = "finish in flight"
 		assert
 			"%TEST%: ON ENTER MISSION COMPLETION: offered" == 1
 			"%TEST%: ON ENTER MISSION COMPLETION: completed" == 1

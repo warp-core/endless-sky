@@ -105,6 +105,9 @@ test "Entering Mission Triggers"
 		apply
 			"%TEST%: ON ENTER MISSION" = 1
 		call "Depart"
+		# skip the mission offering conversation
+		input
+			key "Return"
 		call "Land On Ruin helper"
 		# use a test-data temporary variable for debugging in case of errors
 		apply
@@ -126,6 +129,9 @@ test "Entering Mission Finishes"
 		apply
 			"%TEST%: ON ENTER MISSION COMPLETION" = 1
 		call "Depart"
+		# skip the mission offering conversation
+		input
+			key "Return"
 		call "Land On Ruin helper"
 		# use a test-data temporary variable for debugging in case of errors
 		apply

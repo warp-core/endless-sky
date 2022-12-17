@@ -3355,7 +3355,7 @@ void AI::AimTurrets(const Ship &ship, FireCommand &command, bool opportunistic) 
 			if(hardpoint.CanAim())
 			{
 				// Get the index of this weapon.
-				int index = &hardpoint - &ship.Weapons().front();
+				int index = ship.WeaponIndex(hardpoint);
 				double offset = (hardpoint.HarmonizedAngle() - hardpoint.GetAngle()).Degrees();
 				command.SetAim(index, offset / hardpoint.GetOutfit()->TurretTurn());
 			}
@@ -3366,8 +3366,7 @@ void AI::AimTurrets(const Ship &ship, FireCommand &command, bool opportunistic) 
 		for(const Hardpoint &hardpoint : ship.Weapons())
 			if(hardpoint.CanAim())
 			{
-				// Get the index of this weapon.
-				int index = &hardpoint - &ship.Weapons().front();
+				int index = ship.WeaponIndex(hardpoint);
 				// First, check if this turret is currently in motion. If not,
 				// it only has a small chance of beginning to move.
 				double previous = ship.FiringCommands().Aim(index);
@@ -3449,8 +3448,7 @@ void AI::AimTurrets(const Ship &ship, FireCommand &command, bool opportunistic) 
 			}
 			if(bestAngle)
 			{
-				// Get the index of this weapon.
-				int index = &hardpoint - &ship.Weapons().front();
+				int index = ship.WeaponIndex(hardpoint);
 				command.SetAim(index, bestAngle / weapon->TurretTurn());
 			}
 		}

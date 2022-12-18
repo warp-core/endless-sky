@@ -223,6 +223,33 @@ int Armament::WeaponIndex(const Hardpoint &hardpoint) const
 
 
 
+std::pair<double, double> Armament::GetMinMaxRange() const
+{
+	double minRange = numeric_limits<double>::infinity();
+	double maxRange = 0.;
+	for(const Hardpoint *hardpoint : fixedHardpoints)
+	{
+		if(hardpoint->IsAntiMissile())
+			continue;
+
+		auto range = hardpoint->GetOutfit()->Range();
+		minRange = min(minRange, range);
+		maxRange = max(maxRange, range);
+	}
+	for(const Hardpoint *hardpoint : turrettedHardpoints)
+	{
+		if(hardpoint->IsAntiMissile())
+			continue;
+
+		auto range = hardpoint->GetOutfit()->Range();
+		minRange = min(minRange, range);
+		maxRange = max(maxRange, range);
+	}
+	return { minRange, maxRange };
+}
+
+
+
 // Determine how many fixed gun hardpoints are on this ship.
 int Armament::GunCount() const
 {

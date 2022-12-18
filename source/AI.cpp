@@ -3318,7 +3318,7 @@ void AI::AimTurrets(const Ship &ship, FireCommand &command, bool opportunistic) 
 	{
 		// Find the maximum range of any of this ship's turrets.
 		double maxRange = 0.;
-		for(const Hardpoint *weapon : ship.TurrettedWeapons())
+		for(const Hardpoint *weapon : ship.GetArmament().TurrettedWeapons())
 			maxRange = max(maxRange, weapon->GetOutfit()->Range());
 		// If this ship has no turrets, bail out.
 		if(!maxRange)
@@ -3350,10 +3350,11 @@ void AI::AimTurrets(const Ship &ship, FireCommand &command, bool opportunistic) 
 	// angle. Focused turrets should just point forward.
 	if(targets.empty() && !opportunistic)
 	{
-		for(const Hardpoint *hardpoint : ship.TurrettedWeapons())
+		const auto &armament = ship.GetArmament();
+		for(const Hardpoint *hardpoint : armament.TurrettedWeapons())
 		{
 			// Get the index of this weapon.
-			int index = ship.WeaponIndex(*hardpoint);
+			int index = armament.WeaponIndex(*hardpoint);
 			double offset = (hardpoint->HarmonizedAngle() - hardpoint->GetAngle()).Degrees();
 			command.SetAim(index, offset / hardpoint->GetOutfit()->TurretTurn());
 		}
@@ -3361,10 +3362,11 @@ void AI::AimTurrets(const Ship &ship, FireCommand &command, bool opportunistic) 
 	}
 	if(targets.empty())
 	{
-		for(const Hardpoint *hardpoint : ship.TurrettedWeapons())
+		const auto &armament = ship.GetArmament();
+		for(const Hardpoint *hardpoint : armament.TurrettedWeapons())
 		{
 			// Get the index of this weapon.
-			int index = ship.WeaponIndex(*hardpoint);
+			int index = armament.WeaponIndex(*hardpoint);
 			// First, check if this turret is currently in motion. If not,
 			// it only has a small chance of beginning to move.
 			double previous = ship.FiringCommands().Aim(index);
@@ -3379,7 +3381,8 @@ void AI::AimTurrets(const Ship &ship, FireCommand &command, bool opportunistic) 
 		return;
 	}
 	// Each hardpoint should aim at the target that it is "closest" to hitting.
-	for(const Hardpoint *hardpoint : ship.TurrettedWeapons())
+	const auto &armament = ship.GetArmament();
+	for(const Hardpoint *hardpoint : armament.TurrettedWeapons())
 	{
 		// This is where this projectile fires from. Add some randomness
 		// based on how skilled the pilot is.
@@ -3477,7 +3480,7 @@ void AI::AimTurrets(const Ship &ship, FireCommand &command, bool opportunistic) 
 		if(bestAngle)
 		{
 			// Get the index of this weapon.
-			int index = ship.WeaponIndex(*hardpoint);
+			int index = armament.WeaponIndex(*hardpoint);
 			command.SetAim(index, bestAngle / weapon->TurretTurn());
 		}
 	}

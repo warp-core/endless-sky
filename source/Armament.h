@@ -101,6 +101,9 @@ private:
 	// Returns false if the index is invalid or the hardpoint jammed.
 	bool CheckHardpoint(unsigned index, bool jammed = false);
 
+	void RecreateViewsAndRanges();
+	std::pair<double, double> CalculateMinMaxRange() const;
+
 
 private:
 	// Note: the Armament must be copied when an instance of a Ship is made, so
@@ -118,7 +121,9 @@ private:
 	std::vector<Hardpoint *> turrettedHardpoints;
 	std::vector<Hardpoint *> fixedHardpoints;
 
-	void RecreateShortcuts();
+	// Global ranges of actual configuration
+	double minRange = 0.;
+	double maxRange = 0.;
 };
 
 

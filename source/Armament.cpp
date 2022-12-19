@@ -33,7 +33,7 @@ Armament::Armament(const Armament &other)
 	: streamReload(other.streamReload)
 	, hardpoints(other.hardpoints)
 {
-	RecreateShortcuts();
+	RecreateViewsAndRanges();
 }
 
 
@@ -120,7 +120,7 @@ int Armament::Add(const Outfit *outfit, int count)
 	}
 
 	// Update 'shortcuts'
-	RecreateShortcuts();
+	RecreateViewsAndRanges();
 
 	return added;
 }
@@ -135,7 +135,7 @@ void Armament::FinishLoading()
 		if(hardpoint.GetOutfit())
 			hardpoint.Install(hardpoint.GetOutfit());
 
-	RecreateShortcuts();
+	RecreateViewsAndRanges();
 
 	ReloadAll();
 }
@@ -189,7 +189,7 @@ void Armament::Swap(unsigned first, unsigned second)
 	hardpoints[first].Install(hardpoints[second].GetOutfit());
 	hardpoints[second].Install(outfit);
 
-	RecreateShortcuts();
+	RecreateViewsAndRanges();
 }
 
 
@@ -225,30 +225,8 @@ int Armament::WeaponIndex(const Hardpoint &hardpoint) const
 
 std::pair<double, double> Armament::GetMinMaxRange() const
 {
-	double minRange = numeric_limits<double>::infinity();
-	double maxRange = 0.;
-	for(const Hardpoint *hardpoint : fixedHardpoints)
-	{
-		if(hardpoint->IsAntiMissile())
-			continue;
-
-		auto range = hardpoint->GetOutfit()->Range();
-		minRange = min(minRange, range);
-		maxRange = max(maxRange, range);
-	}
-	for(const Hardpoint *hardpoint : turrettedHardpoints)
-	{
-		if(hardpoint->IsAntiMissile())
-			continue;
-
-		auto range = hardpoint->GetOutfit()->Range();
-		minRange = min(minRange, range);
-		maxRange = max(maxRange, range);
-	}
 	return { minRange, maxRange };
 }
-
-
 
 // Determine how many fixed gun hardpoints are on this ship.
 int Armament::GunCount() const
@@ -387,7 +365,7 @@ bool Armament::CheckHardpoint(unsigned index, bool jammed)
 
 
 
-void Armament::RecreateShortcuts()
+void Armament::RecreateViewsAndRanges()
 {
 	turrettedHardpoints.clear();
 	fixedHardpoints.clear();
@@ -401,4 +379,30 @@ void Armament::RecreateShortcuts()
 		else
 			fixedHardpoints.push_back(&hardpoint);
 	}
+	std::tie(minRange, maxRange) = CalculateMinMaxRange();
+}
+
+std::pair<double, double> Armament::CalculateMinMaxRange() const
+{
+	double rangeMin = numeric_limits<double>::infinity();
+	double rangeMax = 0.;
+	for(const Hardpoint *hardpoint : fixedHardpoints)
+	{
+		if(hardpoint->IsAntiMissile())
+			continue;
+
+		auto range = hardpoint->GetOutfit()->Range();
+		rangeMin = min(rangeMin, range);
+		rangeMax = max(rangeMax, range);
+	}
+	for(const Hardpoint *hardpoint : turrettedHardpoints)
+	{
+		if(hardpoint->IsAntiMissile())
+			continue;
+
+		auto range = hardpoint->GetOutfit()->Range();
+		rangeMin = min(rangeMin, range);
+		rangeMax = max(rangeMax, range);
+	}
+	return { rangeMin, rangeMax };
 }

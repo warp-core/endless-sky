@@ -120,7 +120,7 @@ namespace {
 	// Determine if the ship has any usable weapons.
 	bool IsArmed(const Ship &ship)
 	{
-		for(const Hardpoint *hardpoint : ship.GetArmament().TurrettedWeaponsNoAM())
+		for(const Hardpoint *hardpoint : ship.GetArmament().AllWeaponsNoAM())
 		{
 			const Weapon *weapon = hardpoint->GetOutfit();
 			if(weapon && !hardpoint->IsSpecial())
@@ -2072,7 +2072,7 @@ bool AI::ShouldDock(const Ship &ship, const Ship &parent, const System *playerSy
 	// If a fighter is armed with only ammo-using weapons, but no longer has the ammunition
 	// needed to use them, it should dock if the parent can supply that ammo.
 	bool dockToReload = false;
-	for(const Hardpoint *hardpoint : ship.GetArmament().TurrettedWeaponsNoAM())
+	for(const Hardpoint *hardpoint : ship.GetArmament().AllWeaponsNoAM())
 	{
 		const Outfit *ammo = hardpoint->GetOutfit()->Ammo();
 		if(!ammo || ship.OutfitCount(ammo))

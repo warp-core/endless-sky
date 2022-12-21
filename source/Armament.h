@@ -110,11 +110,7 @@ private:
 	// and the maximum range of turrets
 	std::tuple<double, double, double> CalculateRanges() const;
 
-
 private:
-	// Note: the Armament must be copied when an instance of a Ship is made, so
-	// it should not hold any pointers specific to one ship (including to
-	// elements of this Armament itself).
 	// Notes:
 	// * the Armament must be copied when an instance of a Ship is made, so
 	//   it should not hold any pointers specific to one ship (including to

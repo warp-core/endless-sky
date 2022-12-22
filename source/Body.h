@@ -155,6 +155,12 @@ inline bool operator==(const Body &lhs, const Body &rhs)
 {
 	return
 		lhs.sprite == rhs.sprite &&
+		lhs.scale == rhs.scale &&
+		lhs.randomize == rhs.randomize &&
+		lhs.delay == rhs.delay &&
+		lhs.repeat == rhs.repeat &&
+		lhs.rewind == rhs.rewind &&
+		lhs.frameOffset == rhs.frameOffset &&
 		lhs.position == rhs.position &&
 		lhs.velocity == rhs.velocity &&
 		lhs.angle.Degrees() == rhs.angle.Degrees() &&

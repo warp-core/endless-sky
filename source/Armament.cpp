@@ -212,10 +212,10 @@ void Armament::UninstallAll()
 	for(Hardpoint &hardpoint : hardpoints)
 		hardpoint.Uninstall();
 
-	turrettedHardpoints.clear();
-	allHardpointsNoAM.clear();
-	fixedHardpoints.clear();
-	antiMissileHardpoints.clear();
+	turrettedWeapons.clear();
+	nonAMWeapons.clear();
+	fixedWeapons.clear();
+	antiMissileWeapons.clear();
 }
 
 
@@ -252,28 +252,28 @@ const vector<Hardpoint> &Armament::Get() const
 
 const std::vector<Hardpoint *> Armament::TurrettedWeapons() const
 {
-	return turrettedHardpoints;
+	return turrettedWeapons;
 }
 
 
 
 const std::vector<Hardpoint *> Armament::NonAMWeapons() const
 {
-	return allHardpointsNoAM;
+	return nonAMWeapons;
 }
 
 
 
 const std::vector<Hardpoint *> Armament::FixedWeapons() const
 {
-	return fixedHardpoints;
+	return fixedWeapons;
 }
 
 
 
 const std::vector<Hardpoint *> Armament::AntiMissileWeapons() const
 {
-	return antiMissileHardpoints;
+	return antiMissileWeapons;
 }
 
 
@@ -337,7 +337,7 @@ set<const Outfit *> Armament::RestockableAmmo() const
 // Adjust the aim of the turrets.
 void Armament::Aim(const FireCommand &command)
 {
-	for(auto *hardpoint : turrettedHardpoints)
+	for(auto *hardpoint : turrettedWeapons)
 	{
 		int index = WeaponIndex(*hardpoint);
 		hardpoint->Aim(command.Aim(index));
@@ -399,10 +399,10 @@ bool Armament::FireTractorBeam(unsigned index, Ship &ship, const Flotsam &flotsa
 // Update the reload counters.
 void Armament::Step(const Ship &ship)
 {
-	for(Hardpoint *hardpoint : turrettedHardpoints)
+	for(Hardpoint *hardpoint : turrettedWeapons)
 		hardpoint->Step();
 
-	for(Hardpoint *hardpoint : fixedHardpoints)
+	for(Hardpoint *hardpoint : fixedWeapons)
 		hardpoint->Step();
 
 	for(auto &it : streamReload)
@@ -434,24 +434,24 @@ bool Armament::CheckHardpoint(unsigned index, bool jammed)
 
 void Armament::RecreateViewsAndRanges()
 {
-	turrettedHardpoints.clear();
-	allHardpointsNoAM.clear();
-	fixedHardpoints.clear();
-	antiMissileHardpoints.clear();
+	turrettedWeapons.clear();
+	nonAMWeapons.clear();
+	fixedWeapons.clear();
+	antiMissileWeapons.clear();
 	for(auto &hardpoint : hardpoints)
 	{
 		if(!hardpoint.GetOutfit())
 			continue;
 
 		if(hardpoint.CanAim())
-			turrettedHardpoints.push_back(&hardpoint);
+			turrettedWeapons.push_back(&hardpoint);
 		else
-			fixedHardpoints.push_back(&hardpoint);
+			fixedWeapons.push_back(&hardpoint);
 
 		if(hardpoint.IsAntiMissile())
-			antiMissileHardpoints.push_back(&hardpoint);
+			antiMissileWeapons.push_back(&hardpoint);
 		else
-			allHardpointsNoAM.push_back(&hardpoint);
+			nonAMWeapons.push_back(&hardpoint);
 	}
 	std::tie(minRange, maxRange) = CalculateMinMaxRanges(hardpoints);
 	maxTurretsRange = CalculateTurretsMaxRange(hardpoints);

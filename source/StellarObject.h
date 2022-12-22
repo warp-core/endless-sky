@@ -114,7 +114,8 @@ inline bool operator==(const StellarObject &lhs, const StellarObject &rhs)
 		&& lhs.message == rhs.message
 		&& lhs.isStar == rhs.isStar
 		&& lhs.isStation == rhs.isStation
-		&& lhs.isMoon == rhs.isMoon;
+		&& lhs.isMoon == rhs.isMoon
+		&& static_cast<const Body &>(lhs) == static_cast<const Body &>(rhs);
 }
 
 

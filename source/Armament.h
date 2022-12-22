@@ -106,9 +106,7 @@ private:
 	bool CheckHardpoint(unsigned index, bool jammed = false);
 
 	void RecreateViewsAndRanges();
-	// Return global minimum and maximum range of all weapons
-	// and the maximum range of turrets
-	std::tuple<double, double, double> CalculateRanges() const;
+
 
 private:
 	// Notes:
@@ -126,10 +124,10 @@ private:
 	std::vector<Hardpoint *> fixedHardpoints;
 	std::vector<Hardpoint *> antiMissileHardpoints;
 
-	// Global ranges of actual configuration
+	// Global ranges of actual configuration (excluding AntiMissiles)
 	double minRange = 0.;
 	double maxRange = 0.;
-	// Max ranges of turrets
+	// Max ranges of turrets (excluding AntiMissiles)
 	double maxTurretsRange = 0.;
 };
 

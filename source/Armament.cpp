@@ -360,7 +360,8 @@ void Armament::Aim(const FireCommand &command)
 
 // Fire the given weapon, if it is ready. If it did not fire because it is
 // not ready, return false.
-void Armament::Fire(unsigned index, Ship &ship, vector<Projectile> &projectiles, vector<Visual> &visuals, bool jammed)
+void Armament::Fire(int index, Ship &ship, vector<Projectile> &projectiles
+	, vector<Visual> &visuals, bool jammed)
 {
 	// Don't check if the hardpoint jammed here, as the weapon may not even
 	// attempt to fire due to stream reloading.
@@ -386,7 +387,8 @@ void Armament::Fire(unsigned index, Ship &ship, vector<Projectile> &projectiles,
 
 
 
-void Armament::Fire(const Hardpoint &hardpoint, Ship &ship, std::vector<Projectile> &projectiles, std::vector<Visual> &visuals, bool jammed)
+void Armament::Fire(const Hardpoint &hardpoint, Ship &ship, std::vector<Projectile> &projectiles
+	, std::vector<Visual> &visuals, bool jammed)
 {
 	int index = WeaponIndex(hardpoint);
 	Fire(index, ship, projectiles, visuals, jammed);
@@ -404,7 +406,8 @@ bool Armament::FireAntiMissile(int index, Ship &ship, const Projectile &projecti
 
 
 
-bool Armament::FireAntiMissile(const Hardpoint &hardpoint, Ship &ship, const Projectile &projectile, std::vector<Visual> &visuals, bool jammed)
+bool Armament::FireAntiMissile(const Hardpoint &hardpoint, Ship &ship, const Projectile &projectile
+	, std::vector<Visual> &visuals, bool jammed)
 {
 	int index = WeaponIndex(hardpoint);
 	return FireAntiMissile(index, ship, projectile, visuals, jammed);

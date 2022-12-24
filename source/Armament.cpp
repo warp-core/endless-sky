@@ -386,7 +386,14 @@ void Armament::Fire(unsigned index, Ship &ship, vector<Projectile> &projectiles,
 
 
 
-bool Armament::FireAntiMissile(unsigned index, Ship &ship, const Projectile &projectile,
+void Armament::Fire(const Hardpoint &hardpoint, Ship &ship, std::vector<Projectile> &projectiles, std::vector<Visual> &visuals, bool jammed)
+{
+	int index = WeaponIndex(hardpoint);
+	Fire(index, ship, projectiles, visuals, jammed);
+}
+
+
+bool Armament::FireAntiMissile(int index, Ship &ship, const Projectile &projectile,
 	vector<Visual> &visuals, bool jammed)
 {
 	if(!CheckHardpoint(index, jammed))
@@ -397,15 +404,11 @@ bool Armament::FireAntiMissile(unsigned index, Ship &ship, const Projectile &pro
 
 
 
-bool Armament::FireTractorBeam(unsigned index, Ship &ship, const Flotsam &flotsam,
-	vector<Visual> &visuals, bool jammed)
+bool Armament::FireAntiMissile(const Hardpoint &hardpoint, Ship &ship, const Projectile &projectile, std::vector<Visual> &visuals, bool jammed)
 {
-	if(!CheckHardpoint(index, jammed))
-		return false;
-
-	return hardpoints[index].FireTractorBeam(ship, flotsam, visuals);
+	int index = WeaponIndex(hardpoint);
+	return FireAntiMissile(index, ship, projectile, visuals, jammed);
 }
-
 
 
 // Update the reload counters.

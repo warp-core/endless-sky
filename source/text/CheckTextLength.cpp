@@ -19,9 +19,30 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include "alignment.hpp"
 #include "FontSet.h"
+#include "Format.h"
 #include "WrappedText.h"
 
 using namespace std;
+
+namespace {
+	const map<string, string> GENERIC_SUBS = {
+		{"<bunks>", "[N]"},
+		{"<cargo>", "[N tons of Commodity]"},
+		{"<commodity>", "[Commodity]"},
+		{"<date>", "[Day Mon Year]"},
+		{"<day>", "[The Nth of Month]"},
+		{"<destination>", "[Planet in the Star system]"},
+		{"<fare>", "[N passengers]"},
+		{"<first>", "[First]"},
+		{"<last>", "[Last]"},
+		{"<origin>", "[Origin Planet]"},
+		{"<passengers>", "[your passengers]"},
+		{"<planet>", "[Planet]"},
+		{"<ship>", "[Ship]"},
+		{"<system>", "[Star]"},
+		{"<tons>", "[N tons]"}
+	};
+}
 
 
 
@@ -33,7 +54,10 @@ bool CheckTextLength::CheckLength(const string &text, int width, int lines)
 	wrap.SetFont(FontSet::Get(14));
 	wrap.SetAlignment(Alignment::JUSTIFIED);
 	wrap.SetWrapWidth(width);
-	wrap.Wrap(text);
-	double lineCount = wrap.Height() / wrap.LineHeight();
+	wrap.Wrap(Format::Replace(text, GENERIC_SUBS));
+	int lineHeight = wrap.LineHeight();
+	if(!lineHeight)
+		return false;
+	double lineCount = wrap.Height() / lineHeight;
 	return lineCount > lines;
 }

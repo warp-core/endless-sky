@@ -15,6 +15,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include "UniverseObjects.h"
 
+#include "text/CheckTextLength.h"
 #include "DataFile.h"
 #include "DataNode.h"
 #include "Files.h"
@@ -157,6 +158,13 @@ void UniverseObjects::FinishLoading()
 				persons.Get(name)->NeverSpawn();
 		else
 			Logger::LogError("Unhandled \"disable\" keyword of type \"" + category.first + "\"");
+	}
+
+	for(const auto &it : missions)
+	{
+		const Mission &mission = it.second;
+		if(CheckTextLength::CheckLength(mission.Description(), 380, 5))
+			Logger::LogError("Warning: mission \"" + it.first + "\" description overflows UI element.");
 	}
 }
 

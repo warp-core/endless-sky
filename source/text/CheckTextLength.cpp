@@ -27,6 +27,8 @@ using namespace std;
 
 bool CheckTextLength::CheckLength(const string &text, int width, int lines)
 {
+	if(text.empty())
+		return false;
 	WrappedText wrap;
 	wrap.SetFont(FontSet::Get(14));
 	wrap.SetAlignment(Alignment::JUSTIFIED);

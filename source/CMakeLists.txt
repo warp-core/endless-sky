@@ -354,6 +354,8 @@ target_sources(EndlessSkyLib PRIVATE
 	opengl.h
 	pi.h
 	shift.h
+	text/CheckTextLength.cpp
+	text/CheckTextLength.h
 	text/DisplayText.cpp
 	text/DisplayText.h
 	text/Font.cpp

@@ -15,6 +15,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include "Mission.h"
 
+#include "text/CheckTextLength.h"
 #include "DataNode.h"
 #include "DataWriter.h"
 #include "Dialog.h"
@@ -38,6 +39,24 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 using namespace std;
 
 namespace {
+	const map<string, string> GENERIC_SUBS = {
+		{"<bunks>", "[N]"},
+		{"<cargo>", "[N tons of Commodity]"},
+		{"<commodity>", "[Commodity]"},
+		{"<date>", "[Day Mon Year]"},
+		{"<day>", "[The Nth of Month]"},
+		{"<destination>", "[Planet in the Star system]"},
+		{"<fare>", "[N passengers]"},
+		{"<first>", "[First]"},
+		{"<last>", "[Last]"},
+		{"<origin>", "[Origin Planet]"},
+		{"<passengers>", "[your passengers]"},
+		{"<planet>", "[Planet]"},
+		{"<ship>", "[Ship]"},
+		{"<system>", "[Star]"},
+		{"<tons>", "[N tons]"}
+	};
+
 	// Pick a random commodity that would make sense to be exported from the
 	// first system to the second.
 	const Trade::Commodity *PickCommodity(const System &from, const System &to)
@@ -313,6 +332,9 @@ void Mission::Load(const DataNode &node)
 		displayName = name;
 	if(hasPriority && location == LANDING)
 		node.PrintTrace("Warning: \"priority\" tag has no effect on \"landing\" missions:");
+	
+	if(CheckTextLength::CheckLength(Format::Replace(description, GENERIC_SUBS), 380, 5))
+		node.PrintTrace("Warning: description overflows UI element.");
 }
 
 

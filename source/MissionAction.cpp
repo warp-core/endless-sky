@@ -359,10 +359,3 @@ MissionAction MissionAction::Instantiate(map<string, string> &subs, const System
 
 	return result;
 }
-
-
-
-int64_t MissionAction::Payment() const noexcept
-{
-	return action.Payment();
-}

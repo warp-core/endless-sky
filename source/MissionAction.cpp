@@ -341,7 +341,7 @@ MissionAction MissionAction::Instantiate(map<string, string> &subs, const System
 
 	string previousPayment = subs["<payment>"];
 	string previousFine = subs["<fine>"];
-	result.action = action.Instantiate(subs, jumps, payload);
+	static_cast<GameAction>(result) = GameAction::Instantiate(subs, jumps, payload);
 
 	// Create any associated dialog text from phrases, or use the directly specified text.
 	string dialogText = !dialogPhrase->IsEmpty() ? dialogPhrase->Get() : this->dialogText;

@@ -123,7 +123,7 @@ void MissionAction::Load(const DataNode &node, const string &missionName)
 				child.PrintTrace("Error: Unsupported use of \"system\" LocationFilter:");
 		}
 		else
-			action.LoadSingle(child, missionName);
+			LoadSingle(child, missionName);
 	}
 }
 

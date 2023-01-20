@@ -82,9 +82,6 @@ private:
 
 	// Outfits that are required to be owned (or not) for this action to be performable.
 	std::map<const Outfit *, int> requiredOutfits;
-
-	// Tasks this mission action performs, such as modifying accounts, inventory, or conditions.
-	GameAction action;
 };
 
 

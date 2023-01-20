@@ -147,79 +147,6 @@ void GameAction::Load(const DataNode &node, const string &missionName)
 
 
 
-// Load a single child at a time, used for streamlining MissionAction::Load.
-void GameAction::LoadSingle(const DataNode &child, const string &missionName)
-{
-	isEmpty = false;
-
-	const string &key = child.Token(0);
-	bool hasValue = (child.Size() >= 2);
-
-	if(key == "log")
-	{
-		bool isSpecial = (child.Size() >= 3);
-		string &text = (isSpecial ?
-			specialLogText[child.Token(1)][child.Token(2)] : logText);
-		Dialog::ParseTextNode(child, isSpecial ? 3 : 1, text);
-	}
-	else if(key == "give" && hasValue)
-	{
-		if(child.Token(1) == "ship" && child.Size() >= 3)
-			giftShips.emplace_back(GameData::Ships().Get(child.Token(2)), child.Size() >= 4 ? child.Token(3) : "");
-		else
-			child.PrintTrace("Error: Skipping unsupported \"give\" syntax:");
-	}
-	else if(key == "outfit" && hasValue)
-	{
-		int count = (child.Size() < 3 ? 1 : static_cast<int>(child.Value(2)));
-		if(count)
-			giftOutfits[GameData::Outfits().Get(child.Token(1))] = count;
-		else
-			child.PrintTrace("Error: Skipping invalid outfit quantity:");
-	}
-	else if(key == "payment")
-	{
-		if(child.Size() == 1)
-			paymentMultiplier += 150;
-		if(child.Size() >= 2)
-			payment += child.Value(1);
-		if(child.Size() >= 3)
-			paymentMultiplier += child.Value(2);
-	}
-	else if(key == "fine" && hasValue)
-	{
-		int64_t value = child.Value(1);
-		if(value > 0)
-			fine += value;
-		else
-			child.PrintTrace("Error: Skipping invalid \"fine\" with non-positive value:");
-	}
-	else if(key == "event" && hasValue)
-	{
-		int minDays = (child.Size() >= 3 ? child.Value(2) : 0);
-		int maxDays = (child.Size() >= 4 ? child.Value(3) : minDays);
-		if(maxDays < minDays)
-			swap(minDays, maxDays);
-		events[GameData::Events().Get(child.Token(1))] = make_pair(minDays, maxDays);
-	}
-	else if(key == "fail")
-	{
-		string toFail = child.Size() >= 2 ? child.Token(1) : missionName;
-		if(toFail.empty())
-			child.PrintTrace("Error: Skipping invalid \"fail\" with no mission:");
-		else
-		{
-			fail.insert(toFail);
-			// Create a GameData reference to this mission name.
-			GameData::Missions().Get(toFail);
-		}
-	}
-	else
-		conditions.Add(child);
-}
-
-
-
 void GameAction::Save(DataWriter &out) const
 {
 	if(!logText.empty())
@@ -415,4 +342,77 @@ GameAction GameAction::Instantiate(map<string, string> &subs, int jumps, int pay
 	result.conditions = conditions;
 
 	return result;
+}
+
+
+
+// Load a single child at a time, used for streamlining MissionAction::Load.
+void GameAction::LoadSingle(const DataNode &child, const string &missionName)
+{
+	isEmpty = false;
+
+	const string &key = child.Token(0);
+	bool hasValue = (child.Size() >= 2);
+
+	if(key == "log")
+	{
+		bool isSpecial = (child.Size() >= 3);
+		string &text = (isSpecial ?
+			specialLogText[child.Token(1)][child.Token(2)] : logText);
+		Dialog::ParseTextNode(child, isSpecial ? 3 : 1, text);
+	}
+	else if(key == "give" && hasValue)
+	{
+		if(child.Token(1) == "ship" && child.Size() >= 3)
+			giftShips.emplace_back(GameData::Ships().Get(child.Token(2)), child.Size() >= 4 ? child.Token(3) : "");
+		else
+			child.PrintTrace("Error: Skipping unsupported \"give\" syntax:");
+	}
+	else if(key == "outfit" && hasValue)
+	{
+		int count = (child.Size() < 3 ? 1 : static_cast<int>(child.Value(2)));
+		if(count)
+			giftOutfits[GameData::Outfits().Get(child.Token(1))] = count;
+		else
+			child.PrintTrace("Error: Skipping invalid outfit quantity:");
+	}
+	else if(key == "payment")
+	{
+		if(child.Size() == 1)
+			paymentMultiplier += 150;
+		if(child.Size() >= 2)
+			payment += child.Value(1);
+		if(child.Size() >= 3)
+			paymentMultiplier += child.Value(2);
+	}
+	else if(key == "fine" && hasValue)
+	{
+		int64_t value = child.Value(1);
+		if(value > 0)
+			fine += value;
+		else
+			child.PrintTrace("Error: Skipping invalid \"fine\" with non-positive value:");
+	}
+	else if(key == "event" && hasValue)
+	{
+		int minDays = (child.Size() >= 3 ? child.Value(2) : 0);
+		int maxDays = (child.Size() >= 4 ? child.Value(3) : minDays);
+		if(maxDays < minDays)
+			swap(minDays, maxDays);
+		events[GameData::Events().Get(child.Token(1))] = make_pair(minDays, maxDays);
+	}
+	else if(key == "fail")
+	{
+		string toFail = child.Size() >= 2 ? child.Token(1) : missionName;
+		if(toFail.empty())
+			child.PrintTrace("Error: Skipping invalid \"fail\" with no mission:");
+		else
+		{
+			fail.insert(toFail);
+			// Create a GameData reference to this mission name.
+			GameData::Missions().Get(toFail);
+		}
+	}
+	else
+		conditions.Add(child);
 }

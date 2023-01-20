@@ -49,8 +49,6 @@ public:
 	GameAction(const DataNode &node, const std::string &missionName);
 
 	void Load(const DataNode &node, const std::string &missionName);
-	// Process a single sibling node.
-	void LoadSingle(const DataNode &child, const std::string &missionName);
 	void Save(DataWriter &out) const;
 
 	// Determine if this GameAction references content that is not fully defined.
@@ -69,6 +67,11 @@ public:
 	// "Instantiate" this action by filling in the wildcard data for the actual
 	// payment, event delay, etc.
 	GameAction Instantiate(std::map<std::string, std::string> &subs, int jumps, int payload) const;
+
+
+protected:
+	// Process a single sibling node.
+	void LoadSingle(const DataNode &child, const std::string &missionName);
 
 
 private:

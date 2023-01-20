@@ -161,7 +161,7 @@ void MissionAction::Save(DataWriter &out) const
 		for(const auto &it : requiredOutfits)
 			out.Write("require", it.first->TrueName(), it.second);
 
-		action.Save(out);
+		GameAction::Save(out);
 	}
 	out.EndChild();
 }
@@ -194,7 +194,7 @@ string MissionAction::Validate() const
 		if(!outfit.first->IsDefined())
 			return "required outfit \"" + outfit.first->TrueName() + "\"";
 
-	return action.Validate();
+	return GameAction::Validate();
 }
 
 
@@ -214,7 +214,7 @@ bool MissionAction::CanBeDone(const PlayerInfo &player, const shared_ptr<Ship> &
 		return false;
 
 	const Ship *flagship = player.Flagship();
-	for(auto &&it : action.Outfits())
+	for(auto &&it : Outfits())
 	{
 		// If this outfit is being given, the player doesn't need to have it.
 		if(it.second > 0)
@@ -321,7 +321,7 @@ void MissionAction::Do(PlayerInfo &player, UI *ui, const System *destination,
 	else if(isOffer && ui)
 		player.MissionCallback(Conversation::ACCEPT);
 
-	action.Do(player, ui);
+	GameAction::Do(player, ui);
 }
 
 
@@ -354,7 +354,7 @@ MissionAction MissionAction::Instantiate(map<string, string> &subs, const System
 	// use in other parts of this mission.
 	if(result.Payment() && trigger != "complete")
 		subs["<payment>"] = previousPayment;
-	if(result.action.Fine() && trigger != "complete")
+	if(result.Fine() && trigger != "complete")
 		subs["<fine>"] = previousFine;
 
 	return result;

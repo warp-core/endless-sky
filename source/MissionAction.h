@@ -16,9 +16,10 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #ifndef MISSION_ACTION_H_
 #define MISSION_ACTION_H_
 
+#include "GameAction.h"
+
 #include "Conversation.h"
 #include "ExclusiveItem.h"
-#include "GameAction.h"
 #include "LocationFilter.h"
 #include "Phrase.h"
 
@@ -39,7 +40,7 @@ class UI;
 // milestone, including offered, accepted, declined, completed, or failed.
 // In addition to performing a GameAction, a MissionAction can gate the task on
 // the ownership of specific outfits and also display dialogs or conversations.
-class MissionAction {
+class MissionAction : public GameAction {
 public:
 	MissionAction() = default;
 	// Construct and Load() at the same time.

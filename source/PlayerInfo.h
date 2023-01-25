@@ -24,7 +24,9 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "Date.h"
 #include "Depreciation.h"
 #include "GameEvent.h"
+#include "Government.h"
 #include "Mission.h"
+#include "SystemEntry.h"
 
 #include <chrono>
 #include <list>
@@ -35,7 +37,6 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include <utility>
 #include <vector>
 
-class Government;
 class Outfit;
 class Planet;
 class Rectangle;
@@ -60,6 +61,8 @@ public:
 		int64_t maintenanceCosts = 0;
 		int64_t assetsReturns = 0;
 	};
+
+
 public:
 	PlayerInfo() = default;
 	// Don't allow copying this class.
@@ -108,11 +111,15 @@ public:
 	// Get basic data about the player's starting scenario.
 	const CoreStartData &StartData() const noexcept;
 
+	// Sets the means the player used to enter the system.
+	void SetSystemEntry(SystemEntry entryType);
+	SystemEntry GetSystemEntry() const;
 	// Set the system the player is in. This must be stored here so that even if
 	// the player sells all their ships, we still know where the player is.
 	// This also marks the given system as visited.
 	void SetSystem(const System &system);
 	const System *GetSystem() const;
+	const System *GetPreviousSystem() const;
 	// Set what planet the player is on (or nullptr, if taking off).
 	void SetPlanet(const Planet *planet);
 	const Planet *GetPlanet() const;
@@ -153,6 +160,7 @@ public:
 	void SetShipOrder(const std::vector<std::shared_ptr<Ship>> &newOrder);
 	// Get the attraction factors of the player's fleet to raid fleets.
 	std::pair<double, double> RaidFleetFactors() const;
+	double RaidFleetAttraction(const Government::RaidFleet &raidFleet, const System *system) const;
 
 	// Get cargo information.
 	CargoHold &Cargo();
@@ -185,6 +193,18 @@ public:
 	// Get mission information.
 	const std::list<Mission> &Missions() const;
 	const std::list<Mission> &AvailableJobs() const;
+
+	enum SortType {ABC, PAY, SPEED, CONVENIENT};
+	const SortType GetAvailableSortType() const;
+	void NextAvailableSortType();
+	const bool ShouldSortAscending() const;
+	void ToggleSortAscending();
+	const bool ShouldSortSeparateDeadline() const;
+	void ToggleSortSeparateDeadline();
+	const bool ShouldSortSeparatePossible() const;
+	void ToggleSortSeparatePossible();
+	void SortAvailable();
+
 	const Mission *ActiveBoardingMission() const;
 	void UpdateMissionNPCs();
 	void AcceptJob(const Mission &mission, UI *ui);
@@ -240,8 +260,10 @@ public:
 	void SetTravelDestination(const Planet *planet);
 
 	// Toggle which secondary weapon the player has selected.
-	const std::set<const Outfit *> &SelectedWeapons() const;
-	void SelectNext();
+	const std::set<const Outfit *> &SelectedSecondaryWeapons() const;
+	void SelectNextSecondary();
+	void DeselectAllSecondaries();
+	void ToggleAnySecondary(const Outfit *outfit);
 
 	// Escorts currently selected for giving orders.
 	const std::vector<std::weak_ptr<Ship>> &SelectedShips() const;
@@ -298,6 +320,9 @@ private:
 	// Check for and apply any punitive actions from planetary security.
 	void Fine(UI *ui);
 
+	// Set the flagship (on departure or during flight).
+	void SetFlagship(Ship &other);
+
 	// Helper function to update the ship selection.
 	void SelectShip(const std::shared_ptr<Ship> &ship, bool *first);
 
@@ -311,6 +336,8 @@ private:
 	std::string filePath;
 
 	Date date;
+	SystemEntry entry = SystemEntry::TAKE_OFF;
+	const System *previousSystem = nullptr;
 	const System *system = nullptr;
 	const Planet *planet = nullptr;
 	bool shouldLaunch = false;
@@ -348,6 +375,11 @@ private:
 	// This pointer to the most recently accepted boarding mission enables
 	// its NPCs to be placed before the player lands, and is then cleared.
 	Mission *activeBoardingMission = nullptr;
+	// How to sort availableJobs
+	bool availableSortAsc = true;
+	SortType availableSortType;
+	bool sortSeparateDeadline = false;
+	bool sortSeparatePossible = false;
 
 	ConditionsStore conditions;
 

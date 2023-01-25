@@ -35,12 +35,15 @@ public:
 	void Load(const DataNode &node);
 	void Save(DataWriter &out) const;
 
+	bool IsDefined() const;
+
 	// Who a ship decides to attack:
 	bool IsPacifist() const;
 	bool IsForbearing() const;
 	bool IsTimid() const;
-	bool IsHeroic() const;
+	bool IsHunting() const;
 	bool IsNemesis() const;
+	bool IsDaring() const;
 
 	// How they fight:
 	bool IsFrugal() const;
@@ -51,6 +54,7 @@ public:
 	bool IsCoward() const;
 	bool IsAppeasing() const;
 	bool IsOpportunistic() const;
+	bool IsMerciful() const;
 
 	// Mission NPC states:
 	bool IsStaying() const;
@@ -66,6 +70,7 @@ public:
 	bool IsMining() const;
 	bool Harvests() const;
 	bool IsSwarming() const;
+	bool IsSecretive() const;
 
 	// Special flags:
 	bool IsEscort() const;
@@ -87,6 +92,8 @@ private:
 
 
 private:
+	bool isDefined = false;
+
 	int flags;
 	double confusionMultiplier;
 	double aimMultiplier;

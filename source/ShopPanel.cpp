@@ -25,6 +25,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "text/Format.h"
 #include "GameData.h"
 #include "Government.h"
+#include "Mission.h"
 #include "OutlineShader.h"
 #include "Planet.h"
 #include "PlayerInfo.h"
@@ -489,7 +490,7 @@ void ShopPanel::DrawMain()
 
 	// What amount would mainScroll have to equal to make nextY equal the
 	// bottom of the screen? (Also leave space for the "key" at the bottom.)
-	maxMainScroll = max(0., nextY + mainScroll - Screen::Height() / 2 - TILE_SIZE / 2 + VisiblityCheckboxesSize());
+	maxMainScroll = max(0., nextY + mainScroll - Screen::Height() / 2 - TILE_SIZE / 2 + VisibilityCheckboxesSize() + 40.);
 
 	PointerShader::Draw(Point(Screen::Right() - 10 - SIDE_WIDTH, Screen::Top() + 10),
 		Point(0., -1.), 10.f, 10.f, 5.f, Color(mainScroll > 0 ? .8f : .2f, 0.f));
@@ -524,6 +525,20 @@ void ShopPanel::DrawShip(const Ship &ship, const Point &center, bool isSelected)
 	Point offset(-SIDEBAR_WIDTH / 2, -.5f * SHIP_SIZE + 10.f);
 	font.Draw({name, {SIDEBAR_WIDTH, Alignment::CENTER, Truncate::MIDDLE}},
 		center + offset, *GameData::Colors().Get("bright"));
+}
+
+
+
+void ShopPanel::CheckForMissions(Mission::Location location)
+{
+	if(!GetUI()->IsTop(this))
+		return;
+
+	Mission *mission = player.MissionToOffer(location);
+	if(mission)
+		mission->Do(Mission::OFFER, player, GetUI());
+	else
+		player.HandleBlockedMissions(location, GetUI());
 }
 
 
@@ -568,7 +583,7 @@ void ShopPanel::DrawKey()
 
 
 
-int ShopPanel::VisiblityCheckboxesSize() const
+int ShopPanel::VisibilityCheckboxesSize() const
 {
 	return 0;
 }

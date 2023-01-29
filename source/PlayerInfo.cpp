@@ -465,18 +465,30 @@ void PlayerInfo::Save() const
 		if(saved.GetDate() != date.ToString())
 		{
 			string root = filePath.substr(0, filePath.length() - 4);
-			static const int SAVE_COUNT = 6;
-			string files[SAVE_COUNT] = {
-				root + "~~previous-5.txt",
-				root + "~~previous-4.txt",
-				root + "~~previous-3.txt",
-				root + "~~previous-2.txt",
-				root + "~~previous-1.txt",
-				filePath
-			};
-			for(int i = 0; i < SAVE_COUNT - 1; ++i)
-				if(Files::Exists(files[i + 1]))
-					Files::Move(files[i + 1], files[i]);
+			if(Preferences::Has("unlimited saves"))
+			{
+				string rootPrevious = root + "~~previous-";
+				int previousCount = 0;
+				while(Files::Exists(rootPrevious + to_string(previousCount + 1) + ".txt"))
+					++previousCount;
+				for(int i = 0; i < previousCount; ++i)
+					Files::Move(rootPrevious + to_string(i + 1) + ".txt", rootPrevious + to_string(i + 2) + ".txt");
+			}
+			else
+			{
+				static const int SAVE_COUNT = 6;
+				string files[SAVE_COUNT] = {
+					root + "~~previous-5.txt",
+					root + "~~previous-4.txt",
+					root + "~~previous-3.txt",
+					root + "~~previous-2.txt",
+					root + "~~previous-1.txt",
+					filePath
+				};
+				for(int i = 0; i < SAVE_COUNT - 1; i++)
+					if(Files::Exists(files[i + 1]))
+						Files::Move(files[i + 1], files[i]);
+			}
 			if(planet->HasSpaceport())
 				Save(root + "~~previous-spaceport.txt");
 		}

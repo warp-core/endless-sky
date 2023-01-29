@@ -17,17 +17,21 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include "DataFile.h"
 #include "DataNode.h"
+#include "Effect.h"
 #include "GameData.h"
 #include "GameEvent.h"
 #include "LocationFilter.h"
 #include "Outfit.h"
 #include "Planet.h"
 #include "Ship.h"
+#include "Sound.h"
+#include "Sprite.h"
 #include "System.h"
 
 #include <iostream>
 #include <map>
 #include <set>
+#include <string>
 
 using namespace std;
 
@@ -484,6 +488,62 @@ namespace {
 
 	void Outfits(const char *const *argv)
 	{
+		auto PrintOtherOutfitData = []() -> void
+		{
+			for(auto &it : GameData::Outfits())
+			{
+				const Outfit &outfit = it.second;
+				cout << it.first << ';';
+				for(const auto &oit : outfit.FlareSounds())
+					if(oit.first)
+						cout << oit.first->Name() << ',' << oit.second << ';';
+				for(const auto &oit : outfit.ReverseFlareSounds())
+					if(oit.first)
+						cout << oit.first->Name() << ',' << oit.second << ';';
+				for(const auto &oit : outfit.SteeringFlareSounds())
+					if(oit.first)
+						cout << oit.first->Name() << ',' << oit.second << ';';
+				for(const auto &oit : outfit.HyperInSounds())
+					if(oit.first)
+						cout << oit.first->Name() << ',' << oit.second << ';';
+				for(const auto &oit : outfit.HyperOutSounds())
+					if(oit.first)
+						cout << oit.first->Name() << ',' << oit.second << ';';
+				for(const auto &oit : outfit.HyperSounds())
+					if(oit.first)
+						cout << oit.first->Name() << ',' << oit.second << ';';
+				for(const auto &oit : outfit.JumpInSounds())
+					if(oit.first)
+						cout << oit.first->Name() << ',' << oit.second << ';';
+				for(const auto &oit : outfit.JumpOutSounds())
+					if(oit.first)
+						cout << oit.first->Name() << ',' << oit.second << ';';
+				for(const auto &oit : outfit.JumpSounds())
+					if(oit.first)
+						cout << oit.first->Name() << ',' << oit.second << ';';
+				for(const auto &oit : outfit.FlareSprites())
+					if(oit.first.GetSprite())
+						cout << oit.first.GetSprite()->Name() << ',' << oit.second << ';';
+				for(const auto &oit : outfit.ReverseFlareSprites())
+					if(oit.first.GetSprite())
+						cout << oit.first.GetSprite()->Name() << ',' << oit.second << ';';
+				for(const auto &oit : outfit.SteeringFlareSprites())
+					if(oit.first.GetSprite())
+						cout << oit.first.GetSprite()->Name() << ',' << oit.second << ';';
+				for(const auto &oit : outfit.AfterburnerEffects())
+					cout << oit.first->Name() << ',' << oit.second << ';';
+				for(const auto &oit : outfit.JumpEffects())
+					if(oit.first)
+						cout << oit.first->Name() << ',' << oit.second << ';';
+				cout << outfit.DisplayName() << ';';
+				cout << outfit.Description() << ';';
+				if(outfit.Ammo())
+					cout << outfit.Ammo()->TrueName() << ';';
+				if(outfit.FlotsamSprite())
+					cout << outfit.FlotsamSprite()->Name() << '\n';
+			}
+		};
+
 		auto PrintOutfitsAllStats = []() -> void
 		{
 			set<string> attributes;
@@ -510,6 +570,7 @@ namespace {
 
 		bool sales = false;
 		bool all = false;
+		bool other = false;
 
 		for(const char *const *it = argv + 2; *it; ++it)
 		{
@@ -518,12 +579,16 @@ namespace {
 				sales = true;
 			else if(arg == "-a" || arg == "--all")
 				all = true;
+			else if(arg == "--other")
+				other = true;
 		}
 
 		if(sales)
 			PrintItemSales(GameData::Outfits(), GameData::Outfitters(), "outfit", "outfitters");
 		else if(all)
 			PrintOutfitsAllStats();
+		else if(other)
+			PrintOtherOutfitData();
 		else
 			PrintObjectList(GameData::Outfits(), true, "outfit");
 	}

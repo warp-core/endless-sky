@@ -18,6 +18,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "DataFile.h"
 #include "DataNode.h"
 #include "Files.h"
+#include "Logger.h"
 
 using namespace std;
 
@@ -91,7 +92,7 @@ void DataObjectsLoader::LoadFile(const string &path, bool debugMode)
 
 	DataFile data(path);
 	if(debugMode)
-		Files::LogError("Parsing: " + path);
+		Logger::LogError("Parsing: " + path);
 
 	for(const DataNode &node : data)
 		if(!(universe.LoadNode(node, path) || interfaces.LoadNode(node)))

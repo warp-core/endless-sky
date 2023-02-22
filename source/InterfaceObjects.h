@@ -32,6 +32,9 @@ class Panel;
 // typically be loaded once and then used as long as the game is running.
 class InterfaceObjects {
 public:
+	// Check for objects that are referred to but never defined.
+	void CheckReferences();
+
 	bool LoadNode(const DataNode &node);
 	const Set<Color> &Colors();
 	const Set<Interface> &Interfaces();

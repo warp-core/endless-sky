@@ -195,6 +195,7 @@ void GameData::FinishLoading()
 void GameData::CheckReferences()
 {
 	objects.CheckReferences();
+	interfaces.CheckReferences();
 }
 
 

@@ -18,8 +18,29 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "Command.h"
 #include "DataNode.h"
 #include "Information.h"
+#include "Logger.h"
 
 using namespace std;
+
+namespace {
+	// TODO: unify this with the identical method in the UniverseObjects.cpp anonymous namespace,
+	// and put it somewhere else, so it is only defined once.
+	// Or do something else. Not sure how this will work with the TODO in the UniverseObjects.cpp.
+	void Warn(const string &noun, const string &name)
+	{
+		Logger::LogError("Warning: " + noun + " \"" + name + "\" is referred to, but not fully defined.");
+	}
+}
+
+
+
+void InterfaceObjects::CheckReferences()
+{
+	// Any stock colors should have been loaded from game data files.
+	for(const auto &it : colors)
+		if(!it.second.IsLoaded())
+			Warn("color", it.first);
+}
 
 
 

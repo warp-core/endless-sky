@@ -48,12 +48,8 @@ bool InterfaceObjects::LoadNode(const DataNode &node)
 {
 	const string &key = node.Token(0);
 	if(key == "color" && node.Size() >= 5)
-	{
-		if(node.Size() == 5)
-			colors.Get(node.Token(1))->Load(node.Value(2), node.Value(3), node.Value(4));
-		else
-			colors.Get(node.Token(1))->Load(node.Value(2), node.Value(3), node.Value(4), node.Value(5));
-	}
+		colors.Get(node.Token(1))->Load(
+				node.Value(2), node.Value(3), node.Value(4), node.Size() >= 6 ? node.Value(5) : 1.);
 	else if(key == "interface" && node.Size() >= 2)
 	{
 		interfaces.Get(node.Token(1))->Load(node);

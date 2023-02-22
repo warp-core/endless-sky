@@ -7,7 +7,10 @@ Foundation, either version 3 of the License, or (at your option) any later versi
 
 Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
 WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
 #ifndef UNIVERSE_OBJECTS_H_
@@ -21,8 +24,10 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include "Conversation.h"
 #include "Effect.h"
 #include "Fleet.h"
+#include "FormationPattern.h"
 #include "Galaxy.h"
 #include "GameEvent.h"
+#include "Gamerules.h"
 #include "Government.h"
 #include "Hazard.h"
 #include "Interface.h"
@@ -40,6 +45,7 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include "TestData.h"
 #include "TextReplacements.h"
 #include "Trade.h"
+#include "Wormhole.h"
 
 #include <map>
 #include <set>
@@ -56,6 +62,7 @@ class Sprite;
 class UniverseObjects {
 	// GameData currently is the orchestrating controller for all game definitions.
 	friend class GameData;
+	friend class TestData;
 public:
 	// Resolve every game object dependency.
 	void FinishLoading();
@@ -78,6 +85,7 @@ private:
 	Set<Effect> effects;
 	Set<GameEvent> events;
 	Set<Fleet> fleets;
+	Set<FormationPattern> formations;
 	Set<Galaxy> galaxies;
 	Set<Government> governments;
 	Set<Hazard> hazards;
@@ -94,8 +102,10 @@ private:
 	Set<TestData> testDataSets;
 	Set<Sale<Ship>> shipSales;
 	Set<Sale<Outfit>> outfitSales;
+	Set<Wormhole> wormholes;
 	std::set<double> neighborDistances;
 
+	Gamerules gamerules;
 	TextReplacements substitutions;
 	Trade trade;
 	std::vector<StartConditions> startConditions;

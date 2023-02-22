@@ -311,7 +311,7 @@ bool UniverseObjects::LoadNode(const DataNode &node, const string &path)
 	else if(key == "phrase" && node.Size() >= 2)
 		phrases.Get(node.Token(1))->Load(node);
 	else if(key == "planet" && node.Size() >= 2)
-		planets.Get(node.Token(1))->Load(node);
+		planets.Get(node.Token(1))->Load(node, wormholes);
 	else if(key == "ship" && node.Size() >= 2)
 	{
 		// Allow multiple named variants of the same ship model.

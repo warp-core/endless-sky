@@ -24,8 +24,8 @@ using namespace std;
 
 
 
-DataObjectsLoader::DataObjectsLoader(UniverseObjects &universe, InterfaceObjects &interfaces) :
-	universe(universe), interfaces(interfaces)
+DataObjectsLoader::DataObjectsLoader(UniverseObjects &universe, InterfaceObjects &interfaces)
+	: universe(universe), interfaces(interfaces)
 {
 }
 

@@ -26,7 +26,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 // This class contains the loader for serialized game data. The serialized
 // game data contains various types of intermixed data (interfaces, outfits,
 // ships, missions) so the loader does need to load to different Object stores.
-class DataObjectsLoader{
+class DataObjectsLoader {
 public:
 	DataObjectsLoader(UniverseObjects &universe, InterfaceObjects &interfaces);
 

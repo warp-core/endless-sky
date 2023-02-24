@@ -26,6 +26,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include <algorithm>
 #include <map>
+#include <set>
 
 using namespace std;
 
@@ -39,6 +40,10 @@ namespace {
 
 	const vector<double> ZOOMS = {.25, .35, .50, .70, 1.00, 1.40, 2.00};
 	int zoomIndex = 4;
+	set<double> customZoomValues = {1.};
+	set<double>::iterator customZoomIndex = customZoomValues.find(1.);
+	const string USE_CUSTOM_ZOOMS = "use custom zooms";
+
 	constexpr double VOLUME_SCALE = .25;
 
 	// Default to fullscreen.
@@ -114,6 +119,9 @@ void Preferences::Load()
 			alertIndicatorIndex = max<int>(0, min<int>(node.Value(1), ALERT_INDICATOR_SETTING.size() - 1));
 		else if(node.Token(0) == "previous saves" && node.Size() >= 2)
 			previousSaveCount = max<int>(3, node.Value(1));
+		else if(node.Token(0) == "custom zoom values" && node.HasChildren())
+			for(const auto &child : node)
+				customZoomValues.insert(child.Value(0));
 		else
 			settings[node.Token(0)] = (node.Size() == 1 || node.Value(1));
 	}
@@ -203,6 +211,8 @@ void Preferences::SetScrollSpeed(int speed)
 // View zoom.
 double Preferences::ViewZoom()
 {
+	if(Has(USE_CUSTOM_ZOOMS))
+		return *customZoomIndex;
 	return ZOOMS[zoomIndex];
 }
 
@@ -210,6 +220,15 @@ double Preferences::ViewZoom()
 
 bool Preferences::ZoomViewIn()
 {
+	if(Has(USE_CUSTOM_ZOOMS))
+	{
+		if(customZoomIndex == --(customZoomValues.end()))
+			return false;
+
+		++customZoomIndex;
+		return true;
+	}
+
 	if(zoomIndex == static_cast<int>(ZOOMS.size() - 1))
 		return false;
 
@@ -221,6 +240,15 @@ bool Preferences::ZoomViewIn()
 
 bool Preferences::ZoomViewOut()
 {
+	if(Has(USE_CUSTOM_ZOOMS))
+	{
+		if(customZoomIndex == customZoomValues.begin())
+			return false;
+
+		--customZoomIndex;
+		return true;
+	}
+
 	if(zoomIndex == 0)
 		return false;
 

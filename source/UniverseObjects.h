@@ -47,14 +47,12 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "Trade.h"
 #include "Wormhole.h"
 
-#include <future>
 #include <map>
 #include <set>
 #include <string>
 #include <vector>
 
 
-class Panel;
 class Sprite;
 
 
@@ -66,10 +64,6 @@ class UniverseObjects {
 	friend class GameData;
 	friend class TestData;
 public:
-	// Load game objects from the given directories of definitions.
-	std::future<void> Load(const std::vector<std::string> &sources, bool debugMode = false);
-	// Determine the fraction of data files read from disk.
-	double GetProgress() const;
 	// Resolve every game object dependency.
 	void FinishLoading();
 
@@ -82,22 +76,11 @@ public:
 	// Check for objects that are referred to but never defined.
 	void CheckReferences();
 
-	// Draws the current menu background. Unlike accessing the menu background
-	// through GameData, this function is thread-safe.
-	void DrawMenuBackground(Panel *panel) const;
+	// Load data from a single root node.
+	bool LoadNode(const DataNode &node, const std::string &path);
 
 
 private:
-	void LoadFile(const std::string &path, bool debugMode = false);
-
-
-private:
-	// A value in [0, 1] representing how many source files have been processed for content.
-	std::atomic<double> progress;
-
-
-private:
-	Set<Color> colors;
 	Set<Conversation> conversations;
 	Set<Effect> effects;
 	Set<GameEvent> events;
@@ -106,7 +89,6 @@ private:
 	Set<Galaxy> galaxies;
 	Set<Government> governments;
 	Set<Hazard> hazards;
-	Set<Interface> interfaces;
 	Set<Minable> minables;
 	Set<Mission> missions;
 	Set<News> news;
@@ -133,13 +115,7 @@ private:
 	std::map<const Sprite *, double> solarWind;
 	std::map<CategoryType, std::vector<std::string>> categories;
 
-	std::map<std::string, std::string> tooltips;
-	std::map<std::string, std::string> helpMessages;
 	std::map<std::string, std::set<std::string>> disabled;
-
-	// A local cache of the menu background interface for thread-safe access.
-	mutable std::mutex menuBackgroundMutex;
-	Interface menuBackgroundCache;
 };
 
 

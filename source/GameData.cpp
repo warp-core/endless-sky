@@ -23,6 +23,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "Conversation.h"
 #include "DataFile.h"
 #include "DataNode.h"
+#include "DataObjectsLoader.h"
 #include "DataWriter.h"
 #include "Effect.h"
 #include "Files.h"
@@ -37,6 +38,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "Hazard.h"
 #include "ImageSet.h"
 #include "Interface.h"
+#include "InterfaceObjects.h"
 #include "LineShader.h"
 #include "MaskManager.h"
 #include "Minable.h"
@@ -74,6 +76,9 @@ using namespace std;
 
 namespace {
 	UniverseObjects objects;
+	InterfaceObjects interfaces;
+	DataObjectsLoader dataLoader(objects, interfaces);
+
 	Set<Fleet> defaultFleets;
 	Set<Government> defaultGovernments;
 	Set<Planet> defaultPlanets;
@@ -163,7 +168,7 @@ future<void> GameData::BeginLoad(bool onlyLoadData, bool debugMode)
 		Music::Init(sources);
 	}
 
-	return objects.Load(sources, debugMode);
+	return dataLoader.Load(sources, debugMode);
 }
 
 
@@ -190,6 +195,7 @@ void GameData::FinishLoading()
 void GameData::CheckReferences()
 {
 	objects.CheckReferences();
+	interfaces.CheckReferences();
 }
 
 
@@ -225,7 +231,7 @@ double GameData::GetProgress()
 	if(initiallyLoaded)
 		return 1.;
 
-	double val = min(min(spriteQueue.GetProgress(), Audio::GetProgress()), objects.GetProgress());
+	double val = min(min(spriteQueue.GetProgress(), Audio::GetProgress()), dataLoader.GetProgress());
 	if(val >= 1.)
 		initiallyLoaded = true;
 	return val;
@@ -518,7 +524,7 @@ void GameData::DestroyPersons(vector<string> &names)
 
 const Set<Color> &GameData::Colors()
 {
-	return objects.colors;
+	return interfaces.Colors();
 }
 
 
@@ -582,7 +588,7 @@ const Set<Hazard> &GameData::Hazards()
 
 const Set<Interface> &GameData::Interfaces()
 {
-	return objects.interfaces;
+	return interfaces.Interfaces();
 }
 
 
@@ -801,31 +807,21 @@ void GameData::SetHaze(const Sprite *sprite, bool allowAnimation)
 
 const string &GameData::Tooltip(const string &label)
 {
-	static const string EMPTY;
-	auto it = objects.tooltips.find(label);
-	// Special case: the "cost" and "sells for" labels include the percentage of
-	// the full price, so they will not match exactly.
-	if(it == objects.tooltips.end() && !label.compare(0, 4, "cost"))
-		it = objects.tooltips.find("cost:");
-	if(it == objects.tooltips.end() && !label.compare(0, 9, "sells for"))
-		it = objects.tooltips.find("sells for:");
-	return (it == objects.tooltips.end() ? EMPTY : it->second);
+	return interfaces.Tooltip(label);
 }
 
 
 
 string GameData::HelpMessage(const string &name)
 {
-	static const string EMPTY;
-	auto it = objects.helpMessages.find(name);
-	return Command::ReplaceNamesWithKeys(it == objects.helpMessages.end() ? EMPTY : it->second);
+	return interfaces.HelpMessage(name);
 }
 
 
 
 const map<string, string> &GameData::HelpTemplates()
 {
-	return objects.helpMessages;
+	return interfaces.HelpTemplates();
 }
 
 
@@ -899,5 +895,5 @@ map<string, shared_ptr<ImageSet>> GameData::FindImages()
 // Thread-safe way to draw the menu background.
 void GameData::DrawMenuBackground(Panel *panel)
 {
-	objects.DrawMenuBackground(panel);
+	interfaces.DrawMenuBackground(panel);
 }

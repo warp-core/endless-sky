@@ -103,6 +103,8 @@ target_sources(EndlessSkyLib PRIVATE
 	DataFile.h
 	DataNode.cpp
 	DataNode.h
+	DataObjectsLoader.cpp
+	DataObjectsLoader.h
 	DataWriter.cpp
 	DataWriter.h
 	Date.cpp
@@ -178,6 +180,8 @@ target_sources(EndlessSkyLib PRIVATE
 	Information.h
 	Interface.cpp
 	Interface.h
+	InterfaceObjects.cpp
+	InterfaceObjects.h
 	ItemInfoDisplay.cpp
 	ItemInfoDisplay.h
 	JumpTypes.h

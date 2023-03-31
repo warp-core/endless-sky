@@ -127,9 +127,10 @@ void ConversationPanel::Draw()
 	const Font &font = FontSet::Get(14);
 	const Color &selectionColor = *GameData::Colors().Get("faint");
 	const Color &dim = *GameData::Colors().Get("dim");
-	const Color &gray = *GameData::Colors().Get("medium");
-	const Color &bright = *GameData::Colors().Get("bright");
 	const Color &dark = *GameData::Colors().Get("dark");
+	const Color &conversationText = *GameData::Colors().Get("conversation text");
+	const Color &highlightedChoiceText = *GameData::Colors().Get("conversation highlighted choice text");
+	const Color &conversationChoiceNumber = *GameData::Colors().Get("conversation choice number");
 
 	// Figure out where we should start drawing.
 	Point point(
@@ -137,7 +138,7 @@ void ConversationPanel::Draw()
 		Screen::Top() + MARGIN + scroll);
 	// Draw all the conversation text up to this point.
 	for(const Paragraph &it : text)
-		point = it.Draw(point, gray);
+		point = it.Draw(point, conversationText);
 
 	// Draw whatever choices are being presented.
 	if(node < 0)
@@ -147,7 +148,7 @@ void ConversationPanel::Draw()
 		int width = font.Width(done);
 		int height = font.Height();
 		Point off(Screen::Left() + MARGIN + WIDTH - width, point.Y());
-		font.Draw(done, off, bright);
+		font.Draw(done, off, highlightedChoiceText);
 
 		// Handle clicks on this button.
 		AddZone(Rectangle::FromCorner(off, Point(width, height)), [this](){ this->Exit(); });
@@ -180,17 +181,17 @@ void ConversationPanel::Draw()
 		}
 
 		font.Draw("First name:", point + Point(40, 0), dim);
-		font.Draw({firstName, layout}, point + Point(120, 0), choice ? gray : bright);
+		font.Draw({firstName, layout}, point + Point(120, 0), choice ? conversationText : highlightedChoiceText);
 
 		font.Draw("Last name:", point + Point(270, 0), dim);
-		font.Draw({lastName, layout}, point + Point(350, 0), choice ? bright : gray);
+		font.Draw({lastName, layout}, point + Point(350, 0), choice ? highlightedChoiceText : conversationText);
 
 		// Draw the OK button, and remember its location.
 		static const string ok = "[ok]";
 		int width = font.Width(ok);
 		int height = font.Height();
 		Point off(Screen::Left() + MARGIN + WIDTH - width, point.Y());
-		font.Draw(ok, off, bright);
+		font.Draw(ok, off, highlightedChoiceText);
 
 		// Handle clicks on this button.
 		AddZone(Rectangle::FromCorner(off, Point(width, height)), SDLK_RETURN);
@@ -218,8 +219,8 @@ void ConversationPanel::Draw()
 			AddZone(zone, [this, index](){ this->ClickChoice(index); });
 			++index;
 
-			font.Draw(label, point + Point(-15, 0), dim);
-			point = paragraph.Draw(point, bright);
+			font.Draw(label, point + Point(-15, 0), conversationChoiceNumber);
+			point = paragraph.Draw(point, highlightedChoiceText);
 		}
 	}
 	// Store the total height of the text.

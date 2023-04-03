@@ -16,40 +16,25 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #ifndef BODY_H_
 #define BODY_H_
 
+#include "BodyTemplate.h"
+
 #include "Angle.h"
 #include "Point.h"
 
-#include <cstdint>
-#include <string>
-
-class DataNode;
-class DataWriter;
 class Government;
-class Mask;
-class Sprite;
 
 
 
 // Class representing any object in the game that has a position, velocity, and
 // facing direction and usually also has a sprite.
-class Body {
+class Body : public BodyTemplate {
 public:
 	// Constructors.
 	Body() = default;
+	Body(const BodyTemplate &sprite, Point position, Point velocity = Point(), Angle facing = Angle(), double zoom = 1.);
 	Body(const Sprite *sprite, Point position, Point velocity = Point(), Angle facing = Angle(), double zoom = 1.);
 	Body(const Body &sprite, Point position, Point velocity = Point(), Angle facing = Angle(), double zoom = 1.);
 
-	// Check that this Body has a sprite and that the sprite has at least one frame.
-	bool HasSprite() const;
-	// Access the underlying Sprite object.
-	const Sprite *GetSprite() const;
-	// Get the dimensions of the sprite.
-	double Width() const;
-	double Height() const;
-	// Get the farthest a part of this sprite can be from its center.
-	double Radius() const;
-	// Which color swizzle should be applied to the sprite?
-	int GetSwizzle() const;
 	// Get the sprite frame and mask for the given time step.
 	float GetFrame(int step = -1) const;
 	const Mask &GetMask(int step = -1) const;
@@ -59,8 +44,6 @@ public:
 	const Point &Velocity() const;
 	const Angle &Facing() const;
 	Point Unit() const;
-	double Zoom() const;
-	double Scale() const;
 
 	// Check if this object is marked for removal from the game.
 	bool ShouldBeRemoved() const;
@@ -69,19 +52,8 @@ public:
 	// on the Body class can figure out which objects will collide.
 	const Government *GetGovernment() const;
 
-	// Sprite serialization.
-	void LoadSprite(const DataNode &node);
-	void SaveSprite(DataWriter &out, const std::string &tag = "sprite") const;
-	// Set the sprite.
-	void SetSprite(const Sprite *sprite);
-	// Set the color swizzle.
-	void SetSwizzle(int swizzle);
-
 
 protected:
-	// Adjust the frame rate.
-	void SetFrameRate(float framesPerSecond);
-	void AddFrameRate(float framesPerSecond);
 	void PauseAnimation();
 	// Mark this object to be removed from the game.
 	void MarkForRemoval();
@@ -94,10 +66,6 @@ protected:
 	Point position;
 	Point velocity;
 	Angle angle;
-	// A zoom of 1 means the sprite should be drawn at half size. For objects
-	// whose sprites should be full size, use zoom = 2.
-	float zoom = 1.f;
-	float scale = 1.f;
 
 	// Government, for use in collision checks.
 	const Government *government = nullptr;
@@ -110,19 +78,6 @@ private:
 
 
 private:
-	// Animation parameters.
-	const Sprite *sprite = nullptr;
-	// Allow objects based on this one to adjust their frame rate and swizzle.
-	int swizzle = 0;
-
-	float frameRate = 2.f / 60.f;
-	int delay = 0;
-	// The chosen frame will be (step * frameRate) + frameOffset.
-	mutable float frameOffset = 0.f;
-	mutable bool startAtZero = false;
-	mutable bool randomize = false;
-	bool repeat = true;
-	bool rewind = false;
 	int pause = 0;
 
 	// Record when this object is marked for removal from the game.

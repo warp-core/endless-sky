@@ -18,6 +18,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "DataNode.h"
 #include "DataWriter.h"
 #include "text/Format.h"
+#include "Logger.h"
 #include "Phrase.h"
 #include "Sprite.h"
 #include "SpriteSet.h"
@@ -233,6 +234,30 @@ void Conversation::Load(const DataNode &node, const string &missionName)
 	// Free the working buffers that we no longer need.
 	labels.clear();
 	unresolved.clear();
+
+	string result;
+	result += missionName + ',';
+
+	int totalLines = 0;
+	int totalWords = 0;
+	int totalChars = 0;
+
+	for(const auto &it : nodes)
+	{
+		++totalLines;
+		for(const auto &eit : it.elements)
+		{
+			const string &etext = eit.text;
+			totalChars += etext.length();
+			for(const auto &cit : etext)
+				totalWords += (cit == ' ');
+		}
+	}
+
+	result += to_string(totalLines) + ',';
+	result += to_string(totalWords) + ',';
+	result += to_string(totalChars) + '\n';
+	Logger::LogError(result);
 }
 
 

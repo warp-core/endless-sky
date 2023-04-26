@@ -668,7 +668,7 @@ namespace {
 	}
 
 
-	void PrintColors()
+	void PrintColors(const char *const *argv)
 	{
 		cout << "color name" << ',';
 		cout << "raw value" << ',';
@@ -727,14 +727,14 @@ namespace {
 		"--outfits"
 	};
 
-	const set<string> OTHER_VALID_ARGS = {
-		"-s",
-		"--ships",
-		"--sales",
-		"--planets",
-		"--systems",
-		"--matches",
-		"--colors-as-hex-triplets"
+	const map<string, function<void(const char *const *)>> OTHER_VALID_ARGS = {
+		{"-s", Ships},
+		{"--ships", Ships},
+		{"--sales", Sales},
+		{"--planets", Planets},
+		{"--systems", Systems},
+		{"--matches", LocationFilterMatches},
+		{"--colors-as-hex-triplets", PrintColors}
 	};
 }
 
@@ -758,29 +758,17 @@ void PrintData::Print(const char *const *argv)
 	for(const char *const *it = argv + 1; *it; ++it)
 	{
 		string arg = *it;
-		if(arg == "-s" || arg == "--ships")
-		{
-			Ships(argv);
-			break;
-		}
-		else if(OUTFIT_ARGS.count(arg))
+		if(OUTFIT_ARGS.count(arg))
 		{
 			Outfits(argv);
 			break;
 		}
-		else if(arg == "--sales")
+		const auto oit = OTHER_VALID_ARGS.find(arg);
+		if(oit != OTHER_VALID_ARGS.end())
 		{
-			Sales(argv);
+			oit->second(argv);
 			break;
 		}
-		else if(arg == "--planets")
-			Planets(argv);
-		else if(arg == "--systems")
-			Systems(argv);
-		else if(arg == "--matches")
-			LocationFilterMatches(argv);
-		else if(arg == "--colors-as-hex-triplets")
-			PrintColors();
 	}
 	cout.flush();
 }

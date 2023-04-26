@@ -806,4 +806,6 @@ void PrintData::Help()
 	cerr << "    --matches: prints a list of all planets and systems matching a location filter passed in STDIN."
 			<< endl;
 	cerr << "        The first node of the location filter should be `location`." << endl;
+	cerr << "    --colors-as-hex-triplets: prints a table of all named colors, their RGBA values,"
+			" and the corresponding HTML color code." << endl;
 }

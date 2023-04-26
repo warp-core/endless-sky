@@ -733,7 +733,8 @@ namespace {
 		"--sales",
 		"--planets",
 		"--systems",
-		"--matches"
+		"--matches",
+		"--colors-as-hex-triplets"
 	};
 }
 
@@ -778,6 +779,8 @@ void PrintData::Print(const char *const *argv)
 			Systems(argv);
 		else if(arg == "--matches")
 			LocationFilterMatches(argv);
+		else if(arg == "--colors-as-hex-triplets")
+			PrintColors();
 	}
 	cout.flush();
 }

@@ -15,8 +15,10 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include "PrintData.h"
 
+#include "Color.h"
 #include "DataFile.h"
 #include "DataNode.h"
+#include "text/Format.h"
 #include "GameData.h"
 #include "GameEvent.h"
 #include "LocationFilter.h"
@@ -663,6 +665,55 @@ namespace {
 		for(const auto &it : GameData::Planets())
 			if(filter.Matches(&it.second))
 				cout << it.first << '\n';
+	}
+
+
+	void PrintColors()
+	{
+		cout << "color name" << ',';
+		cout << "raw value" << ',';
+		cout << "hex triplet" << '\n';
+
+		for(const auto &it : GameData::Colors())
+		{
+			cout << it.first << ',';
+			const Color &color = it.second;
+			int rescaled[4];
+			int i = 0;
+			for(const float *val = color.Get(); i < 4; ++val, ++i)
+			{
+				cout << Format::Decimal(*val, 2);
+				cout << ',';
+				rescaled[i] = *val * 255;
+			}
+			cout << '#';
+			for(i = 0; i < 3; ++i)
+			{
+				const int &value = rescaled[i];
+				const int first = value / 16;
+				const int second = value % 16;
+				static const map<int, char> hexDigits = {
+					{0, '0'},
+					{1, '1'},
+					{2, '2'},
+					{3, '3'},
+					{4, '4'},
+					{5, '5'},
+					{6, '6'},
+					{7, '7'},
+					{8, '8'},
+					{9, '9'},
+					{10, 'A'},
+					{11, 'B'},
+					{12, 'C'},
+					{13, 'D'},
+					{14, 'E'},
+					{15, 'F'}
+				};
+				cout << hexDigits.at(first) << hexDigits.at(second);
+			}
+			cout << '\n';
+		}
 	}
 
 

@@ -17,13 +17,13 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include "CategoryTypes.h"
 #include "Command.h"
-#include "Dialog.h"
 #include "text/DisplayText.h"
 #include "FillShader.h"
 #include "text/Font.h"
 #include "text/FontSet.h"
 #include "GameData.h"
 #include "Government.h"
+#include "InputDialog.h"
 #include "ItemInfoDisplay.h"
 #include "text/layout.hpp"
 #include "Outfit.h"
@@ -117,7 +117,7 @@ bool MapSalesPanel::KeyDown(SDL_Keycode key, Uint16 mod, const Command &command,
 		ScrollTo(selected);
 	}
 	else if(key == 'f')
-		GetUI()->Push(new Dialog(
+		GetUI()->Push(new InputDialog(
 			this, &MapSalesPanel::DoFind, "Search for:"));
 	else
 		return MapPanel::KeyDown(key, mod, command, isNewPress);

@@ -152,6 +152,11 @@ target_sources(EndlessSkyLib PRIVATE
 	InfoPanelState.h
 	Information.cpp
 	Information.h
+	InputDialog.h
+	InputDialog.cpp
+	InputField.h
+	InputField.cpp
+	InputType.h
 	Interface.cpp
 	Interface.h
 	ItemInfoDisplay.cpp

@@ -19,7 +19,6 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "Command.h"
 #include "ConversationPanel.h"
 #include "DataFile.h"
-#include "Dialog.h"
 #include "text/DisplayText.h"
 #include "Files.h"
 #include "FillShader.h"
@@ -28,6 +27,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "text/Format.h"
 #include "GameData.h"
 #include "Information.h"
+#include "InputDialog.h"
 #include "Interface.h"
 #include "text/layout.hpp"
 #include "MainPanel.h"
@@ -221,7 +221,7 @@ bool LoadPanel::KeyDown(SDL_Keycode key, Uint16 mod, const Command &command, boo
 	}
 	else if(key == 'd' && !selectedPilot.empty())
 	{
-		GetUI()->Push(new Dialog(this, &LoadPanel::DeletePilot,
+		GetUI()->Push(new InputDialog(this, &LoadPanel::DeletePilot,
 			"Are you sure you want to delete the selected pilot, \"" + loadedInfo.Name()
 				+ "\", and all their saved games?\n\n(This will permanently delete the pilot data.)\n"
 				+ "Confirm the name of the pilot you want to delete.",
@@ -235,7 +235,7 @@ bool LoadPanel::KeyDown(SDL_Keycode key, Uint16 mod, const Command &command, boo
 
 		nameToConfirm.clear();
 		string lastSave = Files::Saves() + it->second.front().first;
-		GetUI()->Push(new Dialog(this, &LoadPanel::SnapshotCallback,
+		GetUI()->Push(new InputDialog(this, &LoadPanel::SnapshotCallback,
 			"Enter a name for this snapshot, or use the most recent save's date:",
 			FileDate(lastSave)));
 	}
@@ -473,7 +473,7 @@ void LoadPanel::SnapshotCallback(const string &name)
 	if(Files::Exists(to) && suffix != nameToConfirm)
 	{
 		nameToConfirm = suffix;
-		GetUI()->Push(new Dialog(this, &LoadPanel::SnapshotCallback, "Warning: \"" + suffix
+		GetUI()->Push(new InputDialog(this, &LoadPanel::SnapshotCallback, "Warning: \"" + suffix
 			+ "\" is being used for an existing snapshot.\nOverwrite it?", suffix));
 	}
 	else

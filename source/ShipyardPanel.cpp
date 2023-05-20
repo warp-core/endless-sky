@@ -19,13 +19,13 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "comparators/BySeriesAndIndex.h"
 #include "ClickZone.h"
 #include "Color.h"
-#include "Dialog.h"
 #include "text/DisplayText.h"
 #include "text/Font.h"
 #include "text/FontSet.h"
 #include "text/Format.h"
 #include "GameData.h"
 #include "Government.h"
+#include "InputDialog.h"
 #include "Mission.h"
 #include "Phrase.h"
 #include "Planet.h"
@@ -49,14 +49,14 @@ using namespace std;
 namespace {
 	// The name entry dialog should include a "Random" button to choose a random
 	// name using the civilian ship name generator.
-	class NameDialog : public Dialog {
+	class NameDialog : public InputDialog {
 	public:
 		NameDialog(ShipyardPanel *panel, void (ShipyardPanel::*fun)(const string &), const string &message)
-			: Dialog(panel, fun, message) {}
+			: InputDialog(panel, fun, message) {}
 
 		virtual void Draw() override
 		{
-			Dialog::Draw();
+			InputDialog::Draw();
 
 			randomPos = cancelPos - Point(80., 0.);
 			SpriteShader::Draw(SpriteSet::Get("ui/dialog cancel"), randomPos);
@@ -76,7 +76,7 @@ namespace {
 				input = GameData::Phrases().Get("civilian")->Get();
 				return true;
 			}
-			return Dialog::Click(x, y, clicks);
+			return InputDialog::Click(x, y, clicks);
 		}
 
 	private:

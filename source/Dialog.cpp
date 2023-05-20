@@ -27,7 +27,6 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "MapDetailPanel.h"
 #include "PlayerInfo.h"
 #include "Point.h"
-#include "shift.h"
 #include "Sprite.h"
 #include "SpriteSet.h"
 #include "SpriteShader.h"
@@ -120,7 +119,6 @@ void Dialog::Draw()
 	// Get the position of the top of this dialog, and of the text and input.
 	Point pos(0., (top->Height() + height * middle->Height() + bottom->Height()) * -.5f);
 	Point textPos(WIDTH * -.5 + 10., pos.Y() + 20.);
-	Point inputPos = Point(0., -70.) - pos;
 
 	// Draw the top section of the dialog box.
 	pos.Y() += top->Height() * .5;
@@ -144,7 +142,6 @@ void Dialog::Draw()
 	// Draw the buttons, including optionally the cancel button.
 	const Color &bright = *GameData::Colors().Get("bright");
 	const Color &dim = *GameData::Colors().Get("medium");
-	const Color &back = *GameData::Colors().Get("faint");
 	const Color &inactive = *GameData::Colors().Get("inactive");
 	if(canCancel)
 	{
@@ -165,21 +162,6 @@ void Dialog::Draw()
 
 	// Draw the text.
 	text.Draw(textPos, dim);
-
-	// Draw the input, if any.
-	if(!isMission && (intFun || stringFun))
-	{
-		FillShader::Fill(inputPos, Point(WIDTH - 20., 20.), back);
-
-		Point stringPos(
-			inputPos.X() - (WIDTH - 20) * .5 + 5.,
-			inputPos.Y() - .5 * font.Height());
-		const auto inputText = DisplayText(input, {WIDTH - 30, Truncate::FRONT});
-		font.Draw(inputText, stringPos, bright);
-
-		Point barPos(stringPos.X() + font.FormattedWidth(inputText) + 2., inputPos.Y());
-		FillShader::Fill(barPos, Point(1., 16.), dim);
-	}
 }
 
 
@@ -215,32 +197,7 @@ bool Dialog::KeyDown(SDL_Keycode key, Uint16 mod, const Command &command, bool i
 {
 	auto it = KEY_MAP.find(key);
 	bool isCloseRequest = key == SDLK_ESCAPE || (key == 'w' && (mod & (KMOD_CTRL | KMOD_GUI)));
-	if((it != KEY_MAP.end() || (key >= ' ' && key <= '~')) && !isMission && (intFun || stringFun) && !isCloseRequest)
-	{
-		int ascii = (it != KEY_MAP.end()) ? it->second : key;
-		char c = ((mod & KMOD_SHIFT) ? SHIFT[ascii] : ascii);
-		// Caps lock should shift letters, but not any other keys.
-		if((mod & KMOD_CAPS) && c >= 'a' && c <= 'z')
-			c += 'A' - 'a';
-
-		if(stringFun)
-			input += c;
-		// Integer input should not allow leading zeros.
-		else if(intFun && c == '0' && !input.empty())
-			input += c;
-		else if(intFun && c >= '1' && c <= '9')
-			input += c;
-
-		if(validateFun)
-			isOkDisabled = !validateFun(input);
-	}
-	else if((key == SDLK_DELETE || key == SDLK_BACKSPACE) && !input.empty())
-	{
-		input.erase(input.length() - 1);
-		if(validateFun)
-			isOkDisabled = !validateFun(input);
-	}
-	else if(key == SDLK_TAB && canCancel)
+	if(key == SDLK_TAB && canCancel)
 		okIsActive = !okIsActive;
 	else if(key == SDLK_LEFT)
 		okIsActive = !canCancel;
@@ -323,12 +280,27 @@ void Dialog::Init(const string &message, Truncate truncate, bool canCancel, bool
 	// bottom are "padding," but text.Height() over-reports the height by about
 	// 5 pixels because it includes its own padding at the bottom. If there is a
 	// text input, we need another 20 pixels for it and 10 pixels padding.
-	height = 10 + (text.Height() - 5) + 10 + 30 * (!isMission && (intFun || stringFun));
+	height = 10 + (text.Height() - 5) + 10;
+}
+
+
+
+// Convert the pixel height to the number of 40-pixel extension panels needed
+// after InputDialog adds pixels for the input field, if necessary.
+void Dialog::FinishInit()
+{
 	// Determine how many 40-pixel extension panels we need.
 	if(height <= 80)
 		height = 0;
 	else
 		height = (height - 40) / 40;
+}
+
+
+
+void Dialog::SetAllowsFastForward(bool state)
+{
+	allowsFastForward = state;
 }
 
 
@@ -339,24 +311,8 @@ void Dialog::DoCallback() const
 	{
 		if(intFun)
 			intFun(okIsActive ? Conversation::ACCEPT : Conversation::DECLINE);
-
 		return;
 	}
-
-	if(intFun)
-	{
-		// Only call the callback if the input can be converted to an int.
-		// Otherwise treat this as if the player clicked "cancel."
-		try {
-			intFun(stoi(input));
-		}
-		catch(...)
-		{
-		}
-	}
-
-	if(stringFun)
-		stringFun(input);
 
 	if(voidFun)
 		voidFun();

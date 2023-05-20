@@ -19,13 +19,13 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "CategoryList.h"
 #include "CategoryTypes.h"
 #include "Command.h"
-#include "Dialog.h"
 #include "text/DisplayText.h"
 #include "text/Font.h"
 #include "text/FontSet.h"
 #include "text/Format.h"
 #include "GameData.h"
 #include "Information.h"
+#include "InputDialog.h"
 #include "Interface.h"
 #include "LineShader.h"
 #include "LogbookPanel.h"
@@ -160,7 +160,7 @@ bool ShipInfoPanel::KeyDown(SDL_Keycode key, Uint16 mod, const Command &command,
 		GetUI()->Push(new PlayerInfoPanel(player, std::move(panelState)));
 	}
 	else if(key == 'R' || (key == 'r' && shift))
-		GetUI()->Push(new Dialog(this, &ShipInfoPanel::Rename, "Change this ship's name?", (*shipIt)->Name()));
+		GetUI()->Push(new InputDialog(this, &ShipInfoPanel::Rename, "Change this ship's name?", (*shipIt)->Name()));
 	else if(panelState.CanEdit() && (key == 'P' || (key == 'p' && shift) || key == 'k'))
 	{
 		if(shipIt->get() != player.Flagship() || (*shipIt)->IsParked())
@@ -180,13 +180,13 @@ bool ShipInfoPanel::KeyDown(SDL_Keycode key, Uint16 mod, const Command &command,
 		int plunderAmount = (*shipIt)->Cargo().Get(selectedPlunder);
 		if(amount)
 		{
-			GetUI()->Push(new Dialog(this, &ShipInfoPanel::DumpCommodities,
+			GetUI()->Push(new InputDialog(this, &ShipInfoPanel::DumpCommodities,
 				"How many tons of " + Format::LowerCase(selectedCommodity)
 					+ " do you want to jettison?", amount));
 		}
 		else if(plunderAmount > 0 && selectedPlunder->Get("installable") < 0.)
 		{
-			GetUI()->Push(new Dialog(this, &ShipInfoPanel::DumpPlunder,
+			GetUI()->Push(new InputDialog(this, &ShipInfoPanel::DumpPlunder,
 				"How many tons of " + Format::LowerCase(selectedPlunder->DisplayName())
 					+ " do you want to jettison?", plunderAmount));
 		}
@@ -197,7 +197,7 @@ bool ShipInfoPanel::KeyDown(SDL_Keycode key, Uint16 mod, const Command &command,
 		}
 		else if(plunderAmount > 1)
 		{
-			GetUI()->Push(new Dialog(this, &ShipInfoPanel::DumpPlunder,
+			GetUI()->Push(new InputDialog(this, &ShipInfoPanel::DumpPlunder,
 				"How many " + selectedPlunder->PluralName() + " do you want to jettison?",
 				plunderAmount));
 		}

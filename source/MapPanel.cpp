@@ -18,7 +18,6 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "text/alignment.hpp"
 #include "Angle.h"
 #include "CargoHold.h"
-#include "Dialog.h"
 #include "FillShader.h"
 #include "FogShader.h"
 #include "text/Font.h"
@@ -28,6 +27,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "GameData.h"
 #include "Government.h"
 #include "Information.h"
+#include "InputDialog.h"
 #include "Interface.h"
 #include "LineShader.h"
 #include "MapDetailPanel.h"
@@ -513,7 +513,7 @@ bool MapPanel::KeyDown(SDL_Keycode key, Uint16 mod, const Command &command, bool
 	}
 	else if(key == 'f')
 	{
-		GetUI()->Push(new Dialog(
+		GetUI()->Push(new InputDialog(
 			this, &MapPanel::Find, "Search for:", "", Truncate::NONE, true));
 		return true;
 	}

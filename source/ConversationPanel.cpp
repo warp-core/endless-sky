@@ -105,7 +105,7 @@ void ConversationPanel::Draw()
 	// the left side. The edge sprite contains 10 pixels of the margin; the rest
 	// of the margin is included in the filled rectangle drawn here:
 	const Color &back = *GameData::Colors().Get("conversation background");
-	double boxWidth = WIDTH + 2. * MARGIN - 10.;
+	const double boxWidth = WIDTH + 2. * MARGIN - 10.;
 	FillShader::Fill(
 		Point(Screen::Left() + .5 * boxWidth, 0.),
 		Point(boxWidth, Screen::Height()),
@@ -115,7 +115,7 @@ void ConversationPanel::Draw()
 	if(edgeSprite->Height())
 	{
 		// If the screen is high enough, the edge sprite should repeat.
-		double spriteHeight = edgeSprite->Height();
+		const double spriteHeight = edgeSprite->Height();
 		Point pos(
 			Screen::Left() + boxWidth + .5 * edgeSprite->Width(),
 			Screen::Top() + .5 * spriteHeight);
@@ -222,6 +222,7 @@ void ConversationPanel::Draw()
 			point = paragraph.Draw(point, bright);
 		}
 	}
+
 	// Store the total height of the text.
 	maxScroll = min(0., Screen::Top() - (point.Y() - scroll) + font.Height() + 15.);
 

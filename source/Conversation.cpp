@@ -26,7 +26,7 @@ using namespace std;
 
 namespace {
 	// Lookup table for matching special tokens to enumeration values.
-	map<string, int> TOKEN_INDEX = {
+	const map<string, int> TOKEN_INDEX = {
 		{"accept", Conversation::ACCEPT},
 		{"decline", Conversation::DECLINE},
 		{"defer", Conversation::DEFER},
@@ -37,8 +37,8 @@ namespace {
 		{"explode", Conversation::EXPLODE}
 	};
 
-	// Get the index of the given special string. 0 means it is "goto", a number
-	// less than 0 means it is an outcome, and 1 means no match.
+	// Get the index of the given conversation endpoint string.
+	// Returns 0 if this is not a valid endpoint string.
 	int TokenIndex(const string &token)
 	{
 		auto it = TOKEN_INDEX.find(token);
@@ -68,6 +68,8 @@ namespace {
 		out.EndChild();
 	}
 }
+
+
 
 // The possible outcomes of a conversation:
 const int Conversation::ACCEPT;
@@ -113,7 +115,9 @@ void Conversation::Load(const DataNode &node, const string &missionName)
 		{
 			// A scene always starts a new text node.
 			AddNode();
-			nodes.back().scene = SpriteSet::Get(child.Token(1));
+			Node &node = nodes.back();
+			node.scene = SpriteSet::Get(child.Token(1));
+			node.type = NodeType::SCENE;
 		}
 		else if(child.Token(0) == "label" && child.Size() >= 2)
 		{
@@ -124,8 +128,10 @@ void Conversation::Load(const DataNode &node, const string &missionName)
 		}
 		else if(child.Token(0) == "choice")
 		{
-			// Create a new node with one or more choices in it.
-			nodes.emplace_back(true);
+			nodes.emplace_back();
+			Node &node = nodes.back();
+			node.type = NodeType::CHOICE;
+
 			bool foundErrors = false;
 			for(const DataNode &grand : child)
 			{
@@ -139,10 +145,11 @@ void Conversation::Load(const DataNode &node, const string &missionName)
 
 				// Store the text of this choice. By default, the choice will
 				// just bring you to the next node in the script.
-				nodes.back().elements.emplace_back(grand.Token(0) + '\n', nodes.size());
+				node.elements.emplace_back(grand.Token(0) + '\n', nodes.size());
 
 				LoadDestinations(grand);
 			}
+
 			if(nodes.back().elements.empty())
 			{
 				if(!foundErrors)
@@ -565,20 +572,23 @@ bool Conversation::LoadDestinations(const DataNode &node)
 	{
 		if(child.Size() == 2 && child.Token(0) == "goto" && hasGoto)
 		{
-			child.PrintTrace("Warning: Ignoring extra endpoint in conversation choice:");
-		}
-		else if(child.Size() == 2 && child.Token(0) == "goto")
-		{
+			if(hasGoto)
+			{
+				child.PrintTrace("Warning: Ignoring extra endpoint in conversation choice:");
+				continue;
+			}
 			Goto(child.Token(1), nodes.size() - 1, nodes.back().elements.size() - 1);
 			hasGoto = true;
 		}
 		else if(child.Size() == 2 && child.Token(0) == "to" && child.Token(1) == "display" && hasCondition)
 		{
 			// Each choice can only have one condition
-			child.PrintTrace("Warning: Ignoring extra condition in conversation choice:");
-		}
-		else if(child.Size() == 2 && child.Token(0) == "to" && child.Token(1) == "display")
-		{
+			if(hasCondition)
+			{
+				child.PrintTrace("Warning: Ignoring extra condition in conversation choice:");
+				continue;
+			}
+
 			nodes.back().elements.back().conditions.Load(child);
 			hasCondition = true;
 		}

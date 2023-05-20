@@ -38,6 +38,18 @@ class Sprite;
 // are set for the player, or even trigger various changes to the game's state.
 class Conversation {
 public:
+	enum class NodeType : int_fast8_t {
+		NONE,
+		TEXT,
+		SCENE,
+		BRANCH,
+		CHOICE,
+		LABEL,
+		ACTION
+	};
+
+
+public:
 	// The possible outcomes of a conversation:
 	static const int ACCEPT = -1;
 	static const int DECLINE = -2;
@@ -57,13 +69,16 @@ public:
 	// player to immediately depart.
 	static bool RequiresLaunch(int outcome);
 
+
 public:
 	Conversation() = default;
 	// Construct and Load() at the same time.
 	Conversation(const DataNode &node, const std::string &missionName = "");
+
 	// Read or write to files.
 	void Load(const DataNode &node, const std::string &missionName = "");
 	void Save(DataWriter &out) const;
+
 	// Check if any data is loaded in this conversation object.
 	bool IsEmpty() const noexcept;
 	// Check if this conversation includes a name prompt.
@@ -75,6 +90,8 @@ public:
 	// substitutions and instantiating any actions.
 	Conversation Instantiate(std::map<std::string, std::string> &subs, int jumps = 0, int payload = 0) const;
 
+	NodeType Type(int node) const;
+
 	// The beginning of the conversation is node 0. Some nodes have choices for
 	// the user to select; others just automatically continue to another node.
 	// Nodes may also display images or include conditional branches.
@@ -84,18 +101,23 @@ public:
 	bool HasAnyChoices(const ConditionsStore &vars, int node) const;
 	// If the given node is a choice node, check how many choices it offers.
 	int Choices(int node) const;
+
 	// Check if the given conversation node is a conditional branch.
 	bool IsBranch(int node) const;
+	const ConditionSet &Conditions(int node) const;
+
 	// Check if the given conversation node performs an action.
 	bool IsAction(int node) const;
-	const ConditionSet &Conditions(int node) const;
 	const GameAction &GetAction(int node) const;
+
 	const std::string &Text(int node, int element = 0) const;
 	const Sprite *Scene(int node) const;
+
 	// Find out where the conversation goes if the given option is chosen.
 	int NextNodeForChoice(int node, int element = 0) const;
 	// Go to the next node of the conversation, ignoring any choices.
 	int StepToNextNode(int node) const;
+
 	// Returns whether the given node should be displayed.
 	// Returns false if:
 	// - The node (or element) is out of range.
@@ -103,6 +125,7 @@ public:
 	// - The node (or element) has conditions and those conditions are not met.
 	// and true otherwise.
 	bool ShouldDisplayNode(const ConditionsStore &vars, int node, int element = 0) const;
+
 	// Returns true if the given node index is in the range of valid nodes for
 	// this Conversation.
 	// Note: This function only considers actual Conversation nodes to be valid
@@ -110,6 +133,7 @@ public:
 	// sentinel values, rather than indices of Conversation nodes, and are
 	// therefore considered invalid by this function.
 	bool NodeIsValid(int node) const;
+
 	// Returns true if the given node index is in the range of valid nodes for
 	// this Conversation *and* the given element index is in the range of valid
 	// elements for the given node.
@@ -133,10 +157,11 @@ private:
 	public:
 		explicit Element(std::string text, int next)
 			: text(std::move(text)), next(next) {}
+
 		// The text to display:
 		std::string text;
 		// The next node to visit:
-		int next;
+		int next = 0;
 		// Conditions for displaying the text:
 		ConditionSet conditions;
 	};
@@ -148,25 +173,18 @@ private:
 	public:
 		// Construct a new node. Each paragraph of conversation that involves no
 		// choice can be merged into what came before it, to simplify things.
-		explicit Node(bool isChoice = false) noexcept : isChoice(isChoice), canMergeOnto(!isChoice) {}
+		explicit Node() = default;
 
-		// The condition expressions that determine the next node to load, or
-		// whether to display.
-		ConditionSet conditions;
-		// Tasks performed when this node is reached.
-		GameAction actions;
 		// See Element's comment above for what this actually entails.
 		std::vector<Element> elements;
-		// This distinguishes "choice" nodes from "branch" or text nodes. If
-		// this value is false, a one-element node is considered text, and a
-		// node with more than one element is considered is considered a
-		// "branch".
-		bool isChoice;
-		// Keep track of whether it's possible to merge future nodes onto this.
-		bool canMergeOnto;
-
 		// Image that should be shown along with this text.
 		const Sprite *scene = nullptr;
+		// Tasks performed when this node is reached.
+		GameAction actions;
+
+		NodeType type = NodeType::NONE;
+		// Keep track of whether it's possible to merge future nodes onto this.
+		bool canMergeOnto = true;
 	};
 
 
@@ -175,10 +193,11 @@ private:
 	// or "conditions." If so, link them up properly. Return true if gotos or
 	// conditions were found.
 	bool LoadDestinations(const DataNode &node);
-	// Parse the children to see if there is a condition.
-	bool HasDisplayRestriction(const DataNode &node);
 	// Add a label, pointing to whatever node is created next.
 	void AddLabel(const std::string &label, const DataNode &node);
+
+	// Parse the children to see if there is a condition.
+	bool HasDisplayRestriction(const DataNode &node);
 	// Set up a "goto". Depending on whether the named label has been seen yet
 	// or not, it is either resolved immediately or added to the unresolved set.
 	void Goto(const std::string &label, int node, int element = 0);

@@ -120,23 +120,25 @@ private:
 
 	// Current scroll position.
 	double scroll = 0.;
+	// Maximum scroll amount.
+	double maxScroll = 0.;
 
 	// The "history" of the conversation up to this point:
 	std::list<Paragraph> text;
 	// The current choices being presented to you, and their indices:
 	std::list<std::pair<Paragraph, int>> choices;
+	// The currently highlighted choice.
 	int choice = 0;
+
+	// Text substitutions (player's name, and ship name).
+	std::map<std::string, std::string> subs;
+
 	// Flicker time, set if the player enters invalid input for a pilot's name.
 	int flickerTime = 0;
 
 	// Text entry fields for changing the player's name.
 	std::string firstName;
 	std::string lastName;
-	// Text substitutions (player's name, and ship name).
-	std::map<std::string, std::string> subs;
-
-	// Maximum scroll amount.
-	double maxScroll = 0.;
 
 	// If specified, this is a star system to display with a special big pointer
 	// when the player brings up the map. (Typically a mission destination.)

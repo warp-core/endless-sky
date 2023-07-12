@@ -1,6 +1,6 @@
 # Introduction
 
-The [syntax](DataFormat#grammar-specifications) for the definition of a system hazard is:
+The [syntax](DataFormat.md#grammar-specifications) for the definition of a system hazard is:
 ```html
 hazard <name>
 	"constant strength"
@@ -93,13 +93,13 @@ weapon
 	...
 ```
 
-The [weapon](CreatingOutfits#weapon-attributes) of a hazard defines how all ships within the hazard's range are affected when the hazard triggers. The relevant weapon attributes and any additional information about each of them are listed here:
+The [weapon](CreatingOutfits.md#weapon-attributes) of a hazard defines how all ships within the hazard's range are affected when the hazard triggers. The relevant weapon attributes and any additional information about each of them are listed here:
 
 * All damage types (e.g. `"shield damage"`): All damage values, plus hit force, are multiplied by the square root of the current strength of the hazard, or just the current strength if the hazard has `"constant strength"`.
 * `"piercing"`
 * `"hit force"`: Hit force is relative to the system center. (i.e. positive hit force pushes away from the system center while negative hit force pulls toward it.)
 * `"gravitational"`
-* `"blast radius"`: Causes the damage from this hazard to decline with range from the system center according to the blast radius curve as described in [CreatingOutfits](CreatingOutfits#weapon-attributes).
+* `"blast radius"`: Causes the damage from this hazard to decline with range from the system center according to the blast radius curve as described in [CreatingOutfits](CreatingOutfits.md#weapon-attributes).
 * `"trigger radius"`: Used only to change the blast radius curve.
 * `"damage dropoff"`: Causes the damage from this hazard to change with range according to the damage dropoff ranges and modifier. For expected behavior, two values must be provided with this weapon attribute, as otherwise the second value will be assumed to be 0.
 * `"dropoff modifier"`

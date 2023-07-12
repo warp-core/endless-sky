@@ -1,4 +1,4 @@
-A "person" is a unique ship or fleet of ships that will occasionally appear at random. Each person has a customized ship and its own set of things it might say to the player. If the player kills a person, that person will never appear to that particular pilot again. The [syntax](https://github.com/endless-sky/endless-sky/wiki/DataFormat#grammar-specifications) for the definition of a person is:
+A "person" is a unique ship or fleet of ships that will occasionally appear at random. Each person has a customized ship and its own set of things it might say to the player. If the player kills a person, that person will never appear to that particular pilot again. The [syntax](https://github.com/endless-sky/endless-sky/wiki/DataFormat.md#grammar-specifications) for the definition of a person is:
 
 ```html
 person <name>
@@ -65,7 +65,7 @@ system
 	...
 ```
 
-This defines a [location filter](LocationFilters) for possible systems, using the same syntax as the source, destination, waypoint, and stopover filters in [missions](https://github.com/endless-sky/endless-sky/wiki/CreatingMissions#filters). This controls which systems the person will appear in. For example, they might only appear in systems belonging to a certain government, or in a certain area.
+This defines a [location filter](LocationFilters) for possible systems, using the same syntax as the source, destination, waypoint, and stopover filters in [missions](https://github.com/endless-sky/endless-sky/wiki/CreatingMissions.md#filters). This controls which systems the person will appear in. For example, they might only appear in systems belonging to a certain government, or in a certain area.
 
 ```html
 phrase

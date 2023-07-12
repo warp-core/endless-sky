@@ -6,7 +6,7 @@ Prior to **v. 0.9.13**, all start definitions replaced the previous definitions,
 
 # Datafile Syntax
 
-The [syntax](DataFormat#grammar-specifications) for the definition of a start is:
+The [syntax](DataFormat.md#grammar-specifications) for the definition of a start is:
 
 ```html
 start [<identifier>]
@@ -197,18 +197,18 @@ A path, relative to the `images` directory, for an image that will be displayed 
 
 ### Conditions
 
-Any lines that do not match one of the above syntax definitions will be parsed as [player conditions](Player-Conditions#applied). When the player begins a pilot with this scenario, these conditions will be applied to the player and subsequently available for later use by missions. A common use of starting conditions is to provide licenses.
+Any lines that do not match one of the above syntax definitions will be parsed as [player conditions](Player-Conditions.md#applied). When the player begins a pilot with this scenario, these conditions will be applied to the player and subsequently available for later use by missions. A common use of starting conditions is to provide licenses.
 
 ### Conditional Starts
 
-Beginning in **v. 0.10.0**, starts can be made to conditionally appear or unlock based on a player's global conditions (see `"global: "` on the [Player Conditions](https://github.com/endless-sky/endless-sky/wiki/Player-Conditions#modifiable) page).
+Beginning in **v. 0.10.0**, starts can be made to conditionally appear or unlock based on a player's global conditions (see `"global: "` on the [Player Conditions](https://github.com/endless-sky/endless-sky/wiki/Player-Conditions.md#modifiable) page).
 
 ```html
 to (display | reveal | unlock)
 	<condition-set>
 ```
 
-The `to (display | reveal | unlock)` nodes are similar to the `to offer` and other `to *` nodes of [missions](https://github.com/endless-sky/endless-sky/wiki/CreatingMissions#conditions). Any conditions specified here refer to global conditions, and do not need or allow the use of the `"global: "` prefix, since the global conditions are accessed directly and are the only conditions able to be used.
+The `to (display | reveal | unlock)` nodes are similar to the `to offer` and other `to *` nodes of [missions](https://github.com/endless-sky/endless-sky/wiki/CreatingMissions.md#conditions). Any conditions specified here refer to global conditions, and do not need or allow the use of the `"global: "` prefix, since the global conditions are accessed directly and are the only conditions able to be used.
 
 * `to display`: if these conditions are false, the start will not appear on the starts list.
 * `to reveal`: if these conditions are false and the `to display` conditions are true, the start will appear on the starts list, but display the `on display` information.

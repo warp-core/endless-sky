@@ -1,6 +1,6 @@
 # Introduction
 
-The [syntax](DataFormat#grammar-specifications) for the definition of a phrase is:
+The [syntax](DataFormat.md#grammar-specifications) for the definition of a phrase is:
 
 ```html
 phrase <name>

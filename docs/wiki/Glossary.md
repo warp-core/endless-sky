@@ -22,7 +22,7 @@ Combat Rating  | A sort of reputation that measures your combat experience. Infl
 DPS			| Damage per Second. |
 Escort		 | Can refer to either ships that are part of the player's fleet, or ships that are a part of a mission and follow the player. |
 Farming		| Taking some repeated action over a length of time in order to achieve a goal (e.g. obtaining a large number of some outfit, credits, or reputation). |
-\<first> \<last> | The player character. ([See text replacements](CreatingMissions#replacement))|
+\<first> \<last> | The player character. ([See text replacements](CreatingMissions.md#replacement))|
 FW			 | Free Worlds. |
 Kiting		 | Maneuvering such that you can attack your enemy while they cannot attack you. |
 Minmax		 | Minimizing undesired stats or attributes while maximizing desired stats or attributes. |

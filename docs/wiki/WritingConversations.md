@@ -121,7 +121,7 @@ To maintain consistency across all the text in the game:
 * Subsequent paragraphs should be indented with a single tab character (inside the backticks).
 * Dialog should use double quotes as the first level of quotation marks, and single quotes for [nested quotations](https://en.wikipedia.org/wiki/Nested_quotation): `He said, "They told me, 'The aliens have landed.'"`
 * Use [Oxford commas](https://en.wikipedia.org/wiki/Serial_comma): `a, b, and c`, not `a, b and c`.
-* Avoid non-ASCII characters, including [curly quotes](https://en.wikipedia.org/wiki/Quotation_mark#Quotation_marks_in_English).
+* Avoid non-ASCII characters, including [curly quotes](https://en.wikipedia.org/wiki/Quotation_mark.md#Quotation_marks_in_English).
 
 
 ```js
@@ -196,7 +196,7 @@ branch <if true> [<if false>]
 		...
 ```
 
-A branch takes the conversation to one of two different labels depending on a set of [testable conditions](Player-Conditions#testable-condition-sets).
+A branch takes the conversation to one of two different labels depending on a set of [testable conditions](Player-Conditions.md#testable-condition-sets).
 
 The `branch` keyword is followed by one or two label names. The first is the label to jump to if the subsequent conditions are all true. The second is the one to jump to if any of the conditions are false. If no second label is supplied, the "false" branch simply continues to the next entry in the conversation.
 
@@ -234,11 +234,11 @@ action
 	fail [<name>]
 ```
 
-An "action" entry is similar to a [mission trigger](CreatingMissions#triggers), except it is incapable of creating a dialog or conversation within the current conversation.
+An "action" entry is similar to a [mission trigger](CreatingMissions.md#triggers), except it is incapable of creating a dialog or conversation within the current conversation.
 
 If the action entry has a `fail` line and the entry is part of a named conversation (i.e. one that is not defined within a mission) then the apply must name the mission to be failed.
 
-**Prior to v. 0.9.15** the `action` node was named `apply` and was only capable of [modifying conditions](Player-Conditions#applied-condition-sets), as seen in the example above where a condition "everyone thinks you are awesome" is assigned a value of 1 and the condition "drunk" is increased by 1. If "drunk" was not already a condition, its initial value is 0. If the condition "everyone thinks you are awesome" already existed and had a different value, this preexisting value is lost. Fractional values will be rounded towards zero (e.g. "0.99" becomes "0", "1.01" -> "1", and "-10.5" becomes "-10," so it is recommended to only use whole numbers. While you can assign generic text as a condition value (e.g. `"drunk" = "true"`), the right-hand side will be treated as a [value expression](Player-Conditions#expressions) and the runtime value of the player condition named `"true"` will be used instead of the text "true".
+**Prior to v. 0.9.15** the `action` node was named `apply` and was only capable of [modifying conditions](Player-Conditions.md#applied-condition-sets), as seen in the example above where a condition "everyone thinks you are awesome" is assigned a value of 1 and the condition "drunk" is increased by 1. If "drunk" was not already a condition, its initial value is 0. If the condition "everyone thinks you are awesome" already existed and had a different value, this preexisting value is lost. Fractional values will be rounded towards zero (e.g. "0.99" becomes "0", "1.01" -> "1", and "-10.5" becomes "-10," so it is recommended to only use whole numbers. While you can assign generic text as a condition value (e.g. `"drunk" = "true"`), the right-hand side will be treated as a [value expression](Player-Conditions.md#expressions) and the runtime value of the player condition named `"true"` will be used instead of the text "true".
 
 The `apply` keyword is still supported as an alias of `action` for reverse compatibility purposes.
 

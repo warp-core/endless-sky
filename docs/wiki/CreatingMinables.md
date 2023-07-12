@@ -1,4 +1,4 @@
-The [syntax](DataFormat#grammar-specifications) for the definition of a minable is:
+The [syntax](DataFormat.md#grammar-specifications) for the definition of a minable is:
 
 ```html
 minable <name>

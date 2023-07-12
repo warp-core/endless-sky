@@ -1,6 +1,6 @@
 # Introduction
 
-The [syntax](DataFormat#grammar-specifications) for the definition of a fleet is:
+The [syntax](DataFormat.md#grammar-specifications) for the definition of a fleet is:
 
 ```html
 fleet <name>
@@ -56,7 +56,7 @@ The number of types of commodities that this fleet will carry as cargo and a lis
 outfitters <outfitter>...
 ```
 
-Ships can also carry outfits as cargo, specified by the [outfitters](CreatingOutfits#sales) listed here. If no particular `outfitters` are listed _and_ no `commodities` are specified, then ships may carry outfits from the outfitters of the system they spawn in and the outfitters of all systems linked directly to the spawn system.
+Ships can also carry outfits as cargo, specified by the [outfitters](CreatingOutfits.md#sales) listed here. If no particular `outfitters` are listed _and_ no `commodities` are specified, then ships may carry outfits from the outfitters of the system they spawn in and the outfitters of all systems linked directly to the spawn system.
 
 (Specifying `commodities` but not `outfitters` will prevent fleet ships from carrying outfits. Specifying either both or neither results in a higher chance of carrying commodities.)
 

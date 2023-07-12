@@ -2,9 +2,9 @@
 
 Substitutions are wildcard pieces of text that can be written into mission text and ship hails that get replaced with a separate piece of text before being displayed to the player. These substitutions must be in the form `"<text>"` where the `<` and `>` are required parts of the wildcard.
 
-Certain substitutions are hardcoded; these can be found in the [creating missions](CreatingMissions#text-replacements) page. Beginning with **v0.9.15**, content creators are able to create custom substitutions.
+Certain substitutions are hardcoded; these can be found in the [creating missions](CreatingMissions.md#text-replacements) page. Beginning with **v0.9.15**, content creators are able to create custom substitutions.
 
-The [syntax](DataFormat#grammar-specifications) for the definition of a custom substitution is:
+The [syntax](DataFormat.md#grammar-specifications) for the definition of a custom substitution is:
 
 ```html
 substitutions
@@ -15,7 +15,7 @@ substitutions
 
 # Substitution characteristics
 
-A `substitutions` node can be defined in two places. The first place is as a child of a `missions` node, as described in [creating missions](CreatingMissions#text-replacements). Substitutions defined in this way apply only to the mission they are defined within. The second way to define substitutions is with the `substitutions` node being a root node. Substitutions defined in this was are applied globally to all missions and ship hails.
+A `substitutions` node can be defined in two places. The first place is as a child of a `missions` node, as described in [creating missions](CreatingMissions.md#text-replacements). Substitutions defined in this way apply only to the mission they are defined within. The second way to define substitutions is with the `substitutions` node being a root node. Substitutions defined in this was are applied globally to all missions and ship hails.
 
 The three types of substitutions, hardcoded, mission-specific, and global, have a specific precedence and order of execution to them. Global substitutions are replaced first, followed by mission-specific substitutions, and finally hardcoded substitutions. If a specific text-replacement is defined in more than one location, then the substitution that is executed later is the one that is used. For example, since `<first>` is a hardcoded substitution, this text replacement can never be used or modified by global or mission-specific substitutions. This order of execution can be taken advantage of to create text replacements that substitute into more text replacements. See the Examples section for how this can be done.
 
@@ -34,7 +34,7 @@ A substitutions node can define multiple text replacements at once.
 
 Text replacement lines are able to define a [condition set](Player-Conditions) that determines whether the text replacement is used. This allows for certain text replacements to only be used under certain circumstances. Combining this with defining multiple replacements for the same piece of text, you can create a substitution that reacts to the player's actions or attributes.
 
-Note that currently, the condition sets for substitutions are evaluated when the mission is instantiated. This means that actions taken during a mission can not change the outcome of any substitutions, as they have already made their text replacements. If you wish to change the outcome of text based on conditions that could have changed during the mission, then you should instead use [`branch`](https://github.com/endless-sky/endless-sky/wiki/WritingConversations#branch) or `to display`.
+Note that currently, the condition sets for substitutions are evaluated when the mission is instantiated. This means that actions taken during a mission can not change the outcome of any substitutions, as they have already made their text replacements. If you wish to change the outcome of text based on conditions that could have changed during the mission, then you should instead use [`branch`](https://github.com/endless-sky/endless-sky/wiki/WritingConversations.md#branch) or `to display`.
 
 # Examples
 

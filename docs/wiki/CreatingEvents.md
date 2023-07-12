@@ -251,7 +251,7 @@ Adds a new global substitution. If a previous global replacement existed with th
 
 # Modifying player conditions
 
-An event definition can also include instructions to change the values of condition variables, such as the player's reputation with a specific government. More information on applied conditions is described in the [Player Conditions page](Player-Conditions#applied-condition-sets). All named events set an automatic condition variable named `event: <name>`, making it possible to create missions that cannot offer until after the event has occurred:
+An event definition can also include instructions to change the values of condition variables, such as the player's reputation with a specific government. More information on applied conditions is described in the [Player Conditions page](Player-Conditions.md#applied-condition-sets). All named events set an automatic condition variable named `event: <name>`, making it possible to create missions that cannot offer until after the event has occurred:
 
 ```c++
 mission "show the war conversation"

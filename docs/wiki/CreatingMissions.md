@@ -327,7 +327,7 @@ Note that `priority` will only affect missions that offer from the spaceport.
 (job | landing | assisting | boarding | shipyard | outfitter)
 ```
 
-This specifies where this mission will be shown, if someplace other than the spaceport. If it is a job, it will only appear on the job board (and only if the current planet matches the [source filter](https://github.com/endless-sky/endless-sky/wiki/CreatingMissions.md#filters)).
+This specifies where this mission will be shown, if someplace other than the spaceport. If it is a job, it will only appear on the job board (and only if the current planet matches the [source filter](CreatingMissions.md#filters)).
 
 If this mission is to be shown at `landing`, it shows up as soon as you land instead of waiting for you to visit the spaceport. This can be used, for example, to show a special conversation the first time you land on a particular planet or on any planet belonging to a certain species. It can also be used for a continuation of an active mission.
 
@@ -565,7 +565,7 @@ An NPC will not spawn if its `to spawn` conditions are not met, and any spawned 
 
 Should an NPC have a `to (spawn | despawn)` as well as an objective (e.g. `save`), then the objective of the NPC will be ignored if the NPC has not yet spawned or has been despawned. This means that you can potentially create secondary or alternative objectives for missions (e.g. you must either complete this NPC objective, or go to this planet to despawn the NPCs instead, and in the reverse, you must go to this planet, or go to some other planet to spawn NPCs with a new objective).
 
-When combined with an `apply` node in a [`conversation`](https://github.com/endless-sky/endless-sky/wiki/WritingConversations), this can allow the choices a player makes in a conversation to alter whether NPCs spawn after the mission is accepted.
+When combined with an `apply` node in a [`conversation`](WritingConversations), this can allow the choices a player makes in a conversation to alter whether NPCs spawn after the mission is accepted.
 
 ```html
 on (kill | board | assist | disable | "scan cargo" | "scan outfits" | capture | provoke)
@@ -583,7 +583,7 @@ Starting in **v. 0.10.1**, `on *` nodes can be added to NPCs to trigger actions 
 * `capture`: The action will run after every ship in the NPC has been captured.
 * `provoke`: The action will run if any ship in the NPC is provoked. Will not repeat on subsequent provoke actions.
 
-For details on actions that can be run by these nodes, see the [Triggers](https://github.com/endless-sky/endless-sky/wiki/CreatingMissions.md#triggers) section.
+For details on actions that can be run by these nodes, see the [Triggers](CreatingMissions.md#triggers) section.
 
 ```html
 government <name>
@@ -596,7 +596,7 @@ This specifies what government all the ships connected to this NPC specification
 	...
 ```
 
-Beginning in **v. 0.10.1**, NPCs can manipulate their cargo similarly to how fleets can. If an NPC spawns a fleet that contains cargo settings, but the NPC also has cargo settings, then the NPC overrides the fleet. More details about cargo settings can be found on the [Creating Fleets](https://github.com/endless-sky/endless-sky/wiki/CreatingFleets.md#basic-fleet-characteristics) page.
+Beginning in **v. 0.10.1**, NPCs can manipulate their cargo similarly to how fleets can. If an NPC spawns a fleet that contains cargo settings, but the NPC also has cargo settings, then the NPC overrides the fleet. More details about cargo settings can be found on the [Creating Fleets](CreatingFleets.md#basic-fleet-characteristics) page.
 
 ```html
 personality <type>...
@@ -604,7 +604,7 @@ personality <type>...
 	confusion <amount#>
 ```
 
-This defines the NPC's [personality](https://github.com/endless-sky/endless-sky/wiki/ShipPersonalities). The `confusion` tag is a special value, giving the inaccuracy in pixels of the ship's targeting systems; the default value is 10 pixels.
+This defines the NPC's [personality](ShipPersonalities). The `confusion` tag is a special value, giving the inaccuracy in pixels of the ship's targeting systems; the default value is 10 pixels.
 
 If an NPC is specified as starting out in your current system and its personality is *not* `staying` or `waiting`, it will take off from the planet along with you (e.g. a ship you are escorting). A ship that is `entering` the current system might, for example, be a pirate raid chasing the fleet you are escorting, and a ship `staying` in a certain system might be a target you must locate for a "bounty hunting" mission. (Any ship that is not `staying` will actively seek the player out if it is in a different system, unless it is also `uninterested`.)
 
@@ -766,7 +766,7 @@ Beginning in **v. 0.9.15**, if the outfit being gifts has the "map" attribute, t
 give ship <model> [<name>]
 ```
 
-The named ship model is given to the player. This ship model can be a [ship variant](https://github.com/endless-sky/endless-sky/wiki/CreatingShips.md#variants). It is optional that the given ship has a name, but if no name is provided then a random name will be generated from the civilian phrase.
+The named ship model is given to the player. This ship model can be a [ship variant](CreatingShips.md#variants). It is optional that the given ship has a name, but if no name is provided then a random name will be generated from the civilian phrase.
 
 ```html
 (give | take) ship <model> [<name>]

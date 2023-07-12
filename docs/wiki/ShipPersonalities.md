@@ -23,7 +23,7 @@ Each ship in the game can have a variety of "personality" flags that control its
 * `merciful`: this ship won't fire on ships that are fleeing. **(v. 0.10.0)**
 * `ramming`: will attempt to get as close to its target as possible, regardless of the range of its weapons or whether its weapons would hurt itself. **(v. 0.10.0)**
 
-### Flags that control [NPCs](https://github.com/endless-sky/endless-sky/wiki/CreatingMissions.md#npcs):
+### Flags that control [NPCs](CreatingMissions.md#npcs):
 
 * `staying`: never leaves the system it starts out in.
 * `lingering`: will remain in the system for an additional time equal to one quarter of the smallest period of any fleet assigned to the system, when there is nothing to do. Except when the ship is a mission NPC and can follow the player, or when it already has a destination system. **(v. 0.10.1)**

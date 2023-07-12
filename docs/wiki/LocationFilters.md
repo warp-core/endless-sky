@@ -16,10 +16,10 @@
 
 A "location filter" is a set of constraints that are used to select a planet, system, or ship.
 Location filters can be used for:
-* [Mission](CreatingMissions) source, destination, stopovers, and waypoints.
-* [Mission](CreatingMissions#non-player-characters-npcs) NPC systems.
-* [Mission](CreatingMissions#triggers) "on enter" systems.
-* [Government](CreatingGovernments#enforcement-zones) enforcement zones.
+* [Mission](CreatingMissions.md) source, destination, stopovers, and waypoints.
+* [Mission](CreatingMissions.md#non-player-characters-npcs) NPC systems.
+* [Mission](CreatingMissions.md#triggers) "on enter" systems.
+* [Government](CreatingGovernments.md#enforcement-zones) enforcement zones.
 * [News](CreatingNews) locations.
 * [Person](CreatingPersons) spawn systems.
 

@@ -20,8 +20,8 @@ Location filters can be used for:
 * [Mission](CreatingMissions.md#non-player-characters-npcs) NPC systems.
 * [Mission](CreatingMissions.md#triggers) "on enter" systems.
 * [Government](CreatingGovernments.md#enforcement-zones) enforcement zones.
-* [News](CreatingNews) locations.
-* [Person](CreatingPersons) spawn systems.
+* [News](CreatingNews.md) locations.
+* [Person](CreatingPersons.md) spawn systems.
 
 ```html
 	[<modifier>] planet <name>...

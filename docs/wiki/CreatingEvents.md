@@ -1,4 +1,4 @@
-An "event" is something that happens on a certain in-game date, and can modify both the galactic state (such as system and planet characteristics, government relationships, or even the ships belonging to various fleets) and the player's knowledge (including the internal [conditions](Player-Conditions) that track what the player has done, and which systems or planets are known to the player in the Galactic Map).
+An "event" is something that happens on a certain in-game date, and can modify both the galactic state (such as system and planet characteristics, government relationships, or even the ships belonging to various fleets) and the player's knowledge (including the internal [conditions](Player-Conditions.md) that track what the player has done, and which systems or planets are known to the player in the Galactic Map).
 
 The basic syntax of an event definition is:
 
@@ -156,7 +156,7 @@ Adds or removes a hyperspace link between the given systems. (Unlike the definit
 government <name>
 	...
 ```
-Update the specified elements of the named `government`. For more information on the tokens and expected syntax, see the page on creating [governments](CreatingGovernments).
+Update the specified elements of the named `government`. For more information on the tokens and expected syntax, see the page on creating [governments](CreatingGovernments.md).
 
 ```html
 fleet <name>
@@ -221,7 +221,7 @@ event "breaking news"
 		location
 			government "Republic" "Syndicate"
 ```
-For more information and examples, consult the page on [news](CreatingNews) or the [`news.txt`](https://github.com/endless-sky/endless-sky/tree/master/data/human/news.txt) file.
+For more information and examples, consult the page on [news](CreatingNews.md) or the [`news.txt`](https://github.com/endless-sky/endless-sky/tree/master/data/human/news.txt) file.
 
 ```html
 shipyard <name>
@@ -247,7 +247,7 @@ substitution
 		[<condition set>]
 	...
 ```
-Adds a new global substitution. If a previous global replacement existed with the same text and the new substitution has no condition set, then the new replacement will always be used. Consult the [substitutions](CreatingSubstitutions) page for more information.
+Adds a new global substitution. If a previous global replacement existed with the same text and the new substitution has no condition set, then the new replacement will always be used. Consult the [substitutions](CreatingSubstitutions.md) page for more information.
 
 # Modifying player conditions
 

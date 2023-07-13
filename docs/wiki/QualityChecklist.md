@@ -8,7 +8,7 @@ All graphics:
 
 Ships:
 
-- [ ] Make sure the sprite is a single connected component so that [collision detection](CollisionDetection) works properly.
+- [ ] Make sure the sprite is a single connected component so that [collision detection](CollisionDetection.md) works properly.
 - [ ] Define sensible [hardpoints](https://endless-sky.github.io/ship_builder.html).
 - [ ] Balance the ship's capabilities with other ships in the same price range.
 - [ ] 3D renders should be post-processed to look grungier and less artificial.

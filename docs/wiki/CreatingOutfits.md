@@ -22,7 +22,7 @@ In a few cases, it's ambiguous which direction something should point in. For ex
 ![](https://raw.githubusercontent.com/endless-sky/endless-sky-high-dpi/master/images/outfit/huge%20ion%20steering%402x.png)
 ![](https://raw.githubusercontent.com/endless-sky/endless-sky-high-dpi/master/images/outfit/security%20station%402x.png)
 
-As with [ships](CreatingShips), it is often easier to add texture and color variation to the outfit images in GIMP rather than trying to texture map all the surfaces in Blender. And, also as with the ship graphics, be sure that your GIMP file is at least high enough resolution to create an "@2x" high resolution version.
+As with [ships](CreatingShips.md), it is often easier to add texture and color variation to the outfit images in GIMP rather than trying to texture map all the surfaces in Blender. And, also as with the ship graphics, be sure that your GIMP file is at least high enough resolution to create an "@2x" high resolution version.
 
 ### Outfit attributes
 
@@ -47,7 +47,7 @@ Most attributes are given as a single number, but there are a few "special" attr
 
 * `"flotsam chance"`: a value from 0 to 1 that denotes the chance that any given unit of this outfit will survive its ship being destroyed as a flotsam that can be picked up by other ships. Ammunition has a default flotsam chance of 5%, should no flotsam chance be provided. All other outfits have a default of 0%. A negative flotsam chance can be used on ammunition to mean that the outfit will never drop as a flotsam. **(v. 0.10.0)**
 
-* `"flare sprite"`: for thrusters, the image that is drawn at each of the engine [hardpoints](CreatingShips) when the thruster is firing.
+* `"flare sprite"`: for thrusters, the image that is drawn at each of the engine [hardpoints](CreatingShips.md) when the thruster is firing.
 
   * Beginning with **v. 0.9.13**, `"reverse flare sprite"` and `"steering flare sprite"` can also be used to define the image that is drawn for `"reverse engine"` and `"steering engine"` hardpoints on a ship.
 
@@ -55,15 +55,15 @@ Most attributes are given as a single number, but there are a few "special" attr
 
   * Beginning with **v. 0.9.13**, `"reverse flare sound"` and `"steering flare sound"` can also be used to define the sound that is played when reversing or steering. Sounds are only played if the ship has an associated `"reverse engine"` or `"steering engine"` hardpoint for a flare to be emitted from.
 
-* `"afterburner effect"`: the [effect](CreatingEffects) that is created for every frame that the afterburner is firing. Afterburner effects can last for multiple frames, leaving a trail behind the ship.
+* `"afterburner effect"`: the [effect](CreatingEffects.md) that is created for every frame that the afterburner is firing. Afterburner effects can last for multiple frames, leaving a trail behind the ship.
 
 * `thumbnail`: the thumbnail image to use for the outfit in the outfitter. Outfit thumbnails should be no larger than 360x360 for the @2x sprite and 180x180 for the normal-resolution sprite.
 
-* `licenses`: a list of names of licenses you need to buy this outfit. For each `<name>` specified, the [`license: <name>` condition](Player-Conditions) must be set for the player to buy this ship. **(v. 0.9.7)** (If you make an outfit named `"<name> License"`, that condition variable will automatically be set when you buy that outfit.)
+* `licenses`: a list of names of licenses you need to buy this outfit. For each `<name>` specified, the [`license: <name>` condition](Player-Conditions.md) must be set for the player to buy this ship. **(v. 0.9.7)** (If you make an outfit named `"<name> License"`, that condition variable will automatically be set when you buy that outfit.)
 
 * Beginning with **v. 0.9.13**, the sound and effects of a drive can be customized. If multiple drives are installed that each have their own sounds and effects, then all sounds and effects are played at once.
 
-  * `"jump effect"`: the [effect](CreatingEffects) that is created on a ship when using a jump drive.
+  * `"jump effect"`: the [effect](CreatingEffects.md) that is created on a ship when using a jump drive.
 
   * `"jump sound"`: The sound that the flagship's jump drive makes when jumping. For other ships, use `"jump in sound"` and `"jump out sound"` for the sound that is played when other ships jump into or out of the player's current system.
 
@@ -572,7 +572,7 @@ An outfit that provides a weapon contains an extra set of attributes inside a `w
 
 * `"gravitational"`: this tag (just by itself, no value following it) causes all ships impacted by this weapon to receive the same amount of hit force, as opposed to hit force decreasing in its effectiveness against heavier ships. **(v. 0.9.13)**
 
-* `"parallel"`: this tag (just by itself, no value following it) causes this gun to fire in parallel when installed on a ship. This tag has no effect on turrets. See the [gun](CreatingShips) port definition for more information on parallel firing behavior. **(v. 0.9.13)**
+* `"parallel"`: this tag (just by itself, no value following it) causes this gun to fire in parallel when installed on a ship. This tag has no effect on turrets. See the [gun](CreatingShips.md) port definition for more information on parallel firing behavior. **(v. 0.9.13)**
 
 Ordinary weapon attributes (those that take a number as an argument) include:
 
@@ -712,7 +712,7 @@ Ordinary weapon attributes (those that take a number as an argument) include:
 
 * All of the above damage types also come in "relative" forms that scale the exact amount of damage dealt depending on the stats of the ship impacted. **(v. 0.9.13)**
 
-  * `"relative shield damage"`: shield damage that gets scaled according to the max shields of a target. A value of 0.5 means that one shot should take out 50% of the target's shields, regardless of how strong the target's shields are. Suggested that relative damage types be used on [system hazards](CreatingHazards) as a way to make hazards that affect all ships to a reasonable degree without crippling smaller/weaker ships (unless of course that is the intended effect).
+  * `"relative shield damage"`: shield damage that gets scaled according to the max shields of a target. A value of 0.5 means that one shot should take out 50% of the target's shields, regardless of how strong the target's shields are. Suggested that relative damage types be used on [system hazards](CreatingHazards.md) as a way to make hazards that affect all ships to a reasonable degree without crippling smaller/weaker ships (unless of course that is the intended effect).
 
   * `"relative hull damage"`: hull damage that gets scaled according to the max hull of a target ship or minable.
 
@@ -769,6 +769,6 @@ However, it is still quite possible to do things like buying a bulk freighter an
 
 So, when creating new outfits, it's important to keep in mind not just what you think would be cool, but whether your new outfits will be unbalanced. If you're creating a weapon that is so good that no ship will want to install anything else, that's a balance problem.
 
-[eft]: CreatingEffects
+[eft]: CreatingEffects.md
 [cooleff]: https://endless-sky.github.io/images/inefficiency.png
 [blastscale]: https://i.imgur.com/Nw81ZjK.png

@@ -4,7 +4,7 @@ Because one of the first things I imagine people will want to try out when custo
 
 1. Using the [cheater plugin](https://github.com/endless-sky/all-content-plugin), create a pilot who has access to all human technology on the same planet. (If necessary, edit the pilot file to add access to other technologies as well.)
 
-2. Create a new [plugin](CreatingPlugins) for your ship, rather than modifying the base game data.
+2. Create a new [plugin](CreatingPlugins.md) for your ship, rather than modifying the base game data.
 
 2. Create a new sprite, using your tool of choice. (I recommend making 3D models in [Blender](https://www.blender.org/), then adding "grunge" to the ship by post-processing in [GIMP](https://www.gimp.org/).) Save that sprite in the `images/ship/` folder of your plugin.
 
@@ -32,14 +32,14 @@ If you are creating a human ship, it should be mostly shades of grey with some h
 
 To create a new ship sprite, just add a PNG file to the `images/ship/` directory. Everything in the images directory is automatically loaded when the game launches; no need to add it to a list anywhere.
 
-For collision detection, for all images in `images/ship/` and `images/asteroid/`, or one of their sub-folders, a [polygonal outline](CollisionDetection) is generated when the sprite is loaded. This means that it's important for your ship image to be in that folder, so the game knows that it needs to calculate its outline. **The folder must be named "ship", singular; "ships" will not work.**
+For collision detection, for all images in `images/ship/` and `images/asteroid/`, or one of their sub-folders, a [polygonal outline](CollisionDetection.md) is generated when the sprite is loaded. This means that it's important for your ship image to be in that folder, so the game knows that it needs to calculate its outline. **The folder must be named "ship", singular; "ships" will not work.**
 
 If you want your ship to be animated, just create multiple files with the same name, with "-#.png" appended:
 
 * images/ship/newship-0.png
 * images/ship/newship-1.png
 
-(If there are more than 10 frames, the extensions should be "-00.png", "-01.png", etc. You can also create sprites with additive or "half-additive" [blending modes](BlendingModes) by using the extension "+#.png" or "~#.png" respectively, but these blending modes look much better for projectiles or explosions than for ships.)
+(If there are more than 10 frames, the extensions should be "-00.png", "-01.png", etc. You can also create sprites with additive or "half-additive" [blending modes](BlendingModes.md) by using the extension "+#.png" or "~#.png" respectively, but these blending modes look much better for projectiles or explosions than for ships.)
 
 **The sprite should have at least a one-pixel border of "empty" pixels on every side.** Otherwise, the ship outlines (shown in the targeting display and the escort icons, among other places) will not have sharp lines near those edges.
 
@@ -147,7 +147,7 @@ The data files use indentation, like in the Python language, to define sub-entri
 
 	* `"angle" <degrees#>`: a value of degrees that allows for facing the carried ship in any direction, as an alternative to the set left, right, back directions.
 
-	* `"launch effect" <effect> [<count#>]`: an [effect](CreatingEffects) that is drawn at this bay's coordinates when its carried ship deploys.
+	* `"launch effect" <effect> [<count#>]`: an [effect](CreatingEffects.md) that is drawn at this bay's coordinates when its carried ship deploys.
 
   * Prior to **v. 0.9.13** the syntax for adding bays to a ship was different, although it is still supported for compatibility purposes. The old method for defining a bay was as follows:
 
@@ -178,13 +178,13 @@ The `attributes` key should be followed by a list of ship attributes, ideally li
   Since **v. 0.9.15**: also "Space Liner", or "Utility".
   Since **v. 0.10.0**: also "Superheavy".
 
-* `"licenses"`: a list of names of licenses you need to buy this ship. For each `<name>` specified, the [`license: <name>` condition](Player-Conditions) must be set for the player to buy this ship. (If you make an outfit named `"<name> License"`, that condition variable will automatically be set when you buy that outfit.)
+* `"licenses"`: a list of names of licenses you need to buy this ship. For each `<name>` specified, the [`license: <name>` condition](Player-Conditions.md) must be set for the player to buy this ship. (If you make an outfit named `"<name> License"`, that condition variable will automatically be set when you buy that outfit.)
 
 * `"cost"`: the cost of the ship, in credits.
 
 * `"shields"`: maximum shield capacity. When a ship is hit, if it has any shields left they absorb the damage; otherwise the hull is damaged. Shields can recharge, whereas hulls generally can only be repaired when landing on a planet.
 
-* `"hull"`: maximum hull strength. A ship is disabled when it reaches its disabled threshold. This threshold can be altered by [other attributes](CreatingOutfits), but by default follows the equation `hull * (0.1 * (1 - T) + 0.5 * (T))` where `T = 1 / (1 + 0.0005 * hull)`. This results in a continuous curve where the smallest ships are disabled at 50% and the largest at 10% (although in practice the smallest ships are only disabled at about 46%, and the largest ships only approach 10%).
+* `"hull"`: maximum hull strength. A ship is disabled when it reaches its disabled threshold. This threshold can be altered by [other attributes](CreatingOutfits.md), but by default follows the equation `hull * (0.1 * (1 - T) + 0.5 * (T))` where `T = 1 / (1 + 0.0005 * hull)`. This results in a continuous curve where the smallest ships are disabled at 50% and the largest at 10% (although in practice the smallest ships are only disabled at about 46%, and the largest ships only approach 10%).
 
 * `"required crew"`: the number of crew members needed to operate the ship without anything failing.
 
@@ -215,7 +215,7 @@ There is also one special attribute called `weapon` that defines how much damage
 * `"hull damage"` (Typical value: (shields + hull) * .05)
 * `"hit force"` (Typical value: (shields + hull) * .15)
 
-[Outfits](CreatingOutfits) work by adding or subtracting to these same attributes. The outfits list can be in any order, but for the sake of consistency its preferred order is roughly from "front to back" of the ship:
+[Outfits](CreatingOutfits.md) work by adding or subtracting to these same attributes. The outfits list can be in any order, but for the sake of consistency its preferred order is roughly from "front to back" of the ship:
 
 * guns
 * turrets

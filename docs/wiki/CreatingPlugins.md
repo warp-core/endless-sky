@@ -65,25 +65,25 @@ Eventually, a plugins server will be set up that will be accessible within the g
 
 The game data in Endless Sky includes the following elements, sometimes referred to as "root-level" nodes or tokens:
 
-  * `color`: a named color in premultiplied RGBA format, to be used in the user interface. The format is: `color "name" <red#> <green#> <blue#> <alpha#>`. By setting alpha to 0 you can define a color that uses additive mixing, and you can also use [other blending modes](BlendingModes).
-  * [`conversation`](WritingConversations): a conversation to be shown in a mission event.
-  * [`effect`](CreatingEffects): an animation that is used purely for visual effect and does not interact with objects in the game. (For example, the explosions shown when a projectile strikes something.)
-  * [`event`](CreatingEvents): a list of changes to the game data, which will happen either on a specific date, or in response to a mission.
-  * [`fleet`](CreatingFleets): a list of possible ship combinations and relative frequencies. (For examples, see [`fleets.txt`](https://github.com/endless-sky/endless-sky/tree/master/data/human/fleets.txt).)
-  * [`galaxy`](MapData): a sprite that should be shown in the background of the map. This includes the text labels as well as the galaxy image itself.
-  * [`government`](CreatingGovernments): the characteristics of a particular government.
-  * [`hazard`](CreatingHazards): a weapon that can deal damage to ships in a system when active.
+  * `color`: a named color in premultiplied RGBA format, to be used in the user interface. The format is: `color "name" <red#> <green#> <blue#> <alpha#>`. By setting alpha to 0 you can define a color that uses additive mixing, and you can also use [other blending modes](BlendingModes.md).
+  * [`conversation`](WritingConversations.md): a conversation to be shown in a mission event.
+  * [`effect`](CreatingEffects.md): an animation that is used purely for visual effect and does not interact with objects in the game. (For example, the explosions shown when a projectile strikes something.)
+  * [`event`](CreatingEvents.md): a list of changes to the game data, which will happen either on a specific date, or in response to a mission.
+  * [`fleet`](CreatingFleets.md): a list of possible ship combinations and relative frequencies. (For examples, see [`fleets.txt`](https://github.com/endless-sky/endless-sky/tree/master/data/human/fleets.txt).)
+  * [`galaxy`](MapData.md): a sprite that should be shown in the background of the map. This includes the text labels as well as the galaxy image itself.
+  * [`government`](CreatingGovernments.md): the characteristics of a particular government.
+  * [`hazard`](CreatingHazards.md): a weapon that can deal damage to ships in a system when active.
   * `interface`: the layout of a user interface element. (For examples, see [`interfaces.txt`](https://github.com/endless-sky/endless-sky/tree/master/data/interfaces.txt).)
-  * [`mission`](CreatingMissions): a definition of a job or mission that can be offered to the player.
-  * [`news`](CreatingNews): a definition of information that is provided to the player when visiting a spaceport.
-  * [`outfit`](CreatingOutfits): an outfit that you can purchase. This includes weapons.
+  * [`mission`](CreatingMissions.md): a definition of a job or mission that can be offered to the player.
+  * [`news`](CreatingNews.md): a definition of information that is provided to the player when visiting a spaceport.
+  * [`outfit`](CreatingOutfits.md): an outfit that you can purchase. This includes weapons.
   * `outfitter`: a "catalog" of outfits that can be for sale on various planets, or found in a ship's cargohold. This is so that instead of needing to specify every possible outfit multiple times, a planet or fleet can just say, "all the basic Syndicate outfits are available."
-  * [`person`](CreatingPersons): a unique ship that occasionally appears in certain systems.
-  * [`phrase`](CreatingPhrases): a rule for constructing random phrases, e.g. for ship names, hail messages, and the name used for a spaceport news message. (See [`hails.txt`](https://github.com/endless-sky/endless-sky/tree/master/data/human/hails.txt) or [`names.txt`](https://github.com/endless-sky/endless-sky/tree/master/data/human/names.txt) for examples.)
+  * [`person`](CreatingPersons.md): a unique ship that occasionally appears in certain systems.
+  * [`phrase`](CreatingPhrases.md): a rule for constructing random phrases, e.g. for ship names, hail messages, and the name used for a spaceport news message. (See [`hails.txt`](https://github.com/endless-sky/endless-sky/tree/master/data/human/hails.txt) or [`names.txt`](https://github.com/endless-sky/endless-sky/tree/master/data/human/names.txt) for examples.)
   * [`planet`](MapData.md#planets): specifies what services are available on a given planet. These elements can be modified through the [map editor](https://github.com/endless-sky/endless-sky-editor).
-  * [`ship`](CreatingShips): the attributes of a ship and its default outfits, or a ship variant with an alternative set of outfits.
+  * [`ship`](CreatingShips.md): the attributes of a ship and its default outfits, or a ship variant with an alternative set of outfits.
   * `shipyard`: a "catalog" of ships that can be for sale on various planets.
-  * [`start`](Creating-Starts): starting conditions for the player.
+  * [`start`](Creating-Starts.md): starting conditions for the player.
   * [`system`](MapData.md#systems): a star system. Generally, these will be created through the [map editor](https://github.com/endless-sky/endless-sky-editor) so that orbital periods, habitable zones, etc. will be consistent.
   * `trade`: a list of commodity names and prices. (For examples, see [`commodities.txt`](https://github.com/endless-sky/endless-sky/tree/master/data/commodities.txt).)
 

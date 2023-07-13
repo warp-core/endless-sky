@@ -99,7 +99,7 @@ The [weapon](CreatingOutfits.md#weapon-attributes) of a hazard defines how all s
 * `"piercing"`
 * `"hit force"`: Hit force is relative to the system center. (i.e. positive hit force pushes away from the system center while negative hit force pulls toward it.)
 * `"gravitational"`
-* `"blast radius"`: Causes the damage from this hazard to decline with range from the system center according to the blast radius curve as described in [CreatingOutfits](CreatingOutfits.md#weapon-attributes).
+* `"blast radius"`: Causes the damage from this hazard to decline with range from the system center according to the blast radius curve as described in [CreatingOutfits.md](CreatingOutfits.md#weapon-attributes).
 * `"trigger radius"`: Used only to change the blast radius curve.
 * `"damage dropoff"`: Causes the damage from this hazard to change with range according to the damage dropoff ranges and modifier. For expected behavior, two values must be provided with this weapon attribute, as otherwise the second value will be assumed to be 0.
 * `"dropoff modifier"`

@@ -195,13 +195,13 @@ The position on the map where this system is located.
 government <name>
 ```
 
-The [government](CreatingGovernments) that owns/controls this system. This is what is shown when looking at a system on the map using the government key.
+The [government](CreatingGovernments.md) that owns/controls this system. This is what is shown when looking at a system on the map using the government key.
 
 ```html
 attributes <attribute>...
 ```
 
-The attributes of this system that control what [missions](CreatingMissions) will be offered within it.
+The attributes of this system that control what [missions](CreatingMissions.md) will be offered within it.
 
 If there are no inhabited planets in a system, then it is automatically given an "uninhabited" attribute. 
 
@@ -277,7 +277,7 @@ minables <name> <count#> <energy#>
 
 The name of the asteroids in this system, as well as the number of the asteroids and their energy. The energy of an asteroid determines how fast it moves and rotates, with higher values meaning faster asteroids. A random value between 0 and the energy value is used for each of the asteroids when they are created, meaning that high energy values may still result in slow asteroids.
 
-If an asteroid is minable, then it uses the `minable` keyword. Unlike normal asteroids, which travel randomly throughout the system and are [tiled](TiledAsteroids), minable asteroids will orbit around the system's `belt` distance. Note that minable asteroids names refer to a defined [minable](CreatingMinables), while normal asteroid names refer to the sprite name.
+If an asteroid is minable, then it uses the `minable` keyword. Unlike normal asteroids, which travel randomly throughout the system and are [tiled](TiledAsteroids.md), minable asteroids will orbit around the system's `belt` distance. Note that minable asteroids names refer to a defined [minable](CreatingMinables.md), while normal asteroid names refer to the sprite name.
 
 ```html
 trade <commodity> <cost#>
@@ -289,12 +289,12 @@ A type of commodity sold at the planets in this system and its cost.
 fleet <name> <period#>
 ```
 
-The name of a [fleet](CreatingFleets) that is spawned in this system with a certain period. The period of a fleet is the average number of frames between each spawning of this specific fleet, with there being 60 frames in a second. A random number from 0 to `period - 1` is rolled each frame, and if the result lands on 0 then a fleet is spawned.
+The name of a [fleet](CreatingFleets.md) that is spawned in this system with a certain period. The period of a fleet is the average number of frames between each spawning of this specific fleet, with there being 60 frames in a second. A random number from 0 to `period - 1` is rolled each frame, and if the result lands on 0 then a fleet is spawned.
 
 ```html
 hazard <name> <period#>
 ```
-The name of a [hazard](CreatingHazards) that is created in this system within a certain period. The period of a hazard follows the same behavior as the period of a fleet. Once a hazard is created, the behavior of the hazard is dictated by the hazard itself. The origin of any hazards defined here is the system center. **(v. 0.9.13)**
+The name of a [hazard](CreatingHazards.md) that is created in this system within a certain period. The period of a hazard follows the same behavior as the period of a fleet. Once a hazard is created, the behavior of the hazard is dictated by the hazard itself. The origin of any hazards defined here is the system center. **(v. 0.9.13)**
 
 ```html
 "starfield density" <density#>
@@ -418,7 +418,7 @@ Additionally, giving it a description will cause the wormhole to create a link o
 attributes <attribute>... "requires: <attribute>"
 ```
 
-The list of attributes that will be used to determine what [missions](CreatingMissions) should be offered on this planet.
+The list of attributes that will be used to determine what [missions](CreatingMissions.md) should be offered on this planet.
 
 If the "requires: `<attribute>`" phrase is used, then a ship must have the listed attribute in order to land on this planet.
 
@@ -454,7 +454,7 @@ The description of the spaceport after clicking the spaceport button.
 government <name>
 ```
 
-Planets are capable of having a different [government](CreatingGovernments) than the system. If no government for the planet is specified, then its government is the same as the system government. Otherwise, the government listed here is used.
+Planets are capable of having a different [government](CreatingGovernments.md) than the system. If no government for the planet is specified, then its government is the same as the system government. Otherwise, the government listed here is used.
 
 ```html
 shipyard <name>

@@ -134,7 +134,7 @@ A `news` datafile definition has 4 definable child elements.
 * `name`: The name of the [spaceport person](#People) that will appear along with the news message. For flexibility, this uses the same format as creating ship hails, meaning you can define any number of names to be used with the same set of messages.
 * `portrait`: The path to a sprite to be displayed in the news message, relative to the `images` directory. Multiple sprites can be provided, and one will be chosen at random when the news message is displayed.
 * `message`: The text to be displayed. For flexibility, this uses the same "phrase" format that the news' name element and ship hails use.
-* `location` (optional): A [location filter](LocationFilters) that is used to identify on which planets this News message can appear. If not provided, or removed, then this news source will not be displayed anywhere. For the full syntax associated with locations filters see [the reference here](CreatingMissions.md#filters).
+* `location` (optional): A [location filter](LocationFilters.md) that is used to identify on which planets this News message can appear. If not provided, or removed, then this news source will not be displayed anywhere. For the full syntax associated with locations filters see [the reference here](CreatingMissions.md#filters).
 * `to show` (optional): A condition set that determines whether this News message can appear. Behaves the same way as `to offer` does for [missions](CreatingMissions.md#conditions). 
 
 ```html
@@ -198,7 +198,7 @@ For additional examples, see [`news.txt`](https://github.com/endless-sky/endless
 ## Modifying existing definitions
 </a>
 
-News can be modified by game [events](CreatingEvents) and plugins. All tokens can be modified, but the most likely use case will be to "activate" or "deactivate" a news source, by modifying its `location` element:
+News can be modified by game [events](CreatingEvents.md) and plugins. All tokens can be modified, but the most likely use case will be to "activate" or "deactivate" a news source, by modifying its `location` element:
 ```c++
 event "breaking news"
 	news "terrorism on the rise"

@@ -51,7 +51,7 @@ personality [<type>...]
 	...
 ```
 
-This defines the [personality characteristics](ShipPersonalities). The confusion value is generally not used, but it is meant to control how accurately a ship fires its weapons. (It defaults to 10, meaning the ship's aim may be off by up to 10 pixels.)
+This defines the [personality characteristics](ShipPersonalities.md). The confusion value is generally not used, but it is meant to control how accurately a ship fires its weapons. (It defaults to 10, meaning the ship's aim may be off by up to 10 pixels.)
 
 ```html
 system
@@ -65,7 +65,7 @@ system
 	...
 ```
 
-This defines a [location filter](LocationFilters) for possible systems, using the same syntax as the source, destination, waypoint, and stopover filters in [missions](CreatingMissions.md#filters). This controls which systems the person will appear in. For example, they might only appear in systems belonging to a certain government, or in a certain area.
+This defines a [location filter](LocationFilters.md) for possible systems, using the same syntax as the source, destination, waypoint, and stopover filters in [missions](CreatingMissions.md#filters). This controls which systems the person will appear in. For example, they might only appear in systems belonging to a certain government, or in a certain area.
 
 ```html
 phrase
@@ -82,4 +82,4 @@ ship <modelName> [<name>]
 	{ship definition...}
 ```
 
-This is a definition of the person's ship, using the same format as all other [ship definitions](CreatingShips). Starting in **v. 0.9.9,** multiple ships may be defined to create a person that is the leader of a fleet (such as in an interceptor squadron, or a carrier commanding a flotilla of fightercraft). The person is considered destroyed when the first ship in the list is either destroyed or captured - any escorts that did not survive are replaced when the person next spawns. Starting in **v. 0.9.13,** escorts are able to have their ship name specified, otherwise they will use the name of the person. The first ship in the list will always use the name of the person.
+This is a definition of the person's ship, using the same format as all other [ship definitions](CreatingShips.md). Starting in **v. 0.9.9,** multiple ships may be defined to create a person that is the leader of a fleet (such as in an interceptor squadron, or a carrier commanding a flotilla of fightercraft). The person is considered destroyed when the first ship in the list is either destroyed or captured - any escorts that did not survive are replaced when the person next spawns. Starting in **v. 0.9.13,** escorts are able to have their ship name specified, otherwise they will use the name of the person. The first ship in the list will always use the name of the person.

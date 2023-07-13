@@ -416,14 +416,14 @@ substitutions
 	...
 ```
 
-Beginning with **v.0.9.15**, this specifies custom text replacements that apply only to the text of the mission they're defined within. Substitutions defined within a mission take precedence over global substitutions and are overtaken in precedence by [hardcoded text replacements](#text-replacements). For more information on custom text replacements, see the [creating substitutions](CreatingSubstitutions) page.
+Beginning with **v.0.9.15**, this specifies custom text replacements that apply only to the text of the mission they're defined within. Substitutions defined within a mission take precedence over global substitutions and are overtaken in precedence by [hardcoded text replacements](#text-replacements). For more information on custom text replacements, see the [creating substitutions](CreatingSubstitutions.md) page.
 
 <a name="conditions">
 
 # Conditions
 </a>
 
-["Conditions"](Player-Conditions) are named values that represent things the player has done. Conditions start out with a value of zero, and can only have integer values. Conditions can have almost any name you want, as long as you make sure not to use the same name in two places. A few names are reserved for special purposes and may be read-only. A list of these reserved conditions can be found [here](Player-Conditions.md#reserved-conditions).
+["Conditions"](Player-Conditions.md) are named values that represent things the player has done. Conditions start out with a value of zero, and can only have integer values. Conditions can have almost any name you want, as long as you make sure not to use the same name in two places. A few names are reserved for special purposes and may be read-only. A list of these reserved conditions can be found [here](Player-Conditions.md#reserved-conditions).
 
 Conditions are checked at several times when processing a mission: when determining whether the mission can be offered right now (in the `to offer` tag), and when determining whether it has been completed (in the `to complete` tag) or failed (in the `to fail` tag), and, beginning in **v. 0.10.0**, determining whether it can be accepted (in the `to accept` tag):
 
@@ -565,7 +565,7 @@ An NPC will not spawn if its `to spawn` conditions are not met, and any spawned 
 
 Should an NPC have a `to (spawn | despawn)` as well as an objective (e.g. `save`), then the objective of the NPC will be ignored if the NPC has not yet spawned or has been despawned. This means that you can potentially create secondary or alternative objectives for missions (e.g. you must either complete this NPC objective, or go to this planet to despawn the NPCs instead, and in the reverse, you must go to this planet, or go to some other planet to spawn NPCs with a new objective).
 
-When combined with an `apply` node in a [`conversation`](WritingConversations), this can allow the choices a player makes in a conversation to alter whether NPCs spawn after the mission is accepted.
+When combined with an `apply` node in a [`conversation`](WritingConversations.md), this can allow the choices a player makes in a conversation to alter whether NPCs spawn after the mission is accepted.
 
 ```html
 on (kill | board | assist | disable | "scan cargo" | "scan outfits" | capture | provoke)
@@ -604,7 +604,7 @@ personality <type>...
 	confusion <amount#>
 ```
 
-This defines the NPC's [personality](ShipPersonalities). The `confusion` tag is a special value, giving the inaccuracy in pixels of the ship's targeting systems; the default value is 10 pixels.
+This defines the NPC's [personality](ShipPersonalities.md). The `confusion` tag is a special value, giving the inaccuracy in pixels of the ship's targeting systems; the default value is 10 pixels.
 
 If an NPC is specified as starting out in your current system and its personality is *not* `staying` or `waiting`, it will take off from the planet along with you (e.g. a ship you are escorting). A ship that is `entering` the current system might, for example, be a pirate raid chasing the fleet you are escorting, and a ship `staying` in a certain system might be a target you must locate for a "bounty hunting" mission. (Any ship that is not `staying` will actively seek the player out if it is in a different system, unless it is also `uninterested`.)
 
@@ -624,7 +624,7 @@ system
 	distance [<min#>] <max#>
 ```
 
-This specifies a [location filter](LocationFilters) for choosing what system the NPC starts out in. The `system`, `government`, `near`, and `distance` filters operate the same way they do in the descriptions in the previous section, and can be used instead of naming a particular system. For example, you could have the NPC start out in any "Pirate" system, or within two jumps of the current system. The other location filter options are also available, including `not` and `neighbor`.
+This specifies a [location filter](LocationFilters.md) for choosing what system the NPC starts out in. The `system`, `government`, `near`, and `distance` filters operate the same way they do in the descriptions in the previous section, and can be used instead of naming a particular system. For example, you could have the NPC start out in any "Pirate" system, or within two jumps of the current system. The other location filter options are also available, including `not` and `neighbor`.
 
 ```html
 planet <name>
@@ -657,7 +657,7 @@ fleet [<count#>]
 	...
 ```
 
-This specifies an entire fleet of ships. The first format refers to one or the standard fleets, such as "pirate raid" or "Small Republic". The second format gives a custom fleet, using the same syntax as normal [`fleet` data entry](CreatingFleets). Every ship in the fleet will have the requirements given in the first line (such as `kill` or `save`). Optionally, you can specify a count to create more than one copy of the fleet.
+This specifies an entire fleet of ships. The first format refers to one or the standard fleets, such as "pirate raid" or "Small Republic". The second format gives a custom fleet, using the same syntax as normal [`fleet` data entry](CreatingFleets.md). Every ship in the fleet will have the requirements given in the first line (such as `kill` or `save`). Optionally, you can specify a count to create more than one copy of the fleet.
 
 <a name="triggers">
 
@@ -703,7 +703,7 @@ There are eleven events that can trigger a response of some sort:
 * `daily`: every time the date advanced (every jump between systems and departure from a planet). (**v. 0.9.15**)
 * `disable`: if the player's flagship becomes disabled. (**v. 0.10.3**)
 
-Beginning with **v. 0.9.9**, the `enter` action supports determining the system with a [location filter](LocationFilters). This filter is formatted in the same manner as `source` or `destination` for missions, or `system` for NPCs.
+Beginning with **v. 0.9.9**, the `enter` action supports determining the system with a [location filter](LocationFilters.md). This filter is formatted in the same manner as `source` or `destination` for missions, or `system` for NPCs.
 ```html
 on enter
 	system
@@ -747,7 +747,7 @@ For conversations that are offered when boarding a ship or completing an NPC, if
 
 As with the dialogs, text substitution is done throughout the conversation.
 
-The syntax for conversations is described [here](WritingConversations).
+The syntax for conversations is described [here](WritingConversations.md).
 
 ```html
 outfit <outfit> [<number#>]

@@ -1,6 +1,6 @@
 # Introduction
 
-A "start" serves as the declaration of the beginning state of a new pilot. The game or plugins may use this to set the system & planet where the game begins, [conditions](Player-Conditions), and also the funds available to the new pilot. Beginning with **v 0.9.9**, a start may also list the ship(s) the pilot owns.
+A "start" serves as the declaration of the beginning state of a new pilot. The game or plugins may use this to set the system & planet where the game begins, [conditions](Player-Conditions.md), and also the funds available to the new pilot. Beginning with **v 0.9.9**, a start may also list the ship(s) the pilot owns.
 
 Prior to **v. 0.9.13**, all start definitions replaced the previous definitions, and customized the displayed "new pilot" conversation by defining a conversation named `"intro"`. Beginning with **v 0.9.13**, this default-override behavior was removed and the default conversation key was changed to `"default intro"`. Instead, the player is presented with a list of the available valid starts when beginning a new pilot. Plugin authors may optionally provide an `identifier` to enable the previous override system.
 
@@ -87,7 +87,7 @@ conversation <name>
 conversation
 	{conversation specification...}
 ```
-The conversation that will be displayed to the player after they click the "New Pilot" button. The referenced or defined conversation is required to include a `name` prompt. The full syntax available is described [here](WritingConversations). The "exit code" of an intro conversation is not used.
+The conversation that will be displayed to the player after they click the "New Pilot" button. The referenced or defined conversation is required to include a `name` prompt. The full syntax available is described [here](WritingConversations.md). The "exit code" of an intro conversation is not used.
 
 #### account
 
@@ -170,7 +170,7 @@ Beginning with **v. 0.9.9**, a start may optionally provide one or more ships to
 ship <model>
 	{ship specification...}
 ```
-To provide a ship for the new pilot, the entire [ship definition](CreatingShips) is required.
+To provide a ship for the new pilot, the entire [ship definition](CreatingShips.md) is required.
 
 ### Displayed Details
 

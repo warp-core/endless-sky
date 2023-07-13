@@ -233,7 +233,7 @@ Before you can leave your ship, the <government name> authorities show up and be
 "hostile hail" <phrase>
 "hostile disabled hail" <phrase>
 ```
-These tokens allow customization of the text generation when the player communicates with ships of this government, based on their current reputation and the state of the ship issuing the hail. The [phrases](CreatingPhrases) here should be defined as standalone phrases, e.g.
+These tokens allow customization of the text generation when the player communicates with ships of this government, based on their current reputation and the state of the ship issuing the hail. The [phrases](CreatingPhrases.md) here should be defined as standalone phrases, e.g.
 ```bash
 phrase "ancient greek insults"
 	{phrase specification...}
@@ -261,7 +261,7 @@ The optional "language" token allows disabling hail-based interaction with ships
 1. Bribe (to cease hostilities) or request repair/fuel from ships of this government
 2. Bribe (to land) or demand tribute from planets of this government.
 
-until the [player condition](Player-Conditions) `"language: <text>"` is applied to their pilot (e.g. from an event or mission completion). For example,
+until the [player condition](Player-Conditions.md) `"language: <text>"` is applied to their pilot (e.g. from an event or mission completion). For example,
 ```bash
 government "Children of Tama"
 	language "metaphorical allegory"
@@ -280,7 +280,7 @@ mission "player needs the Tamarian language"
 ```html
 raid <fleet> [<min-attraction#> [<max-attraction#>]]
 ```
-The "raid" token allows the specification of a [fleet](CreatingFleets) that can be spawned in this government's systems if the player has "unguarded cargo". (In order to be spawned, the named fleet's government must also be hostile to the player.) Up to 10 of these fleets may be spawned at once, depending on the magnitude of the cargo space : weaponry imbalance.
+The "raid" token allows the specification of a [fleet](CreatingFleets.md) that can be spawned in this government's systems if the player has "unguarded cargo". (In order to be spawned, the named fleet's government must also be hostile to the player.) Up to 10 of these fleets may be spawned at once, depending on the magnitude of the cargo space : weaponry imbalance.
 
 If defined more than once (e.g. specified both in the base game and then a plugin), each new definition overwrites the current definition. For example, if the game datafiles specify
 ```bash
@@ -306,7 +306,7 @@ enforces
 	{location filter specification...}
 enforces [all]
 ```
-Each use of the optional "enforces" token introduces a description block for a [location filter](LocationFilters) that describes a set of systems and planets wherein this government has the authority to scan and fine other ships. If no "enforces" tokens are present, then the government is considered to have universal policing authority. Only **one** filter needs to apply in order for the system or planet to be enforced by the given government.
+Each use of the optional "enforces" token introduces a description block for a [location filter](LocationFilters.md) that describes a set of systems and planets wherein this government has the authority to scan and fine other ships. If no "enforces" tokens are present, then the government is considered to have universal policing authority. Only **one** filter needs to apply in order for the system or planet to be enforced by the given government.
 
 If instead of a description block, the "enforces" keyword is followed by the keyword "all", then all previously specified "enforces" blocks are ignored. This makes it possible for plugins to modify the behavior of governments defined in the base game or other plugins that were loaded earlier.
 

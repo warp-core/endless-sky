@@ -27,9 +27,9 @@ FW			 | Free Worlds. |
 Kiting		 | Maneuvering such that you can attack your enemy while they cannot attack you. |
 Minmax		 | Minimizing undesired stats or attributes while maximizing desired stats or attributes. |
 Piracy Threat  | How attractive your fleet is to raids by pirates, increased by how much cargo space you have and decreased by the total DPS of your fleet. |
-Plugin		 | A collection of text files and possibly images and sounds used for expanding or modifying the base game. ([See the creating plugins page](CreatingPlugins))|
+Plugin		 | A collection of text files and possibly images and sounds used for expanding or modifying the base game. ([See the creating plugins page](CreatingPlugins.md))|
 RNG			| Random Number Generator. Abbreviation usually used in contexts where luck is needed to accomplish something (like capturing a ship with low odds.) |
 Save scumming  | Repeatedly reloading a save file until achieving the desired results. |
-Tiers		  | A non-linear measure of strength used to compare factions. ([See the story ideas page.](StoryIdeas)) |
+Tiers		  | A non-linear measure of strength used to compare factions. ([See the story ideas page.](StoryIdeas.md)) |
 Tribute		| Dominating a world to receive a daily amount of credits from them. |
 WS			 | World-Ship. |

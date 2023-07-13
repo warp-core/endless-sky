@@ -40,7 +40,7 @@ A phrase can contain multiple word blocks. Words are lists of text, and a single
 
 The `${<phrase>}` construction can be used to pull a sentence from another phrase and place it in the middle of a line of text.
 
-**Beginning in v. 0.9.15,** each choice of a word can be given an optional "weight." Weights are integer values that function similarly to the weights of [fleet variants](CreatingFleets). That is, the sum of the weights of all choices is calculated, and the chances of any single choice being taken is that choice's weight divided by the sum of weights. If a weight is not provided then the choice has a default weight of 1. This can be used to influence the probability of generating a certain outcome from a phrase.
+**Beginning in v. 0.9.15,** each choice of a word can be given an optional "weight." Weights are integer values that function similarly to the weights of [fleet variants](CreatingFleets.md). That is, the sum of the weights of all choices is calculated, and the chances of any single choice being taken is that choice's weight divided by the sum of weights. If a weight is not provided then the choice has a default weight of 1. This can be used to influence the probability of generating a certain outcome from a phrase.
 
 ```html
 phrase

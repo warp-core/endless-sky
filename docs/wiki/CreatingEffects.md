@@ -1,4 +1,4 @@
-"Effects" are animated objects - explosions, muzzle blasts, hull leaks, etc. - that are purely for show and do not interact with the other objects in the game in any way. All [weapons](CreatingOutfits) should define an effect for when they hit something, and some (missiles, in particular) may also define an effect for when they are fired. Also, anti-missile beams are rendered using effects, because they are not actual projectiles.
+"Effects" are animated objects - explosions, muzzle blasts, hull leaks, etc. - that are purely for show and do not interact with the other objects in the game in any way. All [weapons](CreatingOutfits.md) should define an effect for when they hit something, and some (missiles, in particular) may also define an effect for when they are fired. Also, anti-missile beams are rendered using effects, because they are not actual projectiles.
 
 The full syntax of an effect is given below. Most of the parameters are optional, and some are mutually exclusive. For examples of how effects, work, see the **data/effects.txt** file.
 
@@ -32,7 +32,7 @@ The name of the sprite should be a path relative to the **images** folder, and n
 * images/effect/blaster impact+2.png
 * images/effect/blaster impact+3.png
 
-The `<name>` for this sprite is "effect/blaster impact". The `+` in the file names specifies that the images should use [additive blending](BlendingModes), and the numbers after the `+` are the frame numbers for the animation.
+The `<name>` for this sprite is "effect/blaster impact". The `+` in the file names specifies that the images should use [additive blending](BlendingModes.md), and the numbers after the `+` are the frame numbers for the animation.
 
 Sprite sets can be universally resized, in case you would like to re-use an existing animation at a different size, with the `"scale"` attribute. The default scale value is `1.0` (i.e. 100%). For the best results, use a power-of-two increase or decrease, e.g. `0.125` (1/8), `0.25` (1/4), or `0.5` (1/2). Scaling factors that result in odd widths and height generally result in a blurry image, as do scales over 100%. (For most effect sprites, this will not be an issue as they are not very detailed anyway.)
 

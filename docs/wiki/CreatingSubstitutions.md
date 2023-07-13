@@ -32,7 +32,7 @@ A substitutions node can define multiple text replacements at once.
 	[<condition set>]
 ```
 
-Text replacement lines are able to define a [condition set](Player-Conditions) that determines whether the text replacement is used. This allows for certain text replacements to only be used under certain circumstances. Combining this with defining multiple replacements for the same piece of text, you can create a substitution that reacts to the player's actions or attributes.
+Text replacement lines are able to define a [condition set](Player-Conditions.md) that determines whether the text replacement is used. This allows for certain text replacements to only be used under certain circumstances. Combining this with defining multiple replacements for the same piece of text, you can create a substitution that reacts to the player's actions or attributes.
 
 Note that currently, the condition sets for substitutions are evaluated when the mission is instantiated. This means that actions taken during a mission can not change the outcome of any substitutions, as they have already made their text replacements. If you wish to change the outcome of text based on conditions that could have changed during the mission, then you should instead use [`branch`](WritingConversations.md#branch) or `to display`.
 
@@ -133,7 +133,7 @@ Since substitutions are evaluated in the order they are defined, one must be car
 
 ### Changing substitutions through events
 
-The global substitutions list can be added to through [events](CreatingEvents). 
+The global substitutions list can be added to through [events](CreatingEvents.md). 
 
 ```
 substitutions

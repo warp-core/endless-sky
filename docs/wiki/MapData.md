@@ -39,7 +39,7 @@ system <name>
 		link <distance#>
 		jump <distance#>
 	habitable <distance#>
-	belt <distance#> [<weight#?]
+	belt <distance#> [<weight#>]
 	ramscoop
 		universal <value#>
 		addend <value#>

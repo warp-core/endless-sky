@@ -24,13 +24,8 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "Sound.h"
 #include "SoundSet.h"
 
-#ifndef __APPLE__
 #include <AL/al.h>
 #include <AL/alc.h>
-#else
-#include <OpenAL/al.h>
-#include <OpenAL/alc.h>
-#endif
 
 #include <algorithm>
 #include <cmath>

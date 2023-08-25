@@ -619,6 +619,10 @@ bool Interface::BarElement::ParseLine(const DataNode &node)
 		color = GameData::Colors().Get(node.Token(1));
 	else if(node.Token(0) == "size" && node.Size() >= 2)
 		width = node.Value(1);
+	else if(node.Token(0) == "span angle" && node.Size() >= 2)
+		spanAngle = max(0., min(360., node.Value(1)));
+	else if(node.Token(0) == "start angle" && node.Size() >= 2)
+		startAngle = max(0., min(360., node.Value(1)));
 	else
 		return false;
 
@@ -645,7 +649,9 @@ void Interface::BarElement::Draw(const Rectangle &rect, const Information &info,
 		if(!rect.Width() || !rect.Height())
 			return;
 
-		RingShader::Draw(rect.Center(), .5 * rect.Width(), width, value, *color, segments > 1. ? segments : 0.);
+
+		double fraction = value * spanAngle / 360.;
+		RingShader::Draw(rect.Center(), .5 * rect.Width(), width, fraction, *color, segments, startAngle);
 	}
 	else
 	{
@@ -710,5 +716,5 @@ void Interface::LineElement::Draw(const Rectangle &rect, const Information &info
 	// Avoid crashes for malformed interface elements that are not fully loaded.
 	if(!from.Get() && !to.Get())
 		return;
-	FillShader::Fill(rect.TopLeft(), rect.Dimensions(), *color);
+	FillShader::Fill(rect.Center(), rect.Dimensions(), *color);
 }

@@ -95,12 +95,13 @@ private:
 
 
 private:
+	struct PointInternal {
+		double x;
+		double y;
+	};
 	union {
 		__m128d v;
-		struct {
-			double x;
-			double y;
-		};
+		PointInternal val;
 	};
 #else
 	double x;
@@ -113,28 +114,44 @@ private:
 // Inline accessor functions, for speed:
 inline double &Point::X()
 {
+#ifdef __SSE3__
+	return val.x;
+#else
 	return x;
+#endif
 }
 
 
 
 inline const double &Point::X() const noexcept
 {
+#ifdef __SSE3__
+	return val.x;
+#else
 	return x;
+#endif
 }
 
 
 
 inline double &Point::Y()
 {
+#ifdef __SSE3__
+	return val.y;
+#else
 	return y;
+#endif
 }
 
 
 
 inline const double &Point::Y() const noexcept
 {
+#ifdef __SSE3__
+	return val.y;
+#else
 	return y;
+#endif
 }
 
 

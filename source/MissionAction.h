@@ -46,9 +46,11 @@ public:
 	MissionAction(const DataNode &node, const std::string &missionName);
 
 	void Load(const DataNode &node, const std::string &missionName);
+	void LoadSingle(const DataNode &node, const std::string &missionName);
 	// Note: the Save() function can assume this is an instantiated mission, not
 	// a template, so it only has to save a subset of the data.
 	void Save(DataWriter &out) const;
+	void SaveBody(DataWriter &out) const;
 	// Determine if this MissionAction references content that is not fully defined.
 	std::string Validate() const;
 
@@ -68,6 +70,7 @@ public:
 	MissionAction Instantiate(std::map<std::string, std::string> &subs,
 		const System *origin, int jumps, int64_t payload) const;
 
+	int64_t Payment() const noexcept;
 
 private:
 	std::string trigger;

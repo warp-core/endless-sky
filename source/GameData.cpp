@@ -17,8 +17,10 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include "Audio.h"
 #include "BatchShader.h"
+#include "CategoryList.h"
 #include "Color.h"
 #include "Command.h"
+#include "ConditionsStore.h"
 #include "Conversation.h"
 #include "DataFile.h"
 #include "DataNode.h"
@@ -29,6 +31,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "Fleet.h"
 #include "FogShader.h"
 #include "text/FontSet.h"
+#include "FormationPattern.h"
 #include "Galaxy.h"
 #include "GameAssets.h"
 #include "GameEvent.h"
@@ -47,6 +50,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "Person.h"
 #include "Phrase.h"
 #include "Planet.h"
+#include "Plugins.h"
 #include "PointerShader.h"
 #include "Politics.h"
 #include "Random.h"
@@ -79,6 +83,7 @@ namespace {
 	Set<Galaxy> defaultGalaxies;
 	Set<Sale<Ship>> defaultShipSales;
 	Set<Sale<Outfit>> defaultOutfitSales;
+	Set<Wormhole> defaultWormholes;
 	TextReplacements defaultSubstitutions;
 
 	map<string, string> plugins;
@@ -90,6 +95,8 @@ namespace {
 
 	const Government *playerGovernment = nullptr;
 	map<const System *, map<string, int>> purchases;
+
+	ConditionsStore globalConditions;
 }
 
 
@@ -115,6 +122,7 @@ void GameData::FinishLoading()
 	defaultShipSales = assets.objects.shipSales;
 	defaultOutfitSales = assets.objects.outfitSales;
 	defaultSubstitutions = assets.objects.substitutions;
+	defaultWormholes = assets.objects.wormholes;
 	playerGovernment = assets.objects.governments.Get("Escort");
 
 	politics.Reset();
@@ -175,6 +183,22 @@ future<void> GameData::Preload(const Sprite *sprite)
 
 
 
+// Get the list of resource sources (i.e. plugin folders).
+const std::vector<std::string> &GameData::Sources()
+{
+	return sources;
+}
+
+
+
+// Get a reference to the UniverseObjects object.
+UniverseObjects &GameData::Objects()
+{
+	return assets.objects;
+}
+
+
+
 // Revert any changes that have been made to the universe.
 void GameData::Revert()
 {
@@ -186,6 +210,7 @@ void GameData::Revert()
 	assets.objects.shipSales.Revert(defaultShipSales);
 	assets.objects.outfitSales.Revert(defaultOutfitSales);
 	assets.objects.substitutions.Revert(defaultSubstitutions);
+	assets.objects.wormholes.Revert(defaultWormholes);
 	for(auto &it : assets.objects.persons)
 		it.second.Restore();
 
@@ -393,7 +418,6 @@ const Set<Effect> &GameData::Effects()
 
 
 
-
 const Set<GameEvent> &GameData::Events()
 {
 	return assets.objects.events;
@@ -404,6 +428,13 @@ const Set<GameEvent> &GameData::Events()
 const Set<Fleet> &GameData::Fleets()
 {
 	return assets.objects.fleets;
+}
+
+
+
+const Set<FormationPattern> &GameData::Formations()
+{
+	return assets.objects.formations;
 }
 
 
@@ -440,7 +471,6 @@ const Set<Minable> &GameData::Minables()
 {
 	return assets.objects.minables;
 }
-
 
 
 
@@ -514,6 +544,13 @@ const Set<TestData> &GameData::TestDataSets()
 
 
 
+ConditionsStore &GameData::GlobalConditions()
+{
+	return globalConditions;
+}
+
+
+
 const Set<Sale<Ship>> &GameData::Shipyards()
 {
 	return assets.objects.shipSales;
@@ -524,6 +561,13 @@ const Set<Sale<Ship>> &GameData::Shipyards()
 const Set<System> &GameData::Systems()
 {
 	return assets.objects.systems;
+}
+
+
+
+const Set<Wormhole> &GameData::Wormholes()
+{
+	return assets.objects.wormholes;
 }
 
 
@@ -553,7 +597,6 @@ const vector<Trade::Commodity> &GameData::Commodities()
 {
 	return assets.objects.trade.Commodities();
 }
-
 
 
 
@@ -612,8 +655,8 @@ const string &GameData::Rating(const string &type, int level)
 
 
 
-// Strings for ship, bay type, and outfit categories.
-const vector<string> &GameData::Category(const CategoryType type)
+// Collections for ship, bay type, outfit, and other categories.
+const CategoryList &GameData::GetCategory(const CategoryType type)
 {
 	return assets.objects.categories[type];
 }
@@ -665,13 +708,6 @@ const map<string, string> &GameData::HelpTemplates()
 
 
 
-const map<string, string> &GameData::PluginAboutText()
-{
-	return plugins;
-}
-
-
-
 MaskManager &GameData::GetMaskManager()
 {
 	return maskManager;
@@ -709,6 +745,13 @@ const SoundSet &GameData::Sounds()
 GameAssets &GameData::Assets()
 {
 	return assets;
+}
+
+
+
+const Gamerules &GameData::GetGamerules()
+{
+	return assets.objects.gamerules;
 }
 
 

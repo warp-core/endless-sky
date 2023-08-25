@@ -19,6 +19,8 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "Angle.h"
 #include "Point.h"
 
+#include <bitset>
+
 class DataNode;
 class DataWriter;
 
@@ -30,35 +32,40 @@ class DataWriter;
 // used to make some fleets noticeably different from others.
 class Personality {
 public :
-	static constexpr int PACIFIST = (1 << 0);
-	static constexpr int FORBEARING = (1 << 1);
-	static constexpr int TIMID = (1 << 2);
-	static constexpr int DISABLES = (1 << 3);
-	static constexpr int PLUNDERS = (1 << 4);
-	static constexpr int HEROIC = (1 << 5);
-	static constexpr int STAYING = (1 << 6);
-	static constexpr int ENTERING = (1 << 7);
-	static constexpr int NEMESIS = (1 << 8);
-	static constexpr int SURVEILLANCE = (1 << 9);
-	static constexpr int UNINTERESTED = (1 << 10);
-	static constexpr int WAITING = (1 << 11);
-	static constexpr int DERELICT = (1 << 12);
-	static constexpr int FLEEING = (1 << 13);
-	static constexpr int ESCORT = (1 << 14);
-	static constexpr int FRUGAL = (1 << 15);
-	static constexpr int COWARD = (1 << 16);
-	static constexpr int VINDICTIVE = (1 << 17);
-	static constexpr int SWARMING = (1 << 18);
-	static constexpr int UNCONSTRAINED = (1 << 19);
-	static constexpr int MINING = (1 << 20);
-	static constexpr int HARVESTS = (1 << 21);
-	static constexpr int APPEASING = (1 << 22);
-	static constexpr int MUTE = (1 << 23);
-	static constexpr int OPPORTUNISTIC = (1 << 24);
-	static constexpr int TARGET = (1 << 25);
-	static constexpr int MARKED = (1 << 26);
-	static constexpr int LAUNCHING = (1 << 27);
-
+	static constexpr auto PACIFIST = 0;
+	static constexpr auto FORBEARING = 1;
+	static constexpr auto TIMID = 2;
+	static constexpr auto DISABLES = 3;
+	static constexpr auto PLUNDERS = 4;
+	static constexpr auto HUNTING = 5;
+	static constexpr auto STAYING = 6;
+	static constexpr auto ENTERING = 7;
+	static constexpr auto NEMESIS = 8;
+	static constexpr auto SURVEILLANCE = 9;
+	static constexpr auto UNINTERESTED = 10;
+	static constexpr auto WAITING = 11;
+	static constexpr auto DERELICT = 12;
+	static constexpr auto FLEEING = 13;
+	static constexpr auto ESCORT = 14;
+	static constexpr auto FRUGAL = 15;
+	static constexpr auto COWARD = 16;
+	static constexpr auto VINDICTIVE = 17;
+	static constexpr auto SWARMING = 18;
+	static constexpr auto UNCONSTRAINED = 19;
+	static constexpr auto MINING = 20;
+	static constexpr auto HARVESTS = 21;
+	static constexpr auto APPEASING = 22;
+	static constexpr auto MUTE = 23;
+	static constexpr auto OPPORTUNISTIC = 24;
+	static constexpr auto MERCIFUL = 25;
+	static constexpr auto TARGET = 26;
+	static constexpr auto MARKED = 27;
+	static constexpr auto LAUNCHING = 28;
+	static constexpr auto LINGERING = 29;
+	static constexpr auto DARING = 30;
+	static constexpr auto SECRETIVE = 31;
+	static constexpr auto RAMMING = 32;
+	static constexpr auto DECLOAKED = 33;
 
 public:
 	Personality() noexcept;
@@ -67,12 +74,15 @@ public:
 	void Load(const DataNode &node);
 	void Save(DataWriter &out) const;
 
+	bool IsDefined() const;
+
 	// Who a ship decides to attack:
 	bool IsPacifist() const;
 	bool IsForbearing() const;
 	bool IsTimid() const;
-	bool IsHeroic() const;
+	bool IsHunting() const;
 	bool IsNemesis() const;
+	bool IsDaring() const;
 
 	// How they fight:
 	bool IsFrugal() const;
@@ -83,6 +93,8 @@ public:
 	bool IsCoward() const;
 	bool IsAppeasing() const;
 	bool IsOpportunistic() const;
+	bool IsMerciful() const;
+	bool IsRamming() const;
 
 	// Mission NPC states:
 	bool IsStaying() const;
@@ -98,12 +110,15 @@ public:
 	bool IsMining() const;
 	bool Harvests() const;
 	bool IsSwarming() const;
+	bool IsLingering() const;
+	bool IsSecretive() const;
 
 	// Special flags:
 	bool IsEscort() const;
 	bool IsTarget() const;
 	bool IsMarked() const;
 	bool IsMute() const;
+	bool IsDecloaked() const;
 
 	// Current inaccuracy in this ship's targeting:
 	const Point &Confusion() const;
@@ -119,7 +134,13 @@ private:
 
 
 private:
-	int flags;
+	// Make sure this matches the number of items in PersonalityTrait,
+	// or the build will fail.
+	static const int PERSONALITY_COUNT = 34;
+
+	bool isDefined = false;
+
+	std::bitset<PERSONALITY_COUNT> flags;
 	double confusionMultiplier;
 	double aimMultiplier;
 	Point confusion;

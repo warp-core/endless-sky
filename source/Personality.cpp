@@ -20,6 +20,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "DataWriter.h"
 
 #include <map>
+#include <vector>
 
 using namespace std;
 
@@ -30,7 +31,7 @@ namespace {
 		{"timid", Personality::TIMID},
 		{"disables", Personality::DISABLES},
 		{"plunders", Personality::PLUNDERS},
-		{"heroic", Personality::HEROIC},
+		{"hunting", Personality::HUNTING},
 		{"staying", Personality::STAYING},
 		{"entering", Personality::ENTERING},
 		{"nemesis", Personality::NEMESIS},
@@ -50,9 +51,20 @@ namespace {
 		{"appeasing", Personality::APPEASING},
 		{"mute", Personality::MUTE},
 		{"opportunistic", Personality::OPPORTUNISTIC},
+		{"merciful", Personality::MERCIFUL},
 		{"target", Personality::TARGET},
 		{"marked", Personality::MARKED},
-		{"launching", Personality::LAUNCHING}
+		{"launching", Personality::LAUNCHING},
+		{"lingering", Personality::LINGERING},
+		{"daring", Personality::DARING},
+		{"secretive", Personality::SECRETIVE},
+		{"ramming", Personality::RAMMING},
+		{"decloaked", Personality::DECLOAKED}
+	};
+
+	// Tokens that combine two or more flags.
+	const map<string, vector<int>> COMPOSITE_TOKEN = {
+		{"heroic", {Personality::DARING, Personality::HUNTING}}
 	};
 
 	const double DEFAULT_CONFUSION = 10.;
@@ -60,40 +72,9 @@ namespace {
 
 
 
-constexpr int Personality::PACIFIST;
-constexpr int Personality::FORBEARING;
-constexpr int Personality::TIMID;
-constexpr int Personality::DISABLES;
-constexpr int Personality::PLUNDERS;
-constexpr int Personality::HEROIC;
-constexpr int Personality::STAYING;
-constexpr int Personality::ENTERING;
-constexpr int Personality::NEMESIS;
-constexpr int Personality::SURVEILLANCE;
-constexpr int Personality::UNINTERESTED;
-constexpr int Personality::WAITING;
-constexpr int Personality::DERELICT;
-constexpr int Personality::FLEEING;
-constexpr int Personality::ESCORT;
-constexpr int Personality::FRUGAL;
-constexpr int Personality::COWARD;
-constexpr int Personality::VINDICTIVE;
-constexpr int Personality::SWARMING;
-constexpr int Personality::UNCONSTRAINED;
-constexpr int Personality::MINING;
-constexpr int Personality::HARVESTS;
-constexpr int Personality::APPEASING;
-constexpr int Personality::MUTE;
-constexpr int Personality::OPPORTUNISTIC;
-constexpr int Personality::TARGET;
-constexpr int Personality::MARKED;
-constexpr int Personality::LAUNCHING;
-
-
-
 // Default settings for player's ships.
 Personality::Personality() noexcept
-	: flags(DISABLES), confusionMultiplier(DEFAULT_CONFUSION), aimMultiplier(1.)
+	: flags(1LL << DISABLES), confusionMultiplier(DEFAULT_CONFUSION), aimMultiplier(1.)
 {
 }
 
@@ -111,7 +92,7 @@ void Personality::Load(const DataNode &node)
 	bool add = (node.Token(0) == "add");
 	bool remove = (node.Token(0) == "remove");
 	if(!(add || remove))
-		flags = 0;
+		flags.reset();
 	for(int i = 1 + (add || remove); i < node.Size(); ++i)
 		Parse(node, i, remove);
 
@@ -132,6 +113,7 @@ void Personality::Load(const DataNode &node)
 				Parse(child, i, remove);
 		}
 	}
+	isDefined = true;
 }
 
 
@@ -143,7 +125,7 @@ void Personality::Save(DataWriter &out) const
 	{
 		out.Write("confusion", confusionMultiplier);
 		for(const auto &it : TOKEN)
-			if(flags & it.second)
+			if(flags.test(it.second))
 				out.Write(it.first);
 	}
 	out.EndChild();
@@ -151,198 +133,248 @@ void Personality::Save(DataWriter &out) const
 
 
 
+bool Personality::IsDefined() const
+{
+	return isDefined;
+}
+
+
+
 bool Personality::IsPacifist() const
 {
-	return flags & PACIFIST;
+	return flags.test(PACIFIST);
 }
 
 
 
 bool Personality::IsForbearing() const
 {
-	return flags & FORBEARING;
+	return flags.test(FORBEARING);
 }
 
 
 
 bool Personality::IsTimid() const
 {
-	return flags & TIMID;
+	return flags.test(TIMID);
 }
 
 
 
-bool Personality::IsHeroic() const
+bool Personality::IsHunting() const
 {
-	return flags & HEROIC;
+	return flags.test(HUNTING);
 }
 
 
 
 bool Personality::IsNemesis() const
 {
-	return flags & NEMESIS;
+	return flags.test(NEMESIS);
 }
+
+
+
+bool Personality::IsDaring() const
+{
+	return flags.test(DARING);
+}
+
 
 
 
 bool Personality::IsFrugal() const
 {
-	return flags & FRUGAL;
+	return flags.test(FRUGAL);
 }
 
 
 
 bool Personality::Disables() const
 {
-	return flags & DISABLES;
+	return flags.test(DISABLES);
 }
 
 
 
 bool Personality::Plunders() const
 {
-	return flags & PLUNDERS;
+	return flags.test(PLUNDERS);
 }
 
 
 
 bool Personality::IsVindictive() const
 {
-	return flags & VINDICTIVE;
+	return flags.test(VINDICTIVE);
 }
 
 
 
 bool Personality::IsUnconstrained() const
 {
-	return flags & UNCONSTRAINED;
+	return flags.test(UNCONSTRAINED);
 }
 
 
 
 bool Personality::IsCoward() const
 {
-	return flags & COWARD;
+	return flags.test(COWARD);
 }
 
 
 
 bool Personality::IsAppeasing() const
 {
-	return flags & APPEASING;
+	return flags.test(APPEASING);
 }
 
 
 
 bool Personality::IsOpportunistic() const
 {
-	return flags & OPPORTUNISTIC;
+	return flags.test(OPPORTUNISTIC);
+}
+
+
+
+bool Personality::IsMerciful() const
+{
+	return flags.test(MERCIFUL);
+}
+
+
+
+bool Personality::IsRamming() const
+{
+	return flags.test(RAMMING);
 }
 
 
 
 bool Personality::IsStaying() const
 {
-	return flags & STAYING;
+	return flags.test(STAYING);
 }
 
 
 
 bool Personality::IsEntering() const
 {
-	return flags & ENTERING;
+	return flags.test(ENTERING);
 }
 
 
 
 bool Personality::IsWaiting() const
 {
-	return flags & WAITING;
+	return flags.test(WAITING);
 }
 
 
 
 bool Personality::IsLaunching() const
 {
-	return flags & LAUNCHING;
+	return flags.test(LAUNCHING);
 }
 
 
 
 bool Personality::IsFleeing() const
 {
-	return flags & FLEEING;
+	return flags.test(FLEEING);
 }
 
 
 
 bool Personality::IsDerelict() const
 {
-	return flags & DERELICT;
+	return flags.test(DERELICT);
 }
 
 
 
 bool Personality::IsUninterested() const
 {
-	return flags & UNINTERESTED;
+	return flags.test(UNINTERESTED);
 }
 
 
 
 bool Personality::IsSurveillance() const
 {
-	return flags & SURVEILLANCE;
+	return flags.test(SURVEILLANCE);
 }
 
 
 
 bool Personality::IsMining() const
 {
-	return flags & MINING;
+	return flags.test(MINING);
 }
 
 
 
 bool Personality::Harvests() const
 {
-	return flags & HARVESTS;
+	return flags.test(HARVESTS);
 }
 
 
 
 bool Personality::IsSwarming() const
 {
-	return flags & SWARMING;
+	return flags.test(SWARMING);
+}
+
+
+
+bool Personality::IsLingering() const
+{
+	return flags.test(LINGERING);
+}
+
+
+
+bool Personality::IsSecretive() const
+{
+	return flags.test(SECRETIVE);
 }
 
 
 
 bool Personality::IsEscort() const
 {
-	return flags & ESCORT;
+	return flags.test(ESCORT);
 }
 
 
 
 bool Personality::IsTarget() const
 {
-	return flags & TARGET;
+	return flags.test(TARGET);
 }
 
 
 
 bool Personality::IsMarked() const
 {
-	return flags & MARKED;
+	return flags.test(MARKED);
 }
 
 
 
 bool Personality::IsMute() const
 {
-	return flags & MUTE;
+	return flags.test(MUTE);
+}
+
+
+
+bool Personality::IsDecloaked() const
+{
+	return flags.test(DECLOAKED);
 }
 
 
@@ -376,7 +408,8 @@ void Personality::UpdateConfusion(bool isFiring)
 Personality Personality::Defender()
 {
 	Personality defender;
-	defender.flags = STAYING | MARKED | HEROIC | UNCONSTRAINED | TARGET;
+	defender.flags = bitset<PERSONALITY_COUNT>((1LL << STAYING) | (1LL << MARKED) | (1LL << HUNTING) | (1LL << DARING)
+			| (1LL << UNCONSTRAINED) | (1LL << TARGET));
 	return defender;
 }
 
@@ -387,7 +420,8 @@ Personality Personality::Defender()
 Personality Personality::DefenderFighter()
 {
 	Personality defender;
-	defender.flags = STAYING | HEROIC | UNCONSTRAINED;
+	defender.flags = bitset<PERSONALITY_COUNT>((1LL << STAYING) | (1LL << HUNTING) | (1LL << DARING)
+			| (1LL << UNCONSTRAINED));
 	return defender;
 }
 
@@ -398,13 +432,26 @@ void Personality::Parse(const DataNode &node, int index, bool remove)
 	const string &token = node.Token(index);
 
 	auto it = TOKEN.find(token);
-	if(it != TOKEN.end())
+	if(it == TOKEN.end())
 	{
-		if(remove)
-			flags &= ~it->second;
+		auto cit = COMPOSITE_TOKEN.find(token);
+		if(cit == COMPOSITE_TOKEN.end())
+			node.PrintTrace("Warning: Skipping unrecognized personality \"" + token + "\":");
 		else
-			flags |= it->second;
+		{
+			if(remove)
+				for(auto personality : cit->second)
+					flags &= ~(1LL << personality);
+			else
+				for(auto personality : cit->second)
+					flags |= 1LL << personality;
+		}
 	}
 	else
-		node.PrintTrace("Warning: Skipping unrecognized personality \"" + token + "\":");
+	{
+		if(remove)
+			flags &= ~(1LL << it->second);
+		else
+			flags |= 1LL << it->second;
+	}
 }

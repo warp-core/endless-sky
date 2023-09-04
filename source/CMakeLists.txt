@@ -49,6 +49,7 @@ target_sources(EndlessSkyLib PRIVATE
 	CategoryList.cpp
 	CategoryList.h
 	CategoryTypes.h
+	BiCircularIterator.h
 	ClickZone.h
 	CollisionSet.cpp
 	CollisionSet.h
@@ -251,6 +252,7 @@ target_sources(EndlessSkyLib PRIVATE
 	PrintData.h
 	Projectile.cpp
 	Projectile.h
+	CircularQueue.h
 	Radar.cpp
 	Radar.h
 	RaidFleet.cpp

@@ -603,7 +603,7 @@ const set<string> &System::Attributes() const
 // Get a list of systems you can travel to through hyperspace from here.
 const set<const System *> &System::Links() const
 {
-	return accessibleLinks;
+	return links;
 }
 
 

@@ -706,7 +706,8 @@ namespace {
 		"--sales",
 		"--planets",
 		"--systems",
-		"--matches"
+		"--matches",
+		"--person-frequencies"
 	};
 }
 
@@ -751,6 +752,8 @@ void PrintData::Print(const char *const *argv)
 			Systems(argv);
 		else if(arg == "--matches")
 			LocationFilterMatches(argv);
+		else if(arg == "--person-frequencies")
+			PersonFrequencies();
 	}
 	cout.flush();
 }

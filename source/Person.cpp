@@ -76,6 +76,8 @@ void Person::NeverSpawn()
 // person is dead or already active, this will return zero.
 int Person::Frequency(const System *system) const
 {
+	if(!system)
+		return frequency;
 	// Because persons always enter a system via one of the regular hyperspace
 	// links, don't create them in systems with no links.
 	if(!system || IsDestroyed() || IsPlaced() || system->Links().empty())

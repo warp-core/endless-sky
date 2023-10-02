@@ -42,6 +42,7 @@ public:
 	// Find out how often this person should appear in the given system. If this
 	// person is dead or already active, this will return zero.
 	int Frequency(const System *system) const;
+	bool Everywhere() const { return location.IsEmpty(); }
 
 	// Get the person's characteristics. The ship object is persistent, i.e. it
 	// will be recycled every time this person appears.

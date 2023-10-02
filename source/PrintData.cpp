@@ -21,6 +21,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "GameEvent.h"
 #include "LocationFilter.h"
 #include "Outfit.h"
+#include "Person.h"
 #include "Planet.h"
 #include "Ship.h"
 #include "System.h"
@@ -674,6 +675,18 @@ namespace {
 		for(const auto &it : GameData::Planets())
 			if(filter.Matches(&it.second))
 				cout << it.first << '\n';
+	}
+
+
+	void PersonFrequencies()
+	{
+		cout << "Person" << ',' << "Frequency" << ',' << "Everywhere?" << '\n';
+		for(const auto &it : GameData::Persons())
+		{
+			cout << it.first << ',';
+			cout << it.second.Frequency(nullptr) << ',';
+			cout << (it.second.Everywhere() ? "Yes" : "No") << '\n';
+		}
 	}
 
 

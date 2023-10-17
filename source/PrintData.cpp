@@ -17,6 +17,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include "DataFile.h"
 #include "DataNode.h"
+#include "text/Format.h"
 #include "GameData.h"
 #include "GameEvent.h"
 #include "LocationFilter.h"
@@ -313,9 +314,58 @@ namespace {
 			}
 		};
 
+		auto PrintShipHeatStats = [](bool variants) -> void
+		{
+			cout << "name" << ',' << "category" << ',' << "mass" << ',' << "generation" << ','
+					<< "cooling" << ',' << "active cooling" << ',' << "engine heat" << ','
+					<< "weapon heat" << ',' << "repair heat" << ',' << "heat dissipation" << ','
+					<< "max heat" << ',' << "resting heat" << ',' << "remaining capacity" << ','
+					<< "net heat" << ',' << "maintain overheated" << ',' << "new maintain overheated" <<'\n';
+
+			for(const auto &it : GameData::Ships())
+			{
+				const Ship &ship = it.second;
+				if(!variants && it.first != ship.TrueModelName())
+					continue;
+
+				cout << '"' << it.first << '"' << ',';
+				const double heatGeneration = 60. * ship.Attributes().Get("heat generation");
+				const double cooling = 60. * ship.CoolingEfficiency() * ship.Attributes().Get("cooling");
+				const double activeCooling = 60. * ship.CoolingEfficiency() * ship.Attributes().Get("active cooling");
+				const double thrustingHeat = 60. * ship.Attributes().Get("thrusting heat");
+				const double turningHeat = 60. * ship.Attributes().Get("turning heat");
+				double firingHeat = 0.;
+				for(const auto &it : ship.Outfits())
+					if(it.first->IsWeapon() && it.first->Reload())
+						firingHeat += it.second * it.first->FiringHeat() / it.first->Reload();
+				firingHeat *= 60.;
+				const double shieldHeat = 60. * ship.Attributes().Get("shield heat") * (1. + ship.Attributes().Get("shield heat multiplier"));
+				const double hullHeat = 60. * ship.Attributes().Get("hull heat") * (1. + ship.Attributes().Get("hull heat multiplier"));
+				const double dissipation = 60. * ship.HeatDissipation() * ship.MaximumHeat();
+
+				cout << ship.Attributes().Category() << ',';
+				cout << ship.Mass() << ',';
+				cout << heatGeneration << ',';
+				cout << cooling << ',';
+				cout << activeCooling << ',';
+				cout << thrustingHeat + turningHeat << ',';
+				cout << firingHeat << ',';
+				cout << shieldHeat + hullHeat << ',';
+				cout << dissipation << ',';
+				cout << ship.MaximumHeat() << ',';
+				cout << ship.IdleHeat() << ',';
+				cout << ship.MaximumHeat() - ship.IdleHeat() << ',';
+				cout << heatGeneration - cooling -activeCooling + thrustingHeat + turningHeat + firingHeat
+						+ shieldHeat + hullHeat - dissipation << ',';
+				cout << dissipation * 0.91 << ',';
+				cout << cooling + (dissipation + activeCooling) * 0.91 << '\n';
+			}
+		};
+
 		bool loaded = false;
 		bool variants = false;
 		bool sales = false;
+		bool heat = false;
 		bool list = false;
 
 		for(const char *const *it = argv + 2; *it; ++it)
@@ -325,6 +375,8 @@ namespace {
 				variants = true;
 			else if(arg == "--sales")
 				sales = true;
+			else if(arg == "--heat")
+				heat = true;
 			else if(arg == "--loaded")
 				loaded = true;
 			else if(arg == "--list")
@@ -333,6 +385,8 @@ namespace {
 
 		if(sales)
 			PrintItemSales(GameData::Ships(), GameData::Shipyards(), "ship", "shipyards");
+		else if(heat)
+			PrintShipHeatStats(variants);
 		else if(loaded)
 			PrintLoadedShipStats(variants);
 		else if(list)

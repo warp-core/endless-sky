@@ -36,6 +36,28 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 using namespace std;
 
 namespace {
+	template<typename T>
+	class MultiPreference {
+	public:
+		MultiPreference<T>(int defaultIndex, const vector<string> &names)
+			: index(defaultIndex), names(names)
+		{
+		}
+
+		void Load(int from) { index = std::max<int>(0, std::min<int>(from, 1)); }
+
+		void Toggle() { index = (index + 1) % names.size(); }
+
+		T Get() const { return static_cast<T>(index); }
+		int_fast8_t Index() const { return index; }
+		const string &GetString() const { return names[index]; }
+
+
+	private:
+		int_fast8_t index;
+		const vector<string> names;
+	};
+
 	map<string, bool> settings;
 	int scrollSpeed = 60;
 

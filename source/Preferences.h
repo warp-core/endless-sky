@@ -24,23 +24,6 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 class Preferences {
 public:
-	template<typename T, int_fast8_t defaultIndex>
-	class MultiPreference {
-	public:
-		MultiPreference<T, defaultIndex>(const std::vector<std::string> &names);
-
-		const T Get() const;
-		const std::string &GetString() const;
-		const int_fast8_t Index() const;
-
-		void Toggle();
-		void Load(int from);
-
-	private:
-		int_fast8_t index;
-		const std::vector<std::string> names;
-	};
-
 	enum class AlertIndicator : int_fast8_t {
 		NONE = 0,
 		AUDIO,
@@ -177,52 +160,6 @@ public:
 	// Flotsam setting, either "off", "on", "flagship only", or "escorts only".
 	static MultiPreference<FlotsamCollection, 1> flotsamCollection;
 };
-
-
-
-template<typename T, int_fast8_t defaultIndex>
-Preferences::MultiPreference<T, defaultIndex>::MultiPreference(const std::vector<std::string> &names)
-	: index(defaultIndex), names(names) {}
-
-
-
-template<typename T, int_fast8_t defaultIndex>
-const T Preferences::MultiPreference<T, defaultIndex>::Get() const
-{
-	return static_cast<T>(index);
-}
-
-
-
-template<typename T, int_fast8_t defaultIndex>
-const std::string &Preferences::MultiPreference<T, defaultIndex>::GetString() const
-{
-	return names[index];
-}
-
-
-
-template<typename T, int_fast8_t defaultIndex>
-const int_fast8_t Preferences::MultiPreference<T, defaultIndex>::Index() const
-{
-	return index;
-}
-
-
-
-template<typename T, int_fast8_t defaultIndex>
-void Preferences::MultiPreference<T, defaultIndex>::Toggle()
-{
-	index = (index + 1) % names.size();
-}
-
-
-
-template<typename T, int_fast8_t defaultIndex>
-void Preferences::MultiPreference<T, defaultIndex>::Load(int from)
-{
-	index = std::max<int>(0, std::min<int>(from, names.size() - 1));
-}
 
 
 

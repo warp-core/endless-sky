@@ -140,25 +140,6 @@ public:
 	static bool DoAlertHelper(AlertIndicator toDo);
 
 	static int GetPreviousSaveCount();
-
-
-public:
-	// Red alert siren and symbol.
-	static MultiPreference<AlertIndicator, 0> alertIndicator;
-	// Auto aim setting, either "off", "always on", or "when firing".
-	static MultiPreference<AutoAim, 2> autoAim;
-	// Auto fire setting, either "off", "on", "guns only", or "turrets only".
-	static MultiPreference<AutoFire, 0> autoFire;
-	// Background parallax setting, either "fast", "fancy", or "off".
-	static MultiPreference<BackgroundParallax, 2> backgroundParallax;
-	// Boarding target setting, either "proximity", "value" or "mixed".
-	static MultiPreference<BoardingPriority, 0> boardingPriority;
-	// Date format preferences.
-	static MultiPreference<DateFormat, 0> dateFormat;
-	// Extended jump effects setting, either "off", "medium", or "heavy".
-	static MultiPreference<ExtendedJumpEffects, 0> extendedJumpEffects;
-	// Flotsam setting, either "off", "on", "flagship only", or "escorts only".
-	static MultiPreference<FlotsamCollection, 1> flotsamCollection;
 };
 
 

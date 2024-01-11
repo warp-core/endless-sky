@@ -59,6 +59,25 @@ namespace {
 	};
 
 	map<string, bool> settings;
+
+	// Red alert siren and symbol.
+	MultiPreference<Preferences::AlertIndicator> alertIndicator(0,
+			{"off", "audio", "visual", "both"});
+	MultiPreference<Preferences::AutoAim> autoAim(2,
+			{"off", "always on", "when firing"});
+	MultiPreference<Preferences::AutoFire> autoFire(0,
+			{"off", "on", "guns only", "turrets only"});
+	MultiPreference<Preferences::BackgroundParallax> backgroundParallax(2,
+			{"off", "fancy", "fast"});
+	MultiPreference<Preferences::BoardingPriority> boardingPriority(0,
+			{"proximity", "value", "mixed"});
+	MultiPreference<Preferences::DateFormat> dateFormat(0,
+			{"dd/mm/yyyy", "mm/dd/yyyy", "yyyy-mm-dd"});
+	MultiPreference<Preferences::ExtendedJumpEffects> extendedJumpEffects(0,
+			{"off", "medium", "heavy"});
+	MultiPreference<Preferences::FlotsamCollection> flotsamCollection(1,
+			{"off", "on", "flagship only", "escorts only"});
+
 	int scrollSpeed = 60;
 
 	// Strings for ammo expenditure:
@@ -142,25 +161,6 @@ namespace {
 
 	int previousSaveCount = 3;
 }
-
-
-
-Preferences::MultiPreference<Preferences::AlertIndicator, 0> Preferences::alertIndicator(
-	{"off", "audio", "visual", "both"});
-Preferences::MultiPreference<Preferences::AutoAim, 2> Preferences::autoAim(
-	{"off", "always on", "when firing"});
-Preferences::MultiPreference<Preferences::AutoFire, 0> Preferences::autoFire(
-	{"off", "on", "guns only", "turrets only"});
-Preferences::MultiPreference<Preferences::BackgroundParallax, 2> Preferences::backgroundParallax(
-	{"off", "fancy", "fast"});
-Preferences::MultiPreference<Preferences::BoardingPriority, 0> Preferences::boardingPriority(
-	{"proximity", "value", "mixed"});
-Preferences::MultiPreference<Preferences::DateFormat, 0> Preferences::dateFormat(
-	{"dd/mm/yyyy", "mm/dd/yyyy", "yyyy-mm-dd"});
-Preferences::MultiPreference<Preferences::ExtendedJumpEffects, 0> Preferences::extendedJumpEffects(
-	{"off", "medium", "heavy"});
-Preferences::MultiPreference<Preferences::FlotsamCollection, 1> Preferences::flotsamCollection(
-	{"off", "on", "flagship only", "escorts only"});
 
 
 

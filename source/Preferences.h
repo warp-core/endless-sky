@@ -105,6 +105,25 @@ public:
 	static bool Has(const std::string &name);
 	static void Set(const std::string &name, bool on = true);
 
+	static void ToggleSpecial(const std::string &name);
+	static const std::string &GetSpecialString(const std::string &name);
+
+	static AlertIndicator GetAlertIndicator();
+
+	static AutoAim GetAutoAim();
+
+	static AutoFire GetAutoFire();
+
+	static BackgroundParallax GetBackgroundParallax();
+
+	static BoardingPriority GetBoardingPriority();
+
+	static DateFormat GetDateFormat();
+
+	static ExtendedJumpEffects GetExtendedJumpEffects();
+
+	static FlotsamCollection GetFlotsamCollection();
+
 	// Toggle the ammo usage preferences, cycling between "never," "frugally,"
 	// and "always."
 	static void ToggleAmmoUsage();

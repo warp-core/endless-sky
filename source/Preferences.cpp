@@ -317,6 +317,109 @@ void Preferences::Set(const string &name, bool on)
 
 
 
+void Preferences::ToggleSpecial(const string &name)
+{
+	if(name == "alert indicator")
+		alertIndicator.Toggle();
+	else if(name == "auto aim")
+		autoAim.Toggle();
+	else if(name == "auto fire")
+		autoFire.Toggle();
+	else if(name == "background parallax")
+		backgroundParallax.Toggle();
+	else if(name == "boarding priority")
+		boardingPriority.Toggle();
+	else if(name == "date format")
+		dateFormat.Toggle();
+	else if(name == "extended jump effects")
+		extendedJumpEffects.Toggle();
+	else if(name == "flotsam collection")
+		flotsamCollection.Toggle();
+}
+
+
+
+const std::string &Preferences::GetSpecialString(const string &name)
+{
+	if(name == "alert indicator")
+		return alertIndicator.GetString();
+	else if(name == "auto aim")
+		return autoAim.GetString();
+	else if(name == "auto fire")
+		return autoFire.GetString();
+	else if(name == "background parallax")
+		return backgroundParallax.GetString();
+	else if(name == "boarding priority")
+		return boardingPriority.GetString();
+	else if(name == "date format")
+		return dateFormat.GetString();
+	else if(name == "extended jump effects")
+		return extendedJumpEffects.GetString();
+	else if(name == "flotsam collection")
+		return flotsamCollection.GetString();
+
+	static const string EMPTY = string{};
+	return EMPTY;
+}
+
+
+
+Preferences::AlertIndicator Preferences::GetAlertIndicator()
+{
+	return alertIndicator.Get();
+}
+
+
+
+Preferences::AutoAim Preferences::GetAutoAim()
+{
+	return autoAim.Get();
+}
+
+
+
+Preferences::AutoFire Preferences::GetAutoFire()
+{
+	return autoFire.Get();
+}
+
+
+
+Preferences::BackgroundParallax Preferences::GetBackgroundParallax()
+{
+	return backgroundParallax.Get();
+}
+
+
+
+Preferences::BoardingPriority Preferences::GetBoardingPriority()
+{
+	return boardingPriority.Get();
+}
+
+
+
+Preferences::DateFormat Preferences::GetDateFormat()
+{
+	return dateFormat.Get();
+}
+
+
+
+Preferences::ExtendedJumpEffects Preferences::GetExtendedJumpEffects()
+{
+	return extendedJumpEffects.Get();
+}
+
+
+
+Preferences::FlotsamCollection Preferences::GetFlotsamCollection()
+{
+	return flotsamCollection.Get();
+}
+
+
+
 void Preferences::ToggleAmmoUsage()
 {
 	bool expend = Has(EXPEND_AMMO);

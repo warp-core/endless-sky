@@ -643,24 +643,24 @@ void PreferencesPanel::DrawSettings()
 		}
 		else if(setting == AUTO_AIM_SETTING)
 		{
-			text = Preferences::autoAim.GetString();
+			text = Preferences::GetSpecialString("auto aim");
 			isOn = text != "off";
 		}
 		else if(setting == AUTO_FIRE_SETTING)
 		{
-			text = Preferences::autoFire.GetString();
+			text = Preferences::GetSpecialString("auto fire");
 			isOn = text != "off";
 		}
 		else if(setting == EXPEND_AMMO)
 			text = Preferences::AmmoUsage();
 		else if(setting == DATE_FORMAT)
 		{
-			text = Preferences::dateFormat.GetString();
+			text = Preferences::GetSpecialString("date format");
 			isOn = true;
 		}
 		else if(setting == FLOTSAM_SETTING)
 		{
-			text = Preferences::flotsamCollection.GetString();
+			text = Preferences::GetSpecialString("flotsam collection");
 			isOn = text != "off";
 		}
 		else if(setting == TURRET_TRACKING)
@@ -680,7 +680,7 @@ void PreferencesPanel::DrawSettings()
 		}
 		else if(setting == BOARDING_PRIORITY)
 		{
-			text = Preferences::boardingPriority.GetString();
+			text = Preferences::GetSpecialString("boarding priority");
 			isOn = true;
 		}
 		else if(setting == TARGET_ASTEROIDS_BASED_ON)
@@ -690,12 +690,12 @@ void PreferencesPanel::DrawSettings()
 		}
 		else if(setting == BACKGROUND_PARALLAX)
 		{
-			text = Preferences::backgroundParallax.GetString();
+			text = Preferences::GetSpecialString("background parallax");
 			isOn = text != "off";
 		}
 		else if(setting == EXTENDED_JUMP_EFFECTS)
 		{
-			text = Preferences::extendedJumpEffects.GetString();
+			text = Preferences::GetSpecialString("extended jump effects");
 			isOn = text != "off";
 		}
 		else if(setting == REACTIVATE_HELP)
@@ -736,8 +736,8 @@ void PreferencesPanel::DrawSettings()
 		}
 		else if(setting == ALERT_INDICATOR)
 		{
-			text = Preferences::alertIndicator.GetString();
-			isOn = Preferences::alertIndicator.Get() != Preferences::AlertIndicator::NONE;
+			text = Preferences::GetSpecialString("alert indicator");
+			isOn = Preferences::GetAlertIndicator() != Preferences::AlertIndicator::NONE;
 		}
 		else
 			text = isOn ? "on" : "off";
@@ -909,11 +909,11 @@ void PreferencesPanel::HandleSettingsString(const string &str, Point cursorPosit
 		SDL_WarpMouseInWindow(nullptr, cursorPosition.X(), cursorPosition.Y());
 	}
 	else if(str == BOARDING_PRIORITY)
-		Preferences::boardingPriority.Toggle();
+		Preferences::ToggleSpecial("boarding priority");
 	else if(str == BACKGROUND_PARALLAX)
-		Preferences::backgroundParallax.Toggle();
+		Preferences::ToggleSpecial("background parallax");
 	else if(str == EXTENDED_JUMP_EFFECTS)
-		Preferences::extendedJumpEffects.Toggle();
+		Preferences::ToggleSpecial("extended jump effects");
 	else if(str == VIEW_ZOOM_FACTOR)
 	{
 		// Increase the zoom factor unless it is at the maximum. In that
@@ -940,13 +940,13 @@ void PreferencesPanel::HandleSettingsString(const string &str, Point cursorPosit
 	else if(str == STATUS_OVERLAYS_NEUTRAL)
 		Preferences::CycleStatusOverlays(Preferences::OverlayType::NEUTRAL);
 	else if(str == AUTO_AIM_SETTING)
-		Preferences::autoAim.Toggle();
+		Preferences::ToggleSpecial("auto aim");
 	else if(str == AUTO_FIRE_SETTING)
-		Preferences::autoFire.Toggle();
+		Preferences::ToggleSpecial("auto fire");
 	else if(str == EXPEND_AMMO)
 		Preferences::ToggleAmmoUsage();
 	else if(str == FLOTSAM_SETTING)
-		Preferences::flotsamCollection.Toggle();
+		Preferences::ToggleSpecial("flotsam collection");
 	else if(str == TURRET_TRACKING)
 		Preferences::Set(FOCUS_PREFERENCE, !Preferences::Has(FOCUS_PREFERENCE));
 	else if(str == REACTIVATE_HELP)
@@ -963,9 +963,9 @@ void PreferencesPanel::HandleSettingsString(const string &str, Point cursorPosit
 		Preferences::SetScrollSpeed(speed);
 	}
 	else if(str == DATE_FORMAT)
-		Preferences::dateFormat.Toggle();
+		Preferences::ToggleSpecial("date format");
 	else if(str == ALERT_INDICATOR)
-		Preferences::alertIndicator.Toggle();
+		Preferences::ToggleSpecial("alert indicator");
 	// All other options are handled by just toggling the boolean state.
 	else
 		Preferences::Set(str, !Preferences::Has(str));

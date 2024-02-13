@@ -314,9 +314,56 @@ namespace {
 			}
 		};
 
+		auto PrintShipRegen = [](bool variants) -> void
+		{
+			cout << "model" << ',' << "category" << ',' << "chassis cost" << ',' << "full cost" << ','
+					<< "shields" << ',' << "shield gen" << ',' << "shield time" << ','
+					<< "hull" << ',' << "hull repair" << ',' << "hull time" << ','
+					<< "outfit space" << ',' << "shield space" << ',' << "hull space" << '\n';
+
+			for(auto &it : GameData::Ships())
+			{
+				if(!variants && it.second.TrueModelName() != it.first)
+					continue;
+
+				cout << it.first << ',';
+				const auto &ship = it.second;
+				const auto &base = ship.BaseAttributes();
+				const auto &attributes = ship.Attributes();
+				cout << base.Category() << ',';
+				cout << base.Cost() << ',';
+				cout << attributes.Cost() << ',';
+
+				const int shieldCapacity = attributes.Get("shields");
+				const int shieldRegen = attributes.Get("shield generation") * 60;
+				const double shieldTime = shieldCapacity * 1. / shieldRegen;
+				cout << shieldCapacity << ',' << shieldRegen << ',' << shieldTime << ',';
+
+				const int hullCapacity = attributes.Get("hull");
+				const int hullRepair = attributes.Get("hull repair rate") * 60;
+				const double hullTime = hullCapacity * 1. / hullRepair;
+				cout << hullCapacity << ',' << hullRepair << ',' << hullTime << ',';
+				cout << base.Get("outfit space") << ',';
+
+				int shieldSpace = 0;
+				int hullSpace = 0;
+				for(const auto &oit : ship.Outfits())
+				{
+					const auto &outfit = *oit.first;
+					const int space = outfit.Get("outfit space");
+					if(outfit.Get("shield generation"))
+						shieldSpace -= space;
+					if(outfit.Get("hull repair rate"))
+						hullSpace -= space;
+				}
+				cout << shieldSpace << ',' << hullSpace << '\n';
+			}
+		};
+
 		bool loaded = false;
 		bool variants = false;
 		bool sales = false;
+		bool regen = false;
 		bool list = false;
 
 		for(const char *const *it = argv + 2; *it; ++it)
@@ -330,6 +377,8 @@ namespace {
 				loaded = true;
 			else if(arg == "--list")
 				list = true;
+			else if(arg == "--regen")
+				regen = true;
 		}
 
 		if(sales)
@@ -338,6 +387,8 @@ namespace {
 			PrintLoadedShipStats(variants);
 		else if(list)
 			PrintShipList(variants);
+		else if(regen)
+			PrintShipRegen(variants);
 		else
 			PrintBaseShipStats();
 	}

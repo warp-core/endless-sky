@@ -23,6 +23,11 @@ indent_style = unset
 indent_style = space
 indent_size = 2
 
+# clang-format file
+[.clang-format]
+indent_style = space
+indent_size = 2
+
 # Copyright file
 [copyright]
 indent_style = space

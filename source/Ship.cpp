@@ -2004,7 +2004,7 @@ bool Ship::FireAntiMissile(const Projectile &projectile, vector<Visual> &visuals
 	if(CannotAct())
 		return false;
 
-	double jamChance = CalculateJamChance(Energy(), scrambling);
+	//double jamChance = CalculateJamChance(Energy(), scrambling);
 
 	for(auto *hardpoint : armament.AntiMissileWeapons())
 	{
@@ -2045,26 +2045,26 @@ Point Ship::FireTractorBeam(const Flotsam &flotsam, vector<Visual> &visuals)
 			return pullVector;
 	}
 
-	double jamChance = CalculateJamChance(Energy(), scrambling);
+	//double jamChance = CalculateJamChance(Energy(), scrambling);
 
-	bool opportunisticEscorts = !Preferences::Has("Turrets focus fire");
+	//bool opportunisticEscorts = !Preferences::Has("Turrets focus fire");
 	const vector<Hardpoint> &hardpoints = armament.Get();
 	for(unsigned i = 0; i < hardpoints.size(); ++i)
 	{
-		const Weapon *weapon = hardpoints[i].GetOutfit();
-		if(weapon && CanFire(weapon))
-			if(armament.FireTractorBeam(i, *this, flotsam, visuals, Random::Real() < jamChance))
-			{
-				Point hardpointPos = Position() + Zoom() * Facing().Rotate(hardpoints[i].GetPoint());
-				// Heavier flotsam are harder to pull.
-				pullVector += (hardpointPos - flotsam.Position()).Unit() * weapon->TractorBeam() / flotsam.Mass();
-				// Remember that this flotsam is being pulled by a tractor beam so that this ship
-				// doesn't try to manually collect it.
-				tractorFlotsam.insert(&flotsam);
-				// If this ship is opportunistic, then only fire one tractor beam at each flostam.
-				if(personality.IsOpportunistic() || (isYours && opportunisticEscorts))
-					break;
-			}
+		//const Weapon *weapon = hardpoints[i].GetOutfit();
+		//if(weapon && CanFire(weapon))
+			//if(armament.FireAntiMissile(i, *this, flotsam, visuals, Random::Real() < jamChance))
+			//{
+			//	Point hardpointPos = Position() + Zoom() * Facing().Rotate(hardpoints[i].GetPoint());
+			//	// Heavier flotsam are harder to pull.
+			//	pullVector += (hardpointPos - flotsam.Position()).Unit() * weapon->TractorBeam() / flotsam.Mass();
+			//	// Remember that this flotsam is being pulled by a tractor beam so that this ship
+			//	// doesn't try to manually collect it.
+			//	tractorFlotsam.insert(&flotsam);
+			//	// If this ship is opportunistic, then only fire one tractor beam at each flostam.
+			//	if(personality.IsOpportunistic() || (isYours && opportunisticEscorts))
+			//		break;
+			//}
 	}
 	return pullVector;
 }

@@ -34,7 +34,7 @@ namespace {
 		double rangeMax = 0.;
 		for(const Hardpoint &hardpoint : hardpoints)
 		{
-			if(hardpoint.IsAntiMissile())
+			if(hardpoint.IsSpecial())
 				continue;
 
 			const auto *weapon = hardpoint.GetOutfit();
@@ -55,7 +55,7 @@ namespace {
 		double rangeMaxTurrets = 0;
 		for(const Hardpoint &hardpoint : hardpoints)
 		{
-			if(hardpoint.IsAntiMissile())
+			if(hardpoint.IsSpecial())
 				continue;
 
 			if(!hardpoint.CanAim())
@@ -478,7 +478,7 @@ void Armament::RecreateViewsAndRanges()
 		else
 			fixedWeapons.push_back(&hardpoint);
 
-		if(hardpoint.IsAntiMissile())
+		if(hardpoint.IsSpecial())
 			antiMissileWeapons.push_back(&hardpoint);
 		else
 			nonAMWeapons.push_back(&hardpoint);

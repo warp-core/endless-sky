@@ -43,6 +43,12 @@ class Visual;
 // distance away and velocity relative to the ship that is firing.
 class Armament {
 public:
+	Armament() = default;
+	Armament(const Armament &other);
+	Armament &operator=(const Armament &other);
+	Armament(Armament &&other) = default;
+	Armament &operator=(Armament &&other) = default;
+
 	// Add a gun or turret hard-point.
 	void AddGunPort(const Point &point, const Angle &angle, bool isParallel, bool isUnder, const Outfit *outfit = nullptr);
 	void AddTurret(const Point &point, bool isUnder, const Outfit *outfit = nullptr);
@@ -64,6 +70,18 @@ public:
 
 	// Access the array of weapon hardpoints.
 	const std::vector<Hardpoint> &Get() const;
+	const std::vector<Hardpoint *> &NonAMWeapons() const;
+	const std::vector<Hardpoint *> &TurrettedWeapons() const;
+	const std::vector<Hardpoint *> &FixedWeapons() const;
+	const std::vector<Hardpoint *> &AntiMissileWeapons() const;
+	// Get the index of the given hardpoint.
+	int WeaponIndex(const Hardpoint &hardpoint) const;
+
+	// Get actual min/max range of the mounted weapons
+	std::pair<double, double> GetMinMaxRange() const;
+	// Get max range of turrets only weapons
+	double GetTurretsMaxRange() const;
+
 	int GunCount() const;
 	int TurretCount() const;
 	// Determine the ammunition used by this armament that can be resupplied (i.e. is not self-uninstalling).
@@ -76,6 +94,8 @@ public:
 	void Fire(unsigned index, Ship &ship, std::vector<Projectile> &projectiles, std::vector<Visual> &visuals, bool jammed);
 	// Fire the given anti-missile system.
 	bool FireAntiMissile(unsigned index, Ship &ship, const Projectile &projectile,
+		std::vector<Visual> &visuals, bool jammed);
+	bool FireAntiMissile(const Hardpoint &hardpoint, Ship &ship, const Projectile &projectile,
 		std::vector<Visual> &visuals, bool jammed);
 	// Fire the given tractor beam.
 	bool FireTractorBeam(unsigned index, Ship &ship, const Flotsam &flotsam,
@@ -90,13 +110,30 @@ private:
 	// Returns false if the index is invalid or the hardpoint jammed.
 	bool CheckHardpoint(unsigned index, bool jammed = false);
 
+	void RecreateViewsAndRanges();
+
 
 private:
-	// Note: the Armament must be copied when an instance of a Ship is made, so
-	// it should not hold any pointers specific to one ship (including to
-	// elements of this Armament itself).
+	// Notes:
+	// * the Armament must be copied when an instance of a Ship is made, so
+	//   it should not hold any pointers specific to one ship (including to
+	//   elements of this Armament itself)
+	// * the above holds for views because their elements must refer to
+	//   those on the newly created copy
 	std::map<const Outfit *, int> streamReload;
 	std::vector<Hardpoint> hardpoints;
+	// 'Views' useful to iterate over specific categories, skipping empty hardpoints
+	// Note: turrettedWeapons and fixedWeapons are mutually exclusive
+	std::vector<Hardpoint *> nonAMWeapons;
+	std::vector<Hardpoint *> turrettedWeapons;
+	std::vector<Hardpoint *> fixedWeapons;
+	std::vector<Hardpoint *> antiMissileWeapons;
+
+	// Global ranges of actual configuration (excluding AntiMissiles)
+	double minRange = 0.;
+	double maxRange = 0.;
+	// Max ranges of turrets (excluding AntiMissiles)
+	double maxTurretsRange = 0.;
 };
 
 

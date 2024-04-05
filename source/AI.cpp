@@ -120,10 +120,10 @@ namespace {
 	// Determine if the ship has any usable weapons.
 	bool IsArmed(const Ship &ship)
 	{
-		for(const Hardpoint &hardpoint : ship.Weapons())
+		for(const Hardpoint *hardpoint : ship.GetArmament().NonAMWeapons())
 		{
-			const Weapon *weapon = hardpoint.GetOutfit();
-			if(weapon && !hardpoint.IsSpecial())
+			const Weapon *weapon = hardpoint->GetOutfit();
+			if(weapon && !hardpoint->IsSpecial())
 			{
 				if(weapon->Ammo() && !ship.OutfitCount(weapon->Ammo()))
 					continue;
@@ -131,6 +131,24 @@ namespace {
 			}
 		}
 		return false;
+	}
+
+	bool ShouldDockForReloading(const Ship &ship, const Ship &parent)
+	{
+		bool dockToReload = false;
+		for(const Hardpoint *hardpoint : ship.GetArmament().NonAMWeapons())
+		{
+			const Outfit *ammo = hardpoint->GetOutfit()->Ammo();
+			if(!ammo || ship.OutfitCount(ammo))
+			{
+				// This fighter has at least one usable weapon, and
+				// thus does not need to dock to continue fighting.
+				return false;
+			}
+			else if(parent.OutfitCount(ammo))
+				dockToReload = true;
+		}
+		return dockToReload;
 	}
 
 	void Deploy(const Ship &ship, bool includingDamaged)
@@ -1280,14 +1298,8 @@ shared_ptr<Ship> AI::FindTarget(const Ship &ship) const
 	}
 
 	// If this ship is not armed, do not make it fight.
-	double minRange = numeric_limits<double>::infinity();
-	double maxRange = 0.;
-	for(const Hardpoint &weapon : ship.Weapons())
-		if(weapon.GetOutfit() && !weapon.IsSpecial())
-		{
-			minRange = min(minRange, weapon.GetOutfit()->Range());
-			maxRange = max(maxRange, weapon.GetOutfit()->Range());
-		}
+	double minRange, maxRange;
+	tie(minRange, maxRange) = ship.GetArmament().GetMinMaxRange();
 	if(!maxRange)
 		return FindNonHostileTarget(ship);
 
@@ -2077,25 +2089,7 @@ bool AI::ShouldDock(const Ship &ship, const Ship &parent, const System *playerSy
 
 	// If a fighter is armed with only ammo-using weapons, but no longer has the ammunition
 	// needed to use them, it should dock if the parent can supply that ammo.
-	auto requiredAmmo = set<const Outfit *>{};
-	for(const Hardpoint &hardpoint : ship.Weapons())
-	{
-		const Weapon *weapon = hardpoint.GetOutfit();
-		if(weapon && !hardpoint.IsSpecial())
-		{
-			const Outfit *ammo = weapon->Ammo();
-			if(!ammo || ship.OutfitCount(ammo))
-			{
-				// This fighter has at least one usable weapon, and
-				// thus does not need to dock to continue fighting.
-				requiredAmmo.clear();
-				break;
-			}
-			else if(parent.OutfitCount(ammo))
-				requiredAmmo.insert(ammo);
-		}
-	}
-	if(!requiredAmmo.empty())
+	if(ShouldDockForReloading(ship, parent))
 		return true;
 
 	// If a carried ship has fuel capacity but is very low, it should return if
@@ -3316,25 +3310,21 @@ void AI::AimTurrets(const Ship &ship, FireCommand &command, bool opportunistic) 
 	const Ship *currentTarget = ship.GetTargetShip().get();
 	if(opportunistic || !currentTarget || !currentTarget->IsTargetable())
 	{
-		// Find the maximum range of any of this ship's turrets.
-		double maxRange = 0.;
-		for(const Hardpoint &weapon : ship.Weapons())
-			if(weapon.CanAim())
-				maxRange = max(maxRange, weapon.GetOutfit()->Range());
+		// Find the maximum range of any of this ship's turrets, and extend
+		// the weapon range slightly to account for velocity differences.
+		const double rangeOfInterest = ship.GetArmament().GetTurretsMaxRange() * 1.5;
 		// If this ship has no turrets, bail out.
-		if(!maxRange)
+		if(!rangeOfInterest)
 			return;
-		// Extend the weapon range slightly to account for velocity differences.
-		maxRange *= 1.5;
 
 		// Now, find all enemy ships within that radius.
-		auto enemies = GetShipsList(ship, true, maxRange);
+		auto enemies = GetShipsList(ship, true, rangeOfInterest);
 		// Convert the shared_ptr<Ship> into const Body *, to allow aiming turrets
 		// at a targeted asteroid. Skip disabled ships, which pose no threat.
 		for(auto &&foe : enemies)
 			if(!foe->IsDisabled())
 				targets.emplace_back(foe);
-		// Even if the ship's current target ship is beyond maxRange,
+		// Even if the ship's current target ship is beyond rangeOfInterest,
 		// or is already disabled, consider aiming at it.
 		if(currentTarget && currentTarget->IsTargetable()
 				&& find(targets.cbegin(), targets.cend(), currentTarget) == targets.cend())
@@ -3351,55 +3341,85 @@ void AI::AimTurrets(const Ship &ship, FireCommand &command, bool opportunistic) 
 	// angle. Focused turrets should just point forward.
 	if(targets.empty() && !opportunistic)
 	{
-		for(const Hardpoint &hardpoint : ship.Weapons())
-			if(hardpoint.CanAim())
-			{
-				// Get the index of this weapon.
-				int index = &hardpoint - &ship.Weapons().front();
-				double offset = (hardpoint.HarmonizedAngle() - hardpoint.GetAngle()).Degrees();
-				command.SetAim(index, offset / hardpoint.GetOutfit()->TurretTurn());
-			}
+		const auto &armament = ship.GetArmament();
+		for(const Hardpoint *hardpoint : armament.TurrettedWeapons())
+		{
+			// Get the index of this weapon.
+			int index = armament.WeaponIndex(*hardpoint);
+			double offset = (hardpoint->HarmonizedAngle() - hardpoint->GetAngle()).Degrees();
+			command.SetAim(index, offset / hardpoint->GetOutfit()->TurretTurn());
+		}
 		return;
 	}
 	if(targets.empty())
 	{
-		for(const Hardpoint &hardpoint : ship.Weapons())
-			if(hardpoint.CanAim())
-			{
-				// Get the index of this weapon.
-				int index = &hardpoint - &ship.Weapons().front();
-				// First, check if this turret is currently in motion. If not,
-				// it only has a small chance of beginning to move.
-				double previous = ship.FiringCommands().Aim(index);
-				if(!previous && (Random::Int(60)))
-					continue;
+		const auto &armament = ship.GetArmament();
+		for(const Hardpoint *hardpoint : armament.TurrettedWeapons())
+		{
+			// Get the index of this weapon.
+			int index = armament.WeaponIndex(*hardpoint);
+			// First, check if this turret is currently in motion. If not,
+			// it only has a small chance of beginning to move.
+			double previous = ship.FiringCommands().Aim(index);
+			if(!previous && (Random::Int(60)))
+				continue;
 
-				Angle centerAngle = Angle(hardpoint.GetPoint());
-				double bias = (centerAngle - hardpoint.GetAngle()).Degrees() / 180.;
-				double acceleration = Random::Real() - Random::Real() + bias;
-				command.SetAim(index, previous + .1 * acceleration);
-			}
+			Angle centerAngle = Angle(hardpoint->GetPoint());
+			double bias = (centerAngle - hardpoint->GetAngle()).Degrees() / 180.;
+			double acceleration = Random::Real() - Random::Real() + bias;
+			command.SetAim(index, previous + .1 * acceleration);
+		}
 		return;
 	}
 	// Each hardpoint should aim at the target that it is "closest" to hitting.
-	for(const Hardpoint &hardpoint : ship.Weapons())
-		if(hardpoint.CanAim())
+	const auto &armament = ship.GetArmament();
+	for(const Hardpoint *hardpoint : armament.TurrettedWeapons())
+	{
+		// This is where this projectile fires from. Add some randomness
+		// based on how skilled the pilot is.
+		Point start = ship.Position() + ship.Facing().Rotate(hardpoint->GetPoint());
+		start += ship.GetPersonality().Confusion();
+		// Get the turret's current facing, in absolute coordinates:
+		Angle aim = ship.Facing() + hardpoint->GetAngle();
+		// Get this projectile's average velocity.
+		const Weapon *weapon = hardpoint->GetOutfit();
+		double vp = weapon->WeightedVelocity() + .5 * weapon->RandomVelocity();
+		// Loop through each body this hardpoint could shoot at. Find the
+		// one that is the "best" in terms of how many frames it will take
+		// to aim at it and for a projectile to hit it.
+		double bestScore = numeric_limits<double>::infinity();
+		double bestAngle = 0.;
+		for(const Body *target : targets)
 		{
-			// This is where this projectile fires from. Add some randomness
-			// based on how skilled the pilot is.
-			Point start = ship.Position() + ship.Facing().Rotate(hardpoint.GetPoint());
-			start += ship.GetPersonality().Confusion();
-			// Get the turret's current facing, in absolute coordinates:
-			Angle aim = ship.Facing() + hardpoint.GetAngle();
-			// Get this projectile's average velocity.
-			const Weapon *weapon = hardpoint.GetOutfit();
-			double vp = weapon->WeightedVelocity() + .5 * weapon->RandomVelocity();
-			// Loop through each body this hardpoint could shoot at. Find the
-			// one that is the "best" in terms of how many frames it will take
-			// to aim at it and for a projectile to hit it.
-			double bestScore = numeric_limits<double>::infinity();
-			double bestAngle = 0.;
-			for(const Body *target : targets)
+			Point p = target->Position() - start;
+			Point v = target->Velocity();
+			// Only take the ship's velocity into account if this weapon
+			// does not have its own acceleration.
+			if(!weapon->Acceleration())
+				v -= ship.Velocity();
+			// By the time this action is performed, the target will
+			// have moved forward one time step.
+			p += v;
+
+			// Find out how long it would take for this projectile to reach the target.
+			double rendezvousTime = RendezvousTime(p, v, vp);
+			// If there is no intersection (i.e. the turret is not facing the target),
+			// consider this target "out-of-range" but still targetable.
+			if(std::isnan(rendezvousTime))
+				rendezvousTime = max(p.Length() / (vp ? vp : 1.), 2 * weapon->TotalLifetime());
+
+			// Determine where the target will be at that point.
+			p += v * rendezvousTime;
+
+			// Determine how much the turret must turn to face that vector.
+			double degrees = (Angle(p) - aim).Degrees();
+			double turnTime = fabs(degrees) / weapon->TurretTurn();
+			// All bodies within weapons range have the same basic
+			// weight. Outside that range, give them lower priority.
+			rendezvousTime = max(0., rendezvousTime - weapon->TotalLifetime());
+			// Always prefer targets that you are able to hit.
+			double score = turnTime + (180. / weapon->TurretTurn()) * rendezvousTime;
+			if(score < bestScore)
 			{
 				Point p = target->Position() - start;
 				Point v = target->Velocity();
@@ -3447,13 +3467,14 @@ void AI::AimTurrets(const Ship &ship, FireCommand &command, bool opportunistic) 
 					bestAngle = degrees;
 				}
 			}
-			if(bestAngle)
-			{
-				// Get the index of this weapon.
-				int index = &hardpoint - &ship.Weapons().front();
-				command.SetAim(index, bestAngle / weapon->TurretTurn());
-			}
 		}
+		if(bestAngle)
+		{
+			// Get the index of this weapon.
+			int index = armament.WeaponIndex(*hardpoint);
+			command.SetAim(index, bestAngle / weapon->TurretTurn());
+		}
+	}
 }
 
 
@@ -3512,18 +3533,18 @@ void AI::AutoFire(const Ship &ship, FireCommand &command, bool secondary, bool i
 	// Find the longest range of any of your non-homing weapons. Homing weapons
 	// that don't consume ammo may also fire in non-homing mode.
 	double maxRange = 0.;
-	for(const Hardpoint &weapon : ship.Weapons())
-		if(weapon.IsReady()
-				&& !(!currentTarget && weapon.IsHoming() && weapon.GetOutfit()->Ammo())
-				&& !(!secondary && weapon.GetOutfit()->Icon())
-				&& !(beFrugal && weapon.GetOutfit()->Ammo())
-				&& !(isWaitingToJump && weapon.GetOutfit()->FiringForce()))
-			maxRange = max(maxRange, weapon.GetOutfit()->Range());
+	for(const Hardpoint &hardpoint : ship.Weapons())
+		if(hardpoint.IsReady()
+				&& !(!currentTarget && hardpoint.IsHoming() && hardpoint.GetOutfit()->Ammo())
+				&& !(!secondary && hardpoint.GetOutfit()->Icon())
+				&& !(beFrugal && hardpoint.GetOutfit()->Ammo())
+				&& !(isWaitingToJump && hardpoint.GetOutfit()->FiringForce()))
+			maxRange = max(maxRange, hardpoint.GetOutfit()->Range());
 	// Extend the weapon range slightly to account for velocity differences.
-	maxRange *= 1.5;
+	const double rangeOfInterest = maxRange * 1.5;
 
 	// Find all enemy ships within range of at least one weapon.
-	auto enemies = GetShipsList(ship, true, maxRange);
+	auto enemies = GetShipsList(ship, true, rangeOfInterest);
 	// Consider the current target if it is not already considered (i.e. it
 	// is a friendly ship and this is a player ship ordered to attack it).
 	if(currentTarget && currentTarget->IsTargetable()
@@ -4328,12 +4349,8 @@ void AI::MovePlayer(Ship &ship, Command &activeCommands)
 			&& !autoPilot.Has(Command::LAND | Command::JUMP | Command::FLEET_JUMP | Command::BOARD))
 	{
 		// Check if this ship has any forward-facing weapons.
-		for(const Hardpoint &weapon : ship.Weapons())
-			if(!weapon.CanAim() && !weapon.IsTurret() && weapon.GetOutfit())
-			{
-				shouldAutoAim = true;
-				break;
-			}
+		if(!ship.GetArmament().FixedWeapons().empty())
+			shouldAutoAim = true;
 	}
 	if(shouldAutoAim)
 	{

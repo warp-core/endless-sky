@@ -92,8 +92,6 @@ public:
 	// Fire the given weapon, if it is ready. If it did not fire because it is
 	// not ready, return false.
 	void Fire(unsigned index, Ship &ship, std::vector<Projectile> &projectiles, std::vector<Visual> &visuals, bool jammed);
-	void Fire(const Hardpoint &hardpoint, Ship &ship, std::vector<Projectile> &projectiles,
-		std::vector<Visual> &visuals, bool jammed);
 	// Fire the given anti-missile system.
 	bool FireAntiMissile(unsigned index, Ship &ship, const Projectile &projectile,
 		std::vector<Visual> &visuals, bool jammed);

@@ -76,8 +76,7 @@ namespace {
 
 
 Armament::Armament(const Armament &other)
-	: streamReload(other.streamReload)
-	, hardpoints(other.hardpoints)
+	: streamReload(other.streamReload), hardpoints(other.hardpoints)
 {
 	RecreateViewsAndRanges();
 }
@@ -388,15 +387,6 @@ void Armament::Fire(unsigned index, Ship &ship, vector<Projectile> &projectiles,
 		hp.Jam();
 	else
 		hp.Fire(ship, projectiles, visuals);
-}
-
-
-
-void Armament::Fire(const Hardpoint &hardpoint, Ship &ship, std::vector<Projectile> &projectiles,
-	std::vector<Visual> &visuals, bool jammed)
-{
-	int index = WeaponIndex(hardpoint);
-	Fire(index, ship, projectiles, visuals, jammed);
 }
 
 

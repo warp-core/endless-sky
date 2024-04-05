@@ -415,7 +415,8 @@ bool Armament::FireAntiMissile(const Hardpoint &hardpoint, Ship &ship, const Pro
 
 
 
-bool Armament::FireTractorBeam(unsigned index, Ship &ship, const Flotsam &flotsam, vector<Visual> &visuals, bool jammed)
+bool Armament::FireTractorBeam(unsigned index, Ship &ship, const Flotsam &flotsam,
+	vector<Visual> &visuals, bool jammed)
 {
 	if(!CheckHardpoint(index, jammed))
 		return false;

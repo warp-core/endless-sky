@@ -429,6 +429,16 @@ bool Armament::FireAntiMissile(const Hardpoint &hardpoint, Ship &ship, const Pro
 
 
 
+bool Armament::FireTractorBeam(unsigned index, Ship &ship, const Flotsam &flotsam, vector<Visual> &visuals, bool jammed)
+{
+	if(!CheckHardpoint(index, jammed))
+		return false;
+
+	return hardpoints[index].FireTractorBeam(ship, flotsam, visuals);
+}
+
+
+
 // Update the reload counters.
 void Armament::Step(const Ship &ship)
 {

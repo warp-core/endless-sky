@@ -99,6 +99,9 @@ public:
 		std::vector<Visual> &visuals, bool jammed);
 	bool FireAntiMissile(const Hardpoint &hardpoint, Ship &ship, const Projectile &projectile,
 		std::vector<Visual> &visuals, bool jammed);
+	// Fire the given tractor beam.
+	bool FireTractorBeam(unsigned index, Ship &ship, const Flotsam &flotsam,
+		std::vector<Visual> &visuals, bool jammed);
 
 	// Update the reload counters.
 	void Step(const Ship &ship);

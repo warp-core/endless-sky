@@ -370,23 +370,21 @@ void Armament::Fire(unsigned index, Ship &ship, vector<Projectile> &projectiles,
 	if(!CheckHardpoint(index))
 		return;
 
-	auto &hp = hardpoints[index];
-
 	// A weapon that has already started a burst ignores stream timing.
-	if(!hp.WasFiring())
+	if(!hardpoints[index].WasFiring())
 	{
-		auto it = streamReload.find(hp.GetOutfit());
+		auto it = streamReload.find(hardpoints[index].GetOutfit());
 		if(it != streamReload.end())
 		{
 			if(it->second > 0)
 				return;
-			it->second += it->first->Reload() * hp.BurstRemaining();
+			it->second += it->first->Reload() * hardpoints[index].BurstRemaining();
 		}
 	}
 	if(jammed)
-		hp.Jam();
+		hardpoints[index].Jam();
 	else
-		hp.Fire(ship, projectiles, visuals);
+		hardpoints[index].Fire(ship, projectiles, visuals);
 }
 
 
@@ -397,15 +395,13 @@ bool Armament::FireAntiMissile(unsigned index, Ship &ship, const Projectile &pro
 	if(!CheckHardpoint(index, jammed))
 		return false;
 
-	auto &hp = hardpoints[index];
-
 	if(jammed)
 	{
-		hp.Jam();
+		hardpoints[index].Jam();
 		return false;
 	}
 
-	return hp.FireAntiMissile(ship, projectile, visuals);
+	return hardpoints[index].FireAntiMissile(ship, projectile, visuals);
 }
 
 

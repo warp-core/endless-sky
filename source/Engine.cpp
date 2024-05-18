@@ -1277,8 +1277,12 @@ void Engine::EnterSystem()
 	GameData::SetDate(today);
 	GameData::StepEconomy();
 
+	std::chrono::milliseconds before = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
 	// Refresh random systems that could be linked to this one.
 	GameData::UpdateSystems(&player);
+	std::chrono::milliseconds after = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
+	int difference = after.count() - before.count();
+	Logger::LogError(Format::Number(difference));
 
 	// SetDate() clears any bribes from yesterday, so restore any auto-clearance.
 	for(const Mission &mission : player.Missions())

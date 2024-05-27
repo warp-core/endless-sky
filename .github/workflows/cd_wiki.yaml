@@ -1,0 +1,55 @@
+name: Wiki CD
+
+on:
+  push:
+    branches:
+      - 'wiki-round-3'
+    paths:
+      - 'docs/wiki/*.md'
+      - '.github/workflows/cd_wiki.yaml'
+  workflow_dispatch:
+
+concurrency:
+  group: 'wiki-cd'
+  cancel-in-progress: true
+
+jobs:
+
+  cd_wiki:
+    name: Wiki deployment
+    runs-on: ubuntu-20.04
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout endless-sky repository
+        run: |
+          git clone https://github.com/warp-core/endless-sky.git
+          cd endless-sky
+          git checkout ${{ github.ref_name }}
+      - name: Checkout wiki
+        run: git clone "https://github.com/warp-core/endless-sky.wiki.git"
+      - name: Synchronise
+        run: rsync --delete -rvh -e .git endless-sky/docs/wiki/* endless-sky.wiki/
+      - name: Check for changes
+        id: check-diff
+        run: |
+          cd endless-sky.wiki
+          git add .
+          if [[ $(git diff --cached --raw) ]]; then
+            echo "changes=yes" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Commit changes
+        if: ${{ steps.check-diff.outputs.changes == 'yes' }}
+        run: |
+          cd endless-sky.wiki
+          git config --local user.name "GitHub Actions"
+          git config --local user.email "actions@github.com"
+          git commit -m "Update" -m "${{ github.sha }}" -m "Triggered by ${{ github.actor }}"
+      - name: Push changes
+        if: ${{ steps.check-diff.outputs.changes == 'yes' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd endless-sky.wiki
+          git remote set-url origin "https://github-actions:${{ env.GH_TOKEN }}@github.com/warp-core/endless-sky.wiki.git"
+          git push origin

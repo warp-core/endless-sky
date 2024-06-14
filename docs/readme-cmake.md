@@ -40,7 +40,7 @@ You'll need the POSIX version of MinGW. For the Winlibs distribution mentioned a
 Install [Homebrew](https://brew.sh). Once it is installed, use it to install the tools and libraries you will need:
 
 ```bash
-$ brew install cmake ninja mad libpng jpeg-turbo sdl2
+$ brew install cmake ninja mad libpng jpeg-turbo sdl2 pkg-config
 ```
 
 **Note**: If you are on Apple Silicon (and want to compile for ARM), make sure that you are using ARM Homebrew!

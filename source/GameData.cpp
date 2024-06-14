@@ -333,7 +333,7 @@ void GameData::Preload(TaskQueue &queue, const Sprite *sprite)
 	while(pit != preloaded.end())
 	{
 		++pit->second;
-		if(pit->second >= 20)
+		if(pit->second >= 5)
 		{
 			// Unloading needs to be queued on the main thread.
 			queue.Run({}, [name = pit->first->Name()] { SpriteSet::Modify(name)->Unload(); });

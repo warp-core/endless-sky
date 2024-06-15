@@ -44,8 +44,6 @@ endif()
 # Tell vcpkg to use system libraries that are missing in the Steam runtime.
 if(ES_STEAM)
 	list(APPEND VCPKG_MANIFEST_FEATURES "steam-libs")
-elseif(APPLE)
-	list(APPEND VCPKG_MANIFEST_FEATURES "macos-libs")
 endif()
 
 # Various helpful options for IDEs.

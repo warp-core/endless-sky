@@ -31,7 +31,9 @@ namespace {
 	// Determine whether the given path is to an @2x image.
 	bool Is2x(const filesystem::path &path)
 	{
-		return path.stem().string().ends_with("@2x");
+		string name = path.stem().string();
+		size_t length = name.size();
+		return length > 3 && !name.compare(length - 3, 3, "@2x");
 	}
 
 	// Determine whether the given path is to a swizzle mask.
@@ -41,7 +43,8 @@ namespace {
 		if(is2x)
 			s.resize(s.length() - 3);
 
-		return s.ends_with("@sw");
+		size_t length = s.size();
+		return length > 3 && !s.compare(length - 3, 3, "@sw");
 	}
 
 	// Check if the given character is a valid blending mode.

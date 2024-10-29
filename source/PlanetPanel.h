@@ -31,9 +31,9 @@ class System;
 
 
 
-// Dialog that pops up when you land on a planet. The shipyard and outfitter are
-// shown in full-screen panels that pop up above this one, but the remaining views
-// (trading, jobs, bank, port, and crew) are displayed within this dialog.
+/// Dialog that pops up when you land on a planet. The shipyard and outfitter are
+/// shown in full-screen panels that pop up above this one, but the remaining views
+/// (trading, jobs, bank, port, and crew) are displayed within this dialog.
 class PlanetPanel : public Panel {
 public:
 	PlanetPanel(PlayerInfo &player, std::function<void()> callback);
@@ -71,9 +71,9 @@ private:
 
 	WrappedText text;
 
-	// Out of system (absent) ships that cannot fly for some reason.
+	/** Out of system (absent) ships that cannot fly for some reason. */
 	std::vector<std::shared_ptr<Ship>> absentCannotFly;
 
-	// Cache flight checks to not calculate them twice before each takeoff.
+	/** Cache flight checks to not calculate them twice before each takeoff. */
 	std::map<const std::shared_ptr<Ship>, std::vector<std::string>> flightChecks;
 };

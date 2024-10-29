@@ -21,9 +21,9 @@ class PlayerInfo;
 
 
 
-// This panel is drawn as an overlay on top of the PlanetPanel. It shows your
-// current crew and passengers and allows you to hire extra crew if you are
-// hunting other ships to capture.
+/// This panel is drawn as an overlay on top of the PlanetPanel. It shows your
+/// current crew and passengers and allows you to hire extra crew if you are
+/// hunting other ships to capture.
 class HiringPanel : public Panel {
 public:
 	explicit HiringPanel(PlayerInfo &player);

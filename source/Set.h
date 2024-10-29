@@ -20,18 +20,20 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 
 
-// Template representing a set of named objects of a given type, where you can
-// query it for a pointer to any object and it will return one, whether or not that
-// object has been loaded yet. (This allows cyclic pointers.)
+/// Template representing a set of named objects of a given type, where you can
+/// query it for a pointer to any object and it will return one, whether or not that
+/// object has been loaded yet. (This allows cyclic pointers.)
 template<class Type>
 class Set {
 public:
-	// Allow non-const access to the owner of this set; it can hand off only
-	// const references to avoid anyone else modifying the objects.
+	///@{
+	/// Allow non-const access to the owner of this set; it can hand off only
+	/// const references to avoid anyone else modifying the objects.
 	Type *Get(const std::string &name) { return &data[name]; }
 	const Type *Get(const std::string &name) const { return &data[name]; }
-	// If an item already exists in this set, get it. Otherwise, return a null
-	// pointer rather than creating the item.
+	///@}
+	/// If an item already exists in this set, get it. Otherwise, return a null
+	/// pointer rather than creating the item.
 	const Type *Find(const std::string &name) const;
 
 	bool Has(const std::string &name) const { return data.contains(name); }
@@ -44,8 +46,8 @@ public:
 
 	int size() const { return data.size(); }
 	bool empty() const { return data.empty(); }
-	// Remove any objects in this set that are not in the given set, and for
-	// those that are in the given set, revert to their contents.
+	/// Remove any objects in this set that are not in the given set, and for
+	/// those that are in the given set, revert to their contents.
 	void Revert(const Set<Type> &other);
 
 

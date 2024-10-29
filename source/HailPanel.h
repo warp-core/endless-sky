@@ -32,9 +32,9 @@ class StellarObject;
 
 
 
-// This panel is shown when you hail a ship or planet. It allows you to ask for
-// assistance from friendly ships, to bribe hostile ships to leave you alone, or
-// to bribe a planet to allow you to land there.
+/// This panel is shown when you hail a ship or planet. It allows you to ask for
+/// assistance from friendly ships, to bribe hostile ships to leave you alone, or
+/// to bribe a planet to allow you to land there.
 class HailPanel : public Panel {
 public:
 	HailPanel(PlayerInfo &player, const std::shared_ptr<Ship> &ship,

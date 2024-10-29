@@ -31,6 +31,8 @@ OUTPUT_DIRECTORY       = ./docs/api
 
 CREATE_SUBDIRS         = YES
 
+DISTRIBUTE_GROUP_DOC   = YES
+
 INPUT                  = ./source
 RECURSIVE              = YES
 EXCLUDE                =

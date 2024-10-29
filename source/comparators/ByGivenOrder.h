@@ -20,8 +20,8 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 
 
-// Compare Ts according to the order specified at construction time.
-// Unknown Ts are considered larger than any known one.
+/// Compare Ts according to the order specified at construction time.
+/// Unknown Ts are considered larger than any known one.
 template<class T>
 class ByGivenOrder {
 public:

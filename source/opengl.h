@@ -26,7 +26,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #endif
 #endif
 
-// A helper class for various OpenGL platform specific calls.
+/** A helper class for various OpenGL platform specific calls. */
 class OpenGL
 {
 public:

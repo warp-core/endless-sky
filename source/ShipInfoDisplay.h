@@ -27,16 +27,16 @@ class Ship;
 
 
 
-// Class representing three panels of information about a given ship. One shows the
-// ship's description, the second summarizes its attributes, and the third lists
-// all outfits currently installed in the ship. This is used for the shipyard, for
-// showing changes to your ship as you add upgrades, for scanning other ships, etc.
+/// Class representing three panels of information about a given ship. One shows the
+/// ship's description, the second summarizes its attributes, and the third lists
+/// all outfits currently installed in the ship. This is used for the shipyard, for
+/// showing changes to your ship as you add upgrades, for scanning other ships, etc.
 class ShipInfoDisplay : public ItemInfoDisplay {
 public:
 	ShipInfoDisplay() = default;
 	ShipInfoDisplay(const Ship &ship, const PlayerInfo &player, bool descriptionCollapsed = true);
 
-	// Call this every time the ship changes.
+	/** Call this every time the ship changes. */
 	void Update(const Ship &ship, const PlayerInfo &player, bool descriptionCollapsed = true,
 		bool scrollingPanel = false);
 

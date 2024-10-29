@@ -26,9 +26,9 @@ class PlayerInfo;
 class Port;
 
 
-// GUI panel to be shown when you are in a spaceport. This just draws the port
-// description, but can also pop up conversation panels or dialogs offering
-// missions that are marked as originating in the spaceport.
+/// GUI panel to be shown when you are in a spaceport. This just draws the port
+/// description, but can also pop up conversation panels or dialogs offering
+/// missions that are marked as originating in the spaceport.
 class SpaceportPanel : public Panel {
 public:
 	explicit SpaceportPanel(PlayerInfo &player);
@@ -49,11 +49,13 @@ private:
 	const Port &port;
 	const Interface &ui;
 
-	// Current news item (if any):
+	///@{
+	/// Current news item (if any):
 	bool hasNews = false;
 	bool hasPortrait = false;
 	int portraitWidth;
 	int normalWidth;
 	Information newsInfo;
 	WrappedText newsMessage;
+	///@}
 };

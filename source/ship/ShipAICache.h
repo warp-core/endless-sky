@@ -19,23 +19,25 @@ class Ship;
 
 
 
-// A class which caches information needed for AI calculations of an individual ship,
-// be those calculations that are needed multiple times a frame or which might only
-// be needed once per frame but don't typically change from frame to frame.
+/// A class which caches information needed for AI calculations of an individual ship,
+/// be those calculations that are needed multiple times a frame or which might only
+/// be needed once per frame but don't typically change from frame to frame.
 class ShipAICache {
 public:
 	ShipAICache() = default;
 
 	void Calibrate(const Ship &ship);
-	// Get the new mass of the ship, if it changed update the weapon cache.
+	/** Get the new mass of the ship, if it changed update the weapon cache. */
 	void Recalibrate(const Ship &ship);
 
-	// Accessors for AI data.
+	///@{
+	/// Accessors for AI data.
 	bool IsArtilleryAI() const;
 	double ShortestRange() const;
 	double ShortestArtillery() const;
 	double MinSafeDistance() const;
 	bool NeedsAmmo() const;
+	///@}
 
 
 private:
@@ -52,9 +54,11 @@ private:
 
 
 
-// Inline the accessors and setters because they get called so frequently.
+///@{
+/// Inline the accessors and setters because they get called so frequently.
 inline bool ShipAICache::IsArtilleryAI() const { return useArtilleryAI; }
 inline double ShipAICache::ShortestRange() const { return shortestRange; }
 inline double ShipAICache::ShortestArtillery() const { return shortestArtillery; }
 inline double ShipAICache::MinSafeDistance() const { return minSafeDistance; }
 inline bool ShipAICache::NeedsAmmo() const { return hasWeapons != canFight; }
+///@}

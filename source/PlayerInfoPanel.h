@@ -30,9 +30,9 @@ class Rectangle;
 
 
 
-// This panel displays detailed information about the player and their fleet. If
-// the player is landed on a planet, it also allows them to reorder the ships in
-// their fleet (including changing which one is the flagship).
+/// This panel displays detailed information about the player and their fleet. If
+/// the player is landed on a planet, it also allows them to reorder the ships in
+/// their fleet (including changing which one is the flagship).
 class PlayerInfoPanel : public Panel {
 public:
 	explicit PlayerInfoPanel(PlayerInfo &player);
@@ -41,7 +41,7 @@ public:
 	virtual void Step() override;
 	virtual void Draw() override;
 
-	// The player info panel allow fast-forward to stay active.
+	/** The player info panel allow fast-forward to stay active. */
 	bool AllowsFastForward() const noexcept final;
 
 
@@ -60,11 +60,11 @@ private:
 	void DrawPlayer(const Rectangle &bounds);
 	void DrawFleet(const Rectangle &bounds);
 
-	// Handle mouse hover (also including hover during drag actions):
+	/** Handle mouse hover (also including hover during drag actions): */
 	bool Hover(const Point &point);
-	// Adjust the scroll by the given amount. Return true if it changed.
+	/** Adjust the scroll by the given amount. Return true if it changed. */
 	bool Scroll(int distance);
-	// Try to scroll to the given position. Return true if position changed.
+	/** Try to scroll to the given position. Return true if position changed. */
 	bool ScrollAbsolute(int scroll);
 
 	void SortShips(InfoPanelState::ShipComparator *shipComparator);
@@ -87,16 +87,16 @@ private:
 
 	InfoPanelState panelState;
 
-	// Column headers that sort ships when clicked.
+	/** Column headers that sort ships when clicked. */
 	std::vector<ClickZone<InfoPanelState::ShipComparator *>> menuZones;
 
-	// Keep track of which ship the mouse is hovering over.
+	/** Keep track of which ship the mouse is hovering over. */
 	int hoverIndex = -1;
 
-	// Initialize mouse point to something off-screen to not
-	// make the game think the player is hovering on something.
+	/// Initialize mouse point to something off-screen to not
+	/// make the game think the player is hovering on something.
 	Point hoverPoint = Point(-10000, -10000);
 
-	// When reordering ships, the names of ships being moved are displayed alongside the cursor.
+	/** When reordering ships, the names of ships being moved are displayed alongside the cursor. */
 	bool isDragging = false;
 };

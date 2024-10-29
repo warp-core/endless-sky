@@ -34,11 +34,11 @@ class Sprite;
 
 
 
-// Class representing all the characteristics of a weapon, including sprites and
-// effects, sounds, icons, ammo, submunitions, and other attributes. Storing
-// these parameters in a separate class keeps each Projectile from needing a
-// copy of them, and storing them as class variables instead of in a map of
-// string to double significantly reduces access time.
+/// Class representing all the characteristics of a weapon, including sprites and
+/// effects, sounds, icons, ammo, submunitions, and other attributes. Storing
+/// these parameters in a separate class keeps each Projectile from needing a
+/// copy of them, and storing them as class variables instead of in a map of
+/// string to double significantly reduces access time.
 class Weapon {
 public:
 	struct Submunition{
@@ -48,9 +48,9 @@ public:
 
 		const Weapon *weapon = nullptr;
 		std::size_t count = 0;
-		// The angular offset from the source projectile, relative to its current facing.
+		/** The angular offset from the source projectile, relative to its current facing. */
 		Angle facing;
-		// The base offset from the source projectile's position, relative to its current facing.
+		/** The base offset from the source projectile's position, relative to its current facing. */
 		Point offset;
 
 		bool spawnOnNaturalDeath = true;
@@ -59,23 +59,27 @@ public:
 
 
 public:
-	// Load from a "weapon" node, either in an outfit, a ship (explosion), or a hazard.
+	/** Load from a "weapon" node, either in an outfit, a ship (explosion), or a hazard. */
 	void LoadWeapon(const DataNode &node);
 	bool IsWeapon() const;
 
-	// Get assets used by this weapon.
+	///@{
+	/// Get assets used by this weapon.
 	const Body &WeaponSprite() const;
 	const Body &HardpointSprite() const;
 	const Sound *WeaponSound() const;
 	const Outfit *Ammo() const;
 	const Sprite *Icon() const;
+	///@}
 
-	// Effects to be created at the start or end of the weapon's lifetime.
+	///@{
+	/// Effects to be created at the start or end of the weapon's lifetime.
 	const std::map<const Effect *, int> &FireEffects() const;
 	const std::map<const Effect *, int> &LiveEffects() const;
 	const std::map<const Effect *, int> &HitEffects() const;
 	const std::map<const Effect *, int> &TargetEffects() const;
 	const std::map<const Effect *, int> &DieEffects() const;
+	///@}
 	const std::vector<Submunition> &Submunitions() const;
 
 	// Accessor functions for various attributes.
@@ -93,9 +97,9 @@ public:
 	int AntiMissile() const;
 	double TractorBeam() const;
 	uint16_t PenetrationCount() const noexcept;
-	// Weapons of the same type will alternate firing (streaming) rather than
-	// firing all at once (clustering) if the weapon is not an anti-missile and
-	// is not vulnerable to anti-missile, or has the "stream" attribute.
+	/// Weapons of the same type will alternate firing (streaming) rather than
+	/// firing all at once (clustering) if the weapon is not an anti-missile and
+	/// is not vulnerable to anti-missile, or has the "stream" attribute.
 	bool IsStreamed() const;
 	bool IsParallel() const;
 
@@ -117,7 +121,8 @@ public:
 	double InfraredTracking() const;
 	double RadarTracking() const;
 
-	// Normal damage sustained on firing ship when weapon fired.
+	///@{
+	/// Normal damage sustained on firing ship when weapon fired.
 	double FiringEnergy() const;
 	double FiringForce() const;
 	double FiringFuel() const;
@@ -132,13 +137,16 @@ public:
 	double FiringCorrosion() const;
 	double FiringLeak() const;
 	double FiringBurn() const;
+	///@}
 
-	// Relative damage sustained on firing ship when weapon fired.
+	///@{
+	/// Relative damage sustained on firing ship when weapon fired.
 	double RelativeFiringEnergy() const;
 	double RelativeFiringHeat() const;
 	double RelativeFiringFuel() const;
 	double RelativeFiringHull() const;
 	double RelativeFiringShields() const;
+	///@}
 
 	double SplitRange() const;
 	double TriggerRadius() const;
@@ -146,27 +154,32 @@ public:
 	double SafeRange() const;
 	double HitForce() const;
 
-	// A "safe" weapon hits only hostile ships (even if it has a blast radius).
-	// A "phasing" weapon hits only its intended target; it passes through
-	// everything else, including asteroids.
+	///@{
+	/// A "safe" weapon hits only hostile ships (even if it has a blast radius).
+	/// A "phasing" weapon hits only its intended target; it passes through
+	/// everything else, including asteroids.
 	bool IsSafe() const;
 	bool IsPhasing() const;
-	// Blast radius weapons will scale damage and hit force based on distance,
-	// unless the "no damage scaling" keyphrase is used in the weapon definition.
+	///@}
+	/// Blast radius weapons will scale damage and hit force based on distance,
+	/// unless the "no damage scaling" keyphrase is used in the weapon definition.
 	bool IsDamageScaled() const;
-	// Gravitational weapons deal the same amount of hit force to a ship regardless
-	// of its mass.
+	/// Gravitational weapons deal the same amount of hit force to a ship regardless
+	/// of its mass.
 	bool IsGravitational() const;
-	// True if this projectile should create an explosion at the end of its lifetime
-	// instead of simply disappearing or only creating a die effect. Blast radius
-	// weapons will cause a blast at the end of their lifetime.
+	/// True if this projectile should create an explosion at the end of its lifetime
+	/// instead of simply disappearing or only creating a die effect. Blast radius
+	/// weapons will cause a blast at the end of their lifetime.
 	bool IsFused() const;
-	// Whether projectiles from this weapon can directly collide with objects.
+	///@{
+	/// Whether projectiles from this weapon can directly collide with objects.
 	bool CanCollideShips() const;
 	bool CanCollideAsteroids() const;
 	bool CanCollideMinables() const;
+	///@}
 
-	// These values include all submunitions:
+	///@{
+	/// These values include all submunitions:
 	// Normal damage types:
 	double ShieldDamage() const;
 	double HullDamage() const;
@@ -192,8 +205,9 @@ public:
 	double RelativeFuelDamage() const;
 	double RelativeHeatDamage() const;
 	double RelativeEnergyDamage() const;
-	// Check if this weapon does damage. If not, attacking a ship with this
-	// weapon is not a provocation (even if you push or pull it).
+	///@}
+	/// Check if this weapon does damage. If not, attacking a ship with this
+	/// weapon is not a provocation (even if you push or pull it).
 	bool DoesDamage() const;
 
 	double Piercing() const;
@@ -203,24 +217,24 @@ public:
 	double TotalLifetime() const;
 	double Range() const;
 
-	// Check if this weapon has a damage dropoff range.
+	/** Check if this weapon has a damage dropoff range. */
 	bool HasDamageDropoff() const;
-	// Calculate the percent damage that this weapon deals given the distance
-	// that the projectile traveled if it has a damage dropoff range.
+	/// Calculate the percent damage that this weapon deals given the distance
+	/// that the projectile traveled if it has a damage dropoff range.
 	double DamageDropoff(double distance) const;
-	// Return the weapon's damage dropoff at maximum range.
+	/** Return the weapon's damage dropoff at maximum range. */
 	double MaxDropoff() const;
-	// Return the ranges at which the weapon's damage dropoff begins and ends.
+	/** Return the ranges at which the weapon's damage dropoff begins and ends. */
 	const std::pair<double, double> &DropoffRanges() const;
 
 
 protected:
-	// Legacy support: allow turret outfits with no turn rate to specify a
-	// default turnrate.
+	/// Legacy support: allow turret outfits with no turn rate to specify a
+	/// default turnrate.
 	void SetTurretTurn(double rate);
 
-	// A pair representing the outfit that is consumed as ammo and the number
-	// of that outfit consumed upon fire.
+	/// A pair representing the outfit that is consumed as ammo and the number
+	/// of that outfit consumed upon fire.
 	std::pair<const Outfit*, int> ammo;
 
 
@@ -243,7 +257,7 @@ private:
 	std::map<const Effect *, int> dieEffects;
 	std::vector<Submunition> submunitions;
 
-	// This stores whether or not the weapon has been loaded.
+	/** This stores whether or not the weapon has been loaded. */
 	bool isWeapon = false;
 	bool isStreamed = false;
 	bool isSafe = false;
@@ -254,11 +268,11 @@ private:
 	bool canCollideShips = true;
 	bool canCollideAsteroids = true;
 	bool canCollideMinables = true;
-	// Guns and missiles are by default aimed a converged point at the
-	// maximum weapons range in front of the ship. When either the installed
-	// weapon or the gun-port (or both) have the isParallel attribute set
-	// to true, then this convergence will not be used and the weapon will
-	// be aimed directly in the gunport angle/direction.
+	/// Guns and missiles are by default aimed a converged point at the
+	/// maximum weapons range in front of the ship. When either the installed
+	/// weapon or the gun-port (or both) have the isParallel attribute set
+	/// to true, then this convergence will not be used and the weapon will
+	/// be aimed directly in the gunport angle/direction.
 	bool isParallel = false;
 
 	// Attributes.
@@ -273,9 +287,9 @@ private:
 	int missileStrength = 0;
 	int antiMissile = 0;
 	double tractorBeam = 0.;
-	// Use of an unsigned integer allows explicit penetration count values of 0
-	// to result in a projectile that will hit 65k targets before being destroyed
-	// (which is effectively infinite under any reasonable balance).
+	/// Use of an unsigned integer allows explicit penetration count values of 0
+	/// to result in a projectile that will hit 65k targets before being destroyed
+	/// (which is effectively infinite under any reasonable balance).
 	uint16_t penetrationCount = 1U;
 
 	double velocity = 0.;
@@ -286,8 +300,8 @@ private:
 
 	double turn = 0.;
 	double inaccuracy = 0.;
-	// A pair representing the distribution type of this weapon's inaccuracy
-	// and whether it is inverted
+	/// A pair representing the distribution type of this weapon's inaccuracy
+	/// and whether it is inverted
 	std::pair<Distribution::Type, bool> inaccuracyDistribution = {Distribution::Type::Triangular, false};
 	double turretTurn = 0.;
 	double maxAngle = 360.;
@@ -363,15 +377,18 @@ private:
 	std::pair<double, double> damageDropoffRange;
 	double damageDropoffModifier = 1.;
 
-	// Cache the calculation of these values, for faster access.
+	///@{
+	/// Cache the calculation of these values, for faster access.
 	mutable bool calculatedDamage = true;
 	mutable bool doesDamage = false;
 	mutable double totalLifetime = -1.;
+	///@}
 };
 
 
 
-// Inline the accessors because they get called so frequently.
+///@{
+/// Inline the accessors because they get called so frequently.
 inline int Weapon::Lifetime() const { return lifetime; }
 inline int Weapon::RandomLifetime() const { return randomLifetime; }
 inline int Weapon::FadeOut() const { return fadeOut; }
@@ -470,3 +487,4 @@ inline double Weapon::RelativeEnergyDamage() const { return TotalDamage(RELATIVE
 inline bool Weapon::DoesDamage() const { if(!calculatedDamage) TotalDamage(0); return doesDamage; }
 
 inline bool Weapon::HasDamageDropoff() const { return hasDamageDropoff; }
+///@}

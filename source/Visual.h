@@ -24,8 +24,8 @@ class Effect;
 
 
 
-// A Visual is the object created by an Effect. This is a separate class from
-// Effect to allow it to be much more lightweight.
+/// A Visual is the object created by an Effect. This is a separate class from
+/// Effect to allow it to be much more lightweight.
 class Visual : public Body {
 public:
 	Visual() = default;
@@ -39,7 +39,7 @@ public:
 	// Point Unit() const;
 	// double Zoom() const;
 
-	// Step the effect forward.
+	/** Step the effect forward. */
 	void Move();
 
 

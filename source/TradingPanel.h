@@ -22,10 +22,10 @@ class System;
 
 
 
-// Overlay on the PlanetPanel showing commodity prices and inventory, and allowing
-// buying and selling. This also lets you sell any plundered outfits you are
-// carrying, although if you want to sell only certain ones and not others you
-// will need to select them individually in the outfitter panel.
+/// Overlay on the PlanetPanel showing commodity prices and inventory, and allowing
+/// buying and selling. This also lets you sell any plundered outfits you are
+/// carrying, although if you want to sell only certain ones and not others you
+/// will need to select them individually in the outfitter panel.
 class TradingPanel : public Panel {
 public:
 	explicit TradingPanel(PlayerInfo &player);
@@ -50,11 +50,13 @@ private:
 	const System &system;
 	const int COMMODITY_COUNT;
 
-	// Remember whether the "sell all" button will sell all outfits, or sell
-	// everything except outfits.
+	/// Remember whether the "sell all" button will sell all outfits, or sell
+	/// everything except outfits.
 	bool sellOutfits = false;
 
-	// Keep track of how much we sold and how much profit was made.
+	///@{
+	/// Keep track of how much we sold and how much profit was made.
 	int tonsSold = 0;
 	int64_t profit = 0;
+	///@}
 };

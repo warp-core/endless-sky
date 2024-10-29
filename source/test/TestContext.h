@@ -20,7 +20,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 class Test;
 
-// State-information used during testing with the AC/Integration test framework.
+/** State-information used during testing with the AC/Integration test framework. */
 class TestContext {
 friend class Test;
 public:
@@ -30,7 +30,7 @@ public:
 
 
 private:
-	// Class to describe a running test and running test-step within the test.
+	/** Class to describe a running test and running test-step within the test. */
 	class ActiveTestStep {
 	public:
 		const Test *test;
@@ -38,13 +38,15 @@ private:
 
 
 	public:
-		// Support operators for usage in containers like map and set.
+		///@{
+		/// Support operators for usage in containers like map and set.
 		bool operator==(const ActiveTestStep &rhs) const;
 		bool operator<(const ActiveTestStep &rhs) const;
+		///@}
 	};
 
 private:
-	// Reference to the currently running test and test-step within the test.
+	/** Reference to the currently running test and test-step within the test. */
 	std::vector<ActiveTestStep> callstack;
 
 	std::set<ActiveTestStep> branchesSinceGameStep;

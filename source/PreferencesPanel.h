@@ -32,13 +32,13 @@ struct Plugin;
 
 
 
-// UI panel for editing preferences, especially the key mappings.
+/** UI panel for editing preferences, especially the key mappings. */
 class PreferencesPanel : public Panel {
 public:
 	PreferencesPanel();
 	virtual ~PreferencesPanel();
 
-	// Draw this panel.
+	/** Draw this panel. */
 	virtual void Draw() override;
 
 
@@ -70,7 +70,7 @@ private:
 	void HandleDown();
 	void HandleConfirm();
 
-	// Scroll the plugin list until the selected plugin is visible.
+	/** Scroll the plugin list until the selected plugin is visible. */
 	void ScrollSelectedPlugin();
 
 
@@ -81,7 +81,7 @@ private:
 	int oldSelected;
 	int oldHover;
 	int latest;
-	// Which page of the preferences we're on.
+	/** Which page of the preferences we're on. */
 	char page = 'c';
 
 	Point hoverPoint;

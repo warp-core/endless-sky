@@ -24,7 +24,8 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 using namespace std;
 
 DamageProfile::DamageProfile(Projectile::ImpactInfo info)
-	: weapon(info.weapon), position(std::move(info.position)), isBlast(weapon.BlastRadius() > 0.)
+	: weapon(info.weapon), position(std::move(info.position)),
+		velocity(std::move(info.velocity)), isBlast(weapon.BlastRadius() > 0.)
 {
 	CalculateBlast();
 	// For weapon projectiles, the distance traveled for the projectile

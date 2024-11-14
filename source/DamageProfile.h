@@ -54,6 +54,8 @@ private:
 	const Weapon &weapon;
 	// The position of the projectile or hazard.
 	Point position;
+	// The velocity of the projectile upon collision. Not applicable to hazards.
+	Point velocity;
 	// Whether damage is applied as a blast.
 	bool isBlast;
 	// The scaling as received before calculating damage.

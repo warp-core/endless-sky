@@ -198,11 +198,21 @@ void DamageProfile::PopulateDamage(DamageDealt &damage, const Ship &ship) const
 
 	// Hit force is unaffected by shields.
 	double hitForce = weapon.HitForce() * ScaleType(0., 0., attributes.Get("force protection"));
-	if(hitForce)
+	// Hit force from a blast or hazard pushes the ship away from the center of that blast.
+	if(hitForce && (isBlast || isHazard))
 	{
 		Point d = ship.Position() - position;
 		double distance = d.Length();
 		if(distance)
 			damage.forcePoint = (hitForce / distance) * d;
+	}
+	// If hit force is not from a blast, the ship should be pushed in
+	// the direction the projectile was moving relative to the ship.
+	else if(hitForce)\
+	{
+		Point shipVelocity = ship.Velocity();
+		Point relativeVelocity = velocity - shipVelocity;
+		double relativeSpeed = relativeVelocity.Length();
+		damage.forcePoint = hitForce * relativeVelocity / relativeSpeed;
 	}
 }

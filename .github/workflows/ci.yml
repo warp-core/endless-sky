@@ -83,6 +83,7 @@ jobs:
         configurePreset: ${{ matrix.opengl == 'GL' && 'linux-ci' || 'linux-gles-ci' }}
         buildPreset: ${{ matrix.opengl == 'GL' && 'linux-ci' || 'linux-gles-ci' }}
         testPreset: ${{ matrix.opengl == 'GL' && 'linux-ci' || 'linux-gles-ci' }}
+        testPresetAdditionalArgs: "['--verbose']"
     - name: Run Benchmarks
       run: ctest --preset ${{ matrix.opengl == 'GL' && 'linux-ci-benchmark' || 'linux-gles-ci-benchmark' }}
 
@@ -146,6 +147,7 @@ jobs:
         configurePreset: 'mingw-ci'
         buildPreset: 'mingw-ci'
         testPreset: 'mingw-ci'
+        testPresetAdditionalArgs: "['--verbose']"
     - name: Run Benchmarks
       run: ctest --preset mingw-ci-benchmark
     - name: Upload binary
@@ -189,6 +191,7 @@ jobs:
         configurePreset: 'clang-cl-ci'
         buildPreset: 'clang-cl-ci'
         testPreset: 'clang-cl-ci'
+        testPresetAdditionalArgs: "['--verbose']"
     - name: Run Benchmarks
       run: ctest --preset clang-cl-ci-benchmark
 
@@ -224,6 +227,7 @@ jobs:
         configurePreset: 'macos-ci'
         buildPreset: 'macos-ci'
         testPreset: 'macos-ci'
+        testPresetAdditionalArgs: "['--verbose']"
     - name: Run Benchmarks
       run: ctest --preset macos-ci-benchmark
 
@@ -260,6 +264,7 @@ jobs:
         configurePreset: 'macos-arm-ci'
         buildPreset: 'macos-arm-ci'
         testPreset: 'macos-arm-ci'
+        testPresetAdditionalArgs: "['--verbose']"
     - name: Run Benchmarks
       run: ctest --preset macos-arm-ci-benchmark
 

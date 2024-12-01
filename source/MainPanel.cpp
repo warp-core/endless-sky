@@ -366,8 +366,7 @@ void MainPanel::ShowScanDialog(const ShipEvent &event)
 		for(const auto &it : target->Outfits())
 		{
 			string outfitNameForDisplay = (it.second == 1 ? it.first->DisplayName() : it.first->PluralName());
-			if(it.first->IsDefined() && !it.first->Category().empty() && !outfitNameForDisplay.empty())
-				outfitsByCategory[it.first->Category()].emplace(std::move(outfitNameForDisplay), it.second);
+			outfitsByCategory[it.first->Category()].emplace(std::move(outfitNameForDisplay), it.second);
 		}
 		for(const auto &it : outfitsByCategory)
 		{

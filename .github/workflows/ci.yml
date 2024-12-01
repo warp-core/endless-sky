@@ -84,7 +84,7 @@ jobs:
         buildPreset: ${{ matrix.opengl == 'GL' && 'linux-ci' || 'linux-gles-ci' }}
         testPreset: ${{ matrix.opengl == 'GL' && 'linux-ci' || 'linux-gles-ci' }}
     - name: Run Benchmarks
-      run: ctest --preset ${{ matrix.opengl == 'GL' && 'linux-ci-benchmark' || 'linux-gles-ci-benchmark' }} -V
+      run: ctest -V --preset ${{ matrix.opengl == 'GL' && 'linux-ci-benchmark' || 'linux-gles-ci-benchmark' }}
 
 
   build_steam:
@@ -147,7 +147,7 @@ jobs:
         buildPreset: 'mingw-ci'
         testPreset: 'mingw-ci'
     - name: Run Benchmarks
-      run: ctest --preset mingw-ci-benchmark -V
+      run: ctest -V --preset mingw-ci-benchmark
     - name: Upload binary
       uses: actions/upload-artifact@v4
       with:
@@ -190,7 +190,7 @@ jobs:
         buildPreset: 'clang-cl-ci'
         testPreset: 'clang-cl-ci'
     - name: Run Benchmarks
-      run: ctest --preset clang-cl-ci-benchmark -V
+      run: ctest -V --preset clang-cl-ci-benchmark
 
 
   build_macos:
@@ -225,7 +225,7 @@ jobs:
         buildPreset: 'macos-ci'
         testPreset: 'macos-ci'
     - name: Run Benchmarks
-      run: ctest --preset macos-ci-benchmark -V
+      run: ctest -V --preset macos-ci-benchmark
 
 
   build_macos-arm:
@@ -261,7 +261,7 @@ jobs:
         buildPreset: 'macos-arm-ci'
         testPreset: 'macos-arm-ci'
     - name: Run Benchmarks
-      run: ctest --preset macos-arm-ci-benchmark -V
+      run: ctest -V --preset macos-arm-ci-benchmark
 
 
   build_documentation_doxygen:

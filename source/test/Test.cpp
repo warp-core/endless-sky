@@ -431,22 +431,26 @@ void Test::Step(TestContext &context, PlayerInfo &player, Command &commandToGive
 
 	while(context.callstack.back().step < steps.size() && !continueGameLoop)
 	{
+		string message = "Running step: " + to_string(context.callstack.back().step) + " - ";
 		const TestStep &stepToRun = steps[context.callstack.back().step];
 		switch(stepToRun.stepType)
 		{
 			case TestStep::Type::APPLY:
 				stepToRun.assignConditions.Apply(player.Conditions());
+				message += "assigning conditions.";
 				++(context.callstack.back().step);
 				break;
 			case TestStep::Type::ASSERT:
 				if(!stepToRun.checkConditions.Test(player.Conditions()))
 					Fail(context, player, "asserted false");
+				message += "asserting.";
 				++(context.callstack.back().step);
 				break;
 			case TestStep::Type::BRANCH:
 				// If we encounter a branch entry twice, then resume the gameloop before the second encounter.
 				// Encountering branch entries twice typically only happen in "wait loops" and we should give
 				// the game cycles to proceed if we are in a wait loop for something that happens over time.
+				message += "branching.";
 				if(context.branchesSinceGameStep.contains(context.callstack.back()))
 				{
 					continueGameLoop = true;
@@ -461,10 +465,16 @@ void Test::Step(TestContext &context, PlayerInfo &player, Command &commandToGive
 					++(context.callstack.back().step);
 				break;
 			case TestStep::Type::CALL:
+				message += "calling.";
 				{
 					auto calledTest = GameData::Tests().Find(stepToRun.nameOrLabel);
 					if(nullptr == calledTest)
 						Fail(context, player, "Calling non-existing test \"" + stepToRun.nameOrLabel + "\"");
+					else
+					{
+						message.pop_back();
+						message += " \"" + calledTest->Name() + "\".";
+					}
 					// Put the called test on the stack and start it from 0.
 					context.callstack.push_back({calledTest, 0});
 					// Break the loop to switch to the test just pushed.
@@ -472,15 +482,22 @@ void Test::Step(TestContext &context, PlayerInfo &player, Command &commandToGive
 				continueGameLoop = true;
 				break;
 			case TestStep::Type::INJECT:
+				message += "injecting.";
 				{
 					// Lookup the data and inject it in the game or into the environment.
 					const TestData *testData = GameData::TestDataSets().Get(stepToRun.nameOrLabel);
 					if(!testData->Inject())
 						Fail(context, player, "injecting data failed");
+					else
+					{
+						message.pop_back();
+						message += " \"" + testData->Name() + "\".";
+					}
 				}
 				++(context.callstack.back().step);
 				break;
 			case TestStep::Type::INPUT:
+				message += "inputting.";
 				if(stepToRun.command)
 					commandToGive |= stepToRun.command;
 				if(!stepToRun.inputKeys.empty())
@@ -497,18 +514,22 @@ void Test::Step(TestContext &context, PlayerInfo &player, Command &commandToGive
 				++(context.callstack.back().step);
 				break;
 			case TestStep::Type::LABEL:
+				message += "label.";
 				++(context.callstack.back().step);
 				break;
 			case TestStep::Type::NAVIGATE:
+				message += "navigating.";
 				player.TravelPlan().clear();
 				player.TravelPlan() = stepToRun.travelPlan;
 				player.SetTravelDestination(stepToRun.travelDestination);
 				++(context.callstack.back().step);
 				break;
 			default:
+				message += "failing.";
 				Fail(context, player, "Unknown step type");
 				break;
 		}
+		Logger::LogError(message);
 	}
 }
 

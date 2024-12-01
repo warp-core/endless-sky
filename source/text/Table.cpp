@@ -16,7 +16,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "Table.h"
 
 #include "DisplayText.h"
-#include "../shader/FillShader.h"
+#include "../FillShader.h"
 #include "Font.h"
 #include "FontSet.h"
 #include "Format.h"

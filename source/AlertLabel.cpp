@@ -17,9 +17,9 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include "Angle.h"
 #include "GameData.h"
-#include "shader/PointerShader.h"
+#include "PointerShader.h"
 #include "Projectile.h"
-#include "shader/RingShader.h"
+#include "RingShader.h"
 #include "Ship.h"
 
 #include <algorithm>

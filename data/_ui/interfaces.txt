@@ -1147,7 +1147,7 @@ interface "boarding"
 		dimensions 80 30
 	
 	active if "can defend"
-	button D "_Defend"
+	button d "_Defend"
 		center 210 185
 		dimensions 80 30
 

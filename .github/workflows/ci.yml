@@ -203,6 +203,12 @@ jobs:
       with:
         name: windows-dlls-clang
         path: ./build/ci/*.dll
+    - name: Upload debug symbols
+      if: success() || failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: windows-debug-symbols
+        path: ./build/ci/*.pdb
 
 
 

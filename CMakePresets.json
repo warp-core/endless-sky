@@ -27,7 +27,7 @@
 				"strategy": "external"
 			},
 			"cacheVariables": {
-				"CMAKE_BUILD_TYPE": "Release",
+				"CMAKE_BUILD_TYPE": "Debug",
 				"CMAKE_CXX_COMPILER_LAUNCHER": "sccache",
 				"CMAKE_COMPILE_WARNING_AS_ERROR": "ON",
 				"ES_USE_VCPKG": "ON",
@@ -239,8 +239,8 @@
 			"description": "Builds with clang-cl for CI purposes",
 			"inherits": "ci",
 			"cacheVariables": {
-				"VCPKG_HOST_TRIPLET": "x64-windows-release",
-				"VCPKG_TARGET_TRIPLET": "x64-windows-release",
+				"VCPKG_HOST_TRIPLET": "x64-windows",
+				"VCPKG_TARGET_TRIPLET": "x64-windows",
 				"CMAKE_CXX_COMPILER": "clang-cl.exe"
 			}
 		},
@@ -341,7 +341,7 @@
 		{
 			"name": "ci",
 			"hidden": true,
-			"configuration": "Release",
+			"configuration": "Debug",
 			"condition": {
 				"type": "equals",
 				"lhs": "$env{CI}",

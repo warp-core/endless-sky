@@ -191,6 +191,17 @@ jobs:
         testPreset: 'clang-cl-ci'
     - name: Run Benchmarks
       run: ctest --preset clang-cl-ci-benchmark
+    - name: Upload binary
+      uses: actions/upload-artifact@v4
+      with:
+        name: binary-windows
+        path: ./build/clang-ci/Endless Sky.exe
+    - name: Upload DLLs
+      uses: actions/upload-artifact@v4
+      with:
+        name: windows-dlls
+        path: ./build/clang-ci/*.dll
+
 
 
   build_macos:

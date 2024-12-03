@@ -188,7 +188,6 @@ jobs:
       with:
         configurePreset: 'clang-cl-ci'
         buildPreset: 'clang-cl-ci'
-        testPreset: 'clang-cl-ci'
     - name: Run Benchmarks
       if: success() || failure()
       run: ctest --preset clang-cl-ci-benchmark

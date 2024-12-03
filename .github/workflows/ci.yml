@@ -197,13 +197,13 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: binary-windows
-        path: ./build/clang-ci/Endless Sky.exe
+        path: ./build/clang-cl-ci/Endless Sky.exe
     - name: Upload DLLs
       if: success() || failure()
       uses: actions/upload-artifact@v4
       with:
         name: windows-dlls
-        path: ./build/clang-ci/*.dll
+        path: ./build/clang-cl-ci/*.dll
 
 
 

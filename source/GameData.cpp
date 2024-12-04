@@ -68,6 +68,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include <algorithm>
 #include <atomic>
+#include <chrono>
 #include <iostream>
 #include <queue>
 #include <utility>
@@ -209,18 +210,20 @@ shared_future<void> GameData::BeginLoad(TaskQueue &queue, bool onlyLoadData, boo
 		Logger::LogError("Loading everything.");
 	if(!onlyLoadData)
 	{
+		auto thing = chrono::duration_cast<chrono::nanoseconds>(chrono::system_clock::now().time_since_epoch()).count();
+		Logger::LogError("Adding to task queue 1: " + to_string(chrono::duration_cast<chrono::nanoseconds>(chrono::system_clock::now().time_since_epoch()).count()));
 		queue.Run([&queue] {
-			Logger::LogError("Calling FindImages.");
+			Logger::LogError("Calling FindImages: " + to_string(chrono::duration_cast<chrono::nanoseconds>(chrono::system_clock::now().time_since_epoch()).count()));
 			// Now, read all the images in all the path directories. For each unique
 			// name, only remember one instance, letting things on the higher priority
 			// paths override the default images.
 			map<string, shared_ptr<ImageSet>> images = FindImages();
-			Logger::LogError("FindImages produced " + to_string(images.size()) + " entries.");
+			Logger::LogError("FindImages produced " + to_string(images.size()) + " entries: " + to_string(chrono::duration_cast<chrono::nanoseconds>(chrono::system_clock::now().time_since_epoch()).count()));
 
+			Logger::LogError("Queuing images.");
 			// From the name, strip out any frame number, plus the extension.
 			for(auto &it : images)
 			{
-				Logger::LogError(it.first + (it.second ? " true" : " false"));
 				// This should never happen, but just in case:
 				if(!it.second)
 					continue;
@@ -235,9 +238,9 @@ shared_future<void> GameData::BeginLoad(TaskQueue &queue, bool onlyLoadData, boo
 				}
 				else
 				{
-					Logger::LogError("Waiting for lock.");
+					Logger::LogError("Waiting for lock to add " + it.first + " to queue: " + to_string(chrono::duration_cast<chrono::nanoseconds>(chrono::system_clock::now().time_since_epoch()).count()));
 					lock_guard lock(imageQueueMutex);
-					Logger::LogError("Acquired lock.");
+					Logger::LogError("Acquired lock to add " + it.first + " to queue: " + to_string(chrono::duration_cast<chrono::nanoseconds>(chrono::system_clock::now().time_since_epoch()).count()));
 					imageQueue.push(std::move(std::move(it.second)));
 					++totalSprites;
 				}
@@ -246,7 +249,9 @@ shared_future<void> GameData::BeginLoad(TaskQueue &queue, bool onlyLoadData, boo
 			// Launch the tasks to actually load the images, making sure not to exceed the amount
 			// of tasks the main thread can handle in a single frame to limit peak memory usage.
 			{
+				Logger::LogError("Waiting for lock to LoadSpriteQueued: " + to_string(chrono::duration_cast<chrono::nanoseconds>(chrono::system_clock::now().time_since_epoch()).count()));
 				lock_guard lock(imageQueueMutex);
+				Logger::LogError("Acquired lock to LoadSpriteQueued: " + to_string(chrono::duration_cast<chrono::nanoseconds>(chrono::system_clock::now().time_since_epoch()).count()));
 				for(int i = 0; i < TaskQueue::MAX_SYNC_TASKS; ++i)
 					LoadSpriteQueued(queue);
 			}

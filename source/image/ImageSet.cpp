@@ -136,6 +136,7 @@ void ImageSet::Add(ImageFileData data)
 // Reduce all given paths to frame images into a sequence of consecutive frames.
 void ImageSet::ValidateFrames() noexcept(false)
 {
+	Logger::LogError("Validating frames.");
 	string prefix = "Sprite \"" + name + "\": ";
 	AddValid(framePaths[0], paths[0], prefix, false, false);
 	AddValid(framePaths[1], paths[1], prefix, true, false);

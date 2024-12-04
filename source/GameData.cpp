@@ -38,6 +38,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "image/ImageSet.h"
 #include "Interface.h"
 #include "shader/LineShader.h"
+#include "Logger.h"
 #include "image/MaskManager.h"
 #include "Minable.h"
 #include "Mission.h"
@@ -191,22 +192,35 @@ namespace {
 
 shared_future<void> GameData::BeginLoad(TaskQueue &queue, bool onlyLoadData, bool debugMode, bool preventUpload)
 {
+	Logger::LogError("Beginning load.");
+	if(preventUpload)
+		Logger::LogError("Preventing image upload.");
+	else
+		Logger::LogError("Will upload image files.");
 	preventSpriteUpload = preventUpload;
 
+	Logger::LogError("Loading sources.");
 	// Initialize the list of "source" folders based on any active plugins.
 	LoadSources(queue);
 
+	if(onlyLoadData)
+		Logger::LogError("Only loading data.");
+	else
+		Logger::LogError("Loading everything.");
 	if(!onlyLoadData)
 	{
 		queue.Run([&queue] {
+			Logger::LogError("Calling FindImages.");
 			// Now, read all the images in all the path directories. For each unique
 			// name, only remember one instance, letting things on the higher priority
 			// paths override the default images.
 			map<string, shared_ptr<ImageSet>> images = FindImages();
+			Logger::LogError("FindImages produced " + to_string(images.size()) + " entries.");
 
 			// From the name, strip out any frame number, plus the extension.
 			for(auto &it : images)
 			{
+				Logger::LogError(it.first + (it.second ? " true" : " false"));
 				// This should never happen, but just in case:
 				if(!it.second)
 					continue;
@@ -215,10 +229,15 @@ shared_future<void> GameData::BeginLoad(TaskQueue &queue, bool onlyLoadData, boo
 				it.second->ValidateFrames();
 				// For landscapes, remember all the source files but don't load them yet.
 				if(ImageSet::IsDeferred(it.first))
+				{
+					Logger::LogError("Deferring: " + it.first);
 					deferred[SpriteSet::Get(it.first)] = std::move(it.second);
+				}
 				else
 				{
+					Logger::LogError("Waiting for lock.");
 					lock_guard lock(imageQueueMutex);
+					Logger::LogError("Acquired lock.");
 					imageQueue.push(std::move(std::move(it.second)));
 					++totalSprites;
 				}
@@ -907,7 +926,9 @@ const Gamerules &GameData::GetGamerules()
 
 void GameData::LoadSources(TaskQueue &queue)
 {
+	Logger::LogError("Entered LoadSources. Clearing " + to_string(sources.size()) + " entries.");
 	sources.clear();
+	Logger::LogError("Cleared sources. " + to_string(sources.size()) + " entries remain.");
 	sources.push_back(Files::Resources());
 
 	vector<string> globalPlugins = Files::ListDirectories(Files::Resources() + "plugins/");
@@ -925,14 +946,17 @@ void GameData::LoadSources(TaskQueue &queue)
 
 map<string, shared_ptr<ImageSet>> GameData::FindImages()
 {
+	Logger::LogError("Finding images. Sources contains " + to_string(sources.size()) + " entries.");
 	map<string, shared_ptr<ImageSet>> images;
 	for(const string &source : sources)
 	{
+		Logger::LogError("Found image files from source: " + source);
 		// All names will only include the portion of the path that comes after
 		// this directory prefix.
 		string directoryPath = source + "images/";
 
 		vector<string> imageFiles = Files::RecursiveList(directoryPath);
+		Logger::LogError("Found " + to_string(imageFiles.size()) + " image files.");
 		for(string &path : imageFiles)
 			if(ImageSet::IsImage(path))
 			{

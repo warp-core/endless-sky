@@ -205,7 +205,7 @@ jobs:
         path: ./build/ci/*.dll
     - name: Test parse
       if: success() || failure()
-      run: "'./Endless Sky.exe' --parse-images-and-sounds"
+      run: "'./build/ci/Endless Sky.exe' --parse-images-and-sounds"
       shell: bash
 
 

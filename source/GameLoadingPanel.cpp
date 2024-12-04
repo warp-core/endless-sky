@@ -22,6 +22,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "GameData.h"
 #include "image/MaskManager.h"
 #include "MenuAnimationPanel.h"
+#include "Logger.h"
 #include "MenuPanel.h"
 #include "PlayerInfo.h"
 #include "Point.h"
@@ -34,6 +35,8 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "UI.h"
 
 #include "opengl.h"
+
+using namespace std;
 
 
 
@@ -49,11 +52,15 @@ GameLoadingPanel::GameLoadingPanel(PlayerInfo &player, TaskQueue &queue, const C
 
 void GameLoadingPanel::Step()
 {
+	Logger::LogError("Stepping GameLoadingPanel.");
 	progress = static_cast<int>(GameData::GetProgress() * MAX_TICKS);
+	Logger::LogError("Progress: " + to_string(progress));
 
+	Logger::LogError("Processing sync tasks...");
 	queue.ProcessSyncTasks();
 	if(GameData::IsLoaded())
 	{
+		Logger::LogError("Game data is loaded");
 		// Now that we have finished loading all the basic sprites and sounds, we can look for invalid file paths,
 		// e.g. due to capitalization errors or other typos.
 		SpriteSet::CheckReferences();

@@ -161,24 +161,15 @@ namespace {
 		auto icon = make_shared<ImageSet>(plugin->name);
 
 		// Try adding all the possible icon variants.
-		for(const string &extension : ImageBuffer::ImageExtensions())
-		{
-			string iconPath = path + "icon" + extension;
-			if(Files::Exists(iconPath))
-			{
-				icon->Add(filesystem::path(iconPath));
-				break;
-			}
-		}
-		for(const string &extension : ImageBuffer::ImageExtensions())
-		{
-			string iconPath = path + "icon@2x" + extension;
-			if(Files::Exists(iconPath))
-			{
-				icon->Add(filesystem::path(iconPath));
-				break;
-			}
-		}
+		if(Files::Exists(path + "icon.png"))
+			icon->Add(path + "icon.png");
+		else if(Files::Exists(path + "icon.jpg"))
+			icon->Add(path + "icon.jpg");
+
+		if(Files::Exists(path + "icon@2x.png"))
+			icon->Add(path + "icon@2x.png");
+		else if(Files::Exists(path + "icon@2x.jpg"))
+			icon->Add(path + "icon@2x.jpg");
 
 		if(!icon->IsEmpty())
 		{
@@ -940,18 +931,19 @@ map<string, shared_ptr<ImageSet>> GameData::FindImages()
 		// All names will only include the portion of the path that comes after
 		// this directory prefix.
 		string directoryPath = source + "images/";
+		size_t start = directoryPath.size();
 
 		vector<string> imageFiles = Files::RecursiveList(directoryPath);
 		for(string &path : imageFiles)
 			if(ImageSet::IsImage(path))
 			{
 				// auto innerStart = chrono::system_clock::now();
-				ImageFileData data(path, directoryPath);
+				string name = ImageSet::Name(path.substr(start));
 
-				shared_ptr<ImageSet> &imageSet = images[data.name];
+				shared_ptr<ImageSet> &imageSet = images[name];
 				if(!imageSet)
-					imageSet.reset(new ImageSet(data.name));
-				imageSet->Add(std::move(data));
+					imageSet.reset(new ImageSet(name));
+				imageSet->Add(std::move(path));
 				// auto innerEnd = chrono::system_clock::now();
 				// Logger::LogError("Added to ImageSet in: " + to_string(chrono::duration_cast<chrono::microseconds>(innerEnd - innerStart).count()));
 			}

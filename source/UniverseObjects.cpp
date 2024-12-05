@@ -44,6 +44,7 @@ shared_future<void> UniverseObjects::Load(TaskQueue &queue, const vector<string>
 	// function (except for calling GetProgress which is safe due to the atomic).
 	return queue.Run([this, sources, debugMode]() noexcept -> void
 		{
+			auto start = chrono::system_clock::now();
 			vector<string> files;
 			for(const string &source : sources)
 			{
@@ -69,6 +70,8 @@ shared_future<void> UniverseObjects::Load(TaskQueue &queue, const vector<string>
 			}
 			FinishLoading();
 			progress = 1.;
+			auto end = chrono::system_clock::now();
+			Logger::LogError("Loading data took: " + to_string(chrono::duration_cast<chrono::microseconds>(end - start).count()));
 		});
 }
 

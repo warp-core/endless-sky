@@ -229,7 +229,10 @@ int main(int argc, char *argv[])
 			GameWindow::Step();
 		}
 
+		auto startAudio = chrono::system_clock::now();
 		Audio::Init(GameData::Sources());
+		auto endAudio = chrono::system_clock::now();
+		Logger::LogError("Audio loaded in: " + to_string(chrono::duration_cast<chrono::microseconds>(endAudio - startAudio).count()));
 
 		if(isTesting && !noTestMute)
 			Audio::SetVolume(0);

@@ -641,6 +641,7 @@ namespace {
 	// Thread entry point for loading sounds.
 	void Load()
 	{
+		auto start = chrono::system_clock::now();
 		string name;
 		string path;
 		Sound *sound;
@@ -654,7 +655,11 @@ namespace {
 				if(!path.empty() && !loadQueue.empty())
 					loadQueue.erase(loadQueue.begin());
 				if(loadQueue.empty())
+				{
+					auto end = chrono::system_clock::now();
+					Logger::LogError("Emptied audio queue in: " + to_string(chrono::duration_cast<chrono::microseconds>(end - start).count()));
 					return;
+				}
 				name = loadQueue.begin()->first;
 				path = loadQueue.begin()->second;
 

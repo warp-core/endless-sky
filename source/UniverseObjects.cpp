@@ -323,8 +323,8 @@ void UniverseObjects::LoadFile(const string &path, bool debugMode)
 		return;
 
 	DataFile data(path);
-	//if(debugMode)
-	//	Logger::LogError("Parsing: " + path);
+	if(debugMode)
+		Logger::LogError("Parsing: " + path);
 
 	for(const DataNode &node : data)
 	{

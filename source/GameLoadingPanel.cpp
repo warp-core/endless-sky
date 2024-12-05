@@ -22,7 +22,6 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "GameData.h"
 #include "image/MaskManager.h"
 #include "MenuAnimationPanel.h"
-#include "Logger.h"
 #include "MenuPanel.h"
 #include "PlayerInfo.h"
 #include "Point.h"
@@ -35,8 +34,6 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "UI.h"
 
 #include "opengl.h"
-
-using namespace std;
 
 
 
@@ -52,16 +49,11 @@ GameLoadingPanel::GameLoadingPanel(PlayerInfo &player, TaskQueue &queue, const C
 
 void GameLoadingPanel::Step()
 {
-	Logger::LogError("Stepping GameLoadingPanel: " + to_string(chrono::duration_cast<chrono::nanoseconds>(chrono::system_clock::now().time_since_epoch()).count()));
 	progress = static_cast<int>(GameData::GetProgress() * MAX_TICKS);
-	Logger::LogError("Progress: " + to_string(progress) + " - " + to_string(chrono::duration_cast<chrono::nanoseconds>(chrono::system_clock::now().time_since_epoch()).count()));
 
-	Logger::LogError("Processing sync tasks..."  + to_string(chrono::duration_cast<chrono::nanoseconds>(chrono::system_clock::now().time_since_epoch()).count()));
 	queue.ProcessSyncTasks();
-	Logger::LogError("Processed sync tasks: " + to_string(chrono::duration_cast<chrono::nanoseconds>(chrono::system_clock::now().time_since_epoch()).count()));
 	if(GameData::IsLoaded())
 	{
-		Logger::LogError("Game data is loaded: " + to_string(chrono::duration_cast<chrono::nanoseconds>(chrono::system_clock::now().time_since_epoch()).count()));
 		// Now that we have finished loading all the basic sprites and sounds, we can look for invalid file paths,
 		// e.g. due to capitalization errors or other typos.
 		SpriteSet::CheckReferences();

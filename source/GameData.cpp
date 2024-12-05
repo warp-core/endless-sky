@@ -38,7 +38,6 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "image/ImageSet.h"
 #include "Interface.h"
 #include "shader/LineShader.h"
-#include "Logger.h"
 #include "image/MaskManager.h"
 #include "Minable.h"
 #include "Mission.h"
@@ -68,7 +67,6 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include <algorithm>
 #include <atomic>
-#include <chrono>
 #include <iostream>
 #include <queue>
 #include <utility>
@@ -193,33 +191,19 @@ namespace {
 
 shared_future<void> GameData::BeginLoad(TaskQueue &queue, bool onlyLoadData, bool debugMode, bool preventUpload)
 {
-	Logger::LogError("Beginning load.");
-	if(preventUpload)
-		Logger::LogError("Preventing image upload.");
-	else
-		Logger::LogError("Will upload image files.");
 	preventSpriteUpload = preventUpload;
 
-	Logger::LogError("Loading sources.");
 	// Initialize the list of "source" folders based on any active plugins.
 	LoadSources(queue);
 
-	if(onlyLoadData)
-		Logger::LogError("Only loading data.");
-	else
-		Logger::LogError("Loading everything.");
 	if(!onlyLoadData)
 	{
-		Logger::LogError("Adding to task queue 1: " + to_string(chrono::duration_cast<chrono::nanoseconds>(chrono::system_clock::now().time_since_epoch()).count()));
 		queue.Run([&queue] {
-			Logger::LogError("Calling FindImages: " + to_string(chrono::duration_cast<chrono::nanoseconds>(chrono::system_clock::now().time_since_epoch()).count()));
 			// Now, read all the images in all the path directories. For each unique
 			// name, only remember one instance, letting things on the higher priority
 			// paths override the default images.
 			map<string, shared_ptr<ImageSet>> images = FindImages();
-			Logger::LogError("FindImages produced " + to_string(images.size()) + " entries: " + to_string(chrono::duration_cast<chrono::nanoseconds>(chrono::system_clock::now().time_since_epoch()).count()));
 
-			Logger::LogError("Queuing images.");
 			// From the name, strip out any frame number, plus the extension.
 			for(auto &it : images)
 			{
@@ -231,15 +215,10 @@ shared_future<void> GameData::BeginLoad(TaskQueue &queue, bool onlyLoadData, boo
 				it.second->ValidateFrames();
 				// For landscapes, remember all the source files but don't load them yet.
 				if(ImageSet::IsDeferred(it.first))
-				{
-					Logger::LogError("Deferring: " + it.first);
 					deferred[SpriteSet::Get(it.first)] = std::move(it.second);
-				}
 				else
 				{
-					Logger::LogError("Waiting for lock to add " + it.first + " to queue: " + to_string(chrono::duration_cast<chrono::nanoseconds>(chrono::system_clock::now().time_since_epoch()).count()));
 					lock_guard lock(imageQueueMutex);
-					Logger::LogError("Acquired lock to add " + it.first + " to queue: " + to_string(chrono::duration_cast<chrono::nanoseconds>(chrono::system_clock::now().time_since_epoch()).count()));
 					imageQueue.push(std::move(std::move(it.second)));
 					++totalSprites;
 				}
@@ -248,9 +227,7 @@ shared_future<void> GameData::BeginLoad(TaskQueue &queue, bool onlyLoadData, boo
 			// Launch the tasks to actually load the images, making sure not to exceed the amount
 			// of tasks the main thread can handle in a single frame to limit peak memory usage.
 			{
-				Logger::LogError("Waiting for lock to LoadSpriteQueued: " + to_string(chrono::duration_cast<chrono::nanoseconds>(chrono::system_clock::now().time_since_epoch()).count()));
 				lock_guard lock(imageQueueMutex);
-				Logger::LogError("Acquired lock to LoadSpriteQueued: " + to_string(chrono::duration_cast<chrono::nanoseconds>(chrono::system_clock::now().time_since_epoch()).count()));
 				for(int i = 0; i < TaskQueue::MAX_SYNC_TASKS; ++i)
 					LoadSpriteQueued(queue);
 			}
@@ -323,8 +300,6 @@ void GameData::LoadShaders()
 double GameData::GetProgress()
 {
 	double spriteProgress = static_cast<double>(spriteLoadingProgress) / totalSprites;
-	Logger::LogError("Sprite loading progress: " + to_string(spriteLoadingProgress));
-	Logger::LogError("Sprite progress: " + to_string(spriteProgress));
 	return min({spriteProgress, Audio::GetProgress(), objects.GetProgress()});
 }
 
@@ -932,9 +907,7 @@ const Gamerules &GameData::GetGamerules()
 
 void GameData::LoadSources(TaskQueue &queue)
 {
-	Logger::LogError("Entered LoadSources. Clearing " + to_string(sources.size()) + " entries.");
 	sources.clear();
-	Logger::LogError("Cleared sources. " + to_string(sources.size()) + " entries remain.");
 	sources.push_back(Files::Resources());
 
 	vector<string> globalPlugins = Files::ListDirectories(Files::Resources() + "plugins/");
@@ -952,18 +925,14 @@ void GameData::LoadSources(TaskQueue &queue)
 
 map<string, shared_ptr<ImageSet>> GameData::FindImages()
 {
-	Logger::LogError("Finding images. Sources contains " + to_string(sources.size()) + " entries.");
-	auto start = chrono::system_clock::now();
 	map<string, shared_ptr<ImageSet>> images;
 	for(const string &source : sources)
 	{
-		Logger::LogError("Found image files from source: " + source);
 		// All names will only include the portion of the path that comes after
 		// this directory prefix.
 		string directoryPath = source + "images/";
 
 		vector<string> imageFiles = Files::RecursiveList(directoryPath);
-		Logger::LogError("Found " + to_string(imageFiles.size()) + " image files.");
 		for(string &path : imageFiles)
 			if(ImageSet::IsImage(path))
 			{
@@ -975,8 +944,6 @@ map<string, shared_ptr<ImageSet>> GameData::FindImages()
 				imageSet->Add(std::move(data));
 			}
 	}
-	auto end = chrono::system_clock::now();
-	Logger::LogError("FindImages took: " + to_string(chrono::duration_cast<chrono::microseconds>(end - start).count()));
 	return images;
 }
 

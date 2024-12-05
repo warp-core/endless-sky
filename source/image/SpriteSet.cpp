@@ -40,7 +40,6 @@ const Sprite *SpriteSet::Get(const string &name)
 
 void SpriteSet::CheckReferences()
 {
-	Logger::LogError("SpriteSet::CheckReferences");
 	for(const auto &pair : sprites)
 	{
 		const Sprite &sprite = pair.second;

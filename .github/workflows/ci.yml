@@ -189,20 +189,7 @@ jobs:
         configurePreset: 'clang-cl-ci'
         buildPreset: 'clang-cl-ci'
     - name: Run Benchmarks
-      if: success() || failure()
       run: ctest --preset clang-cl-ci-benchmark
-    - name: Upload binary
-      if: success() || failure()
-      uses: actions/upload-artifact@v4
-      with:
-        name: binary-windows-clang
-        path: ./build/ci/Endless Sky.exe
-    - name: Upload DLLs
-      if: success() || failure()
-      uses: actions/upload-artifact@v4
-      with:
-        name: windows-dlls-clang
-        path: ./build/ci/*.dll
     - name: Test parse
       if: success() || failure()
       run: "'./build/ci/Endless Sky.exe' --parse-images-and-sounds"
@@ -335,6 +322,9 @@ jobs:
         name: windows-dlls
     - name: Parse Datafiles
       run: "'./Endless Sky.exe' -p"
+      shell: bash
+    - name: Parse Integration Test Data
+      run: "'./Endless Sky.exe' -p --config 'tests/integration/config'"
       shell: bash
     - name: Parse All Resources
       run: "'./Endless Sky.exe' --parse-images-and-sounds"

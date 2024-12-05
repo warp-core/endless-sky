@@ -210,7 +210,6 @@ shared_future<void> GameData::BeginLoad(TaskQueue &queue, bool onlyLoadData, boo
 		Logger::LogError("Loading everything.");
 	if(!onlyLoadData)
 	{
-		auto thing = chrono::duration_cast<chrono::nanoseconds>(chrono::system_clock::now().time_since_epoch()).count();
 		Logger::LogError("Adding to task queue 1: " + to_string(chrono::duration_cast<chrono::nanoseconds>(chrono::system_clock::now().time_since_epoch()).count()));
 		queue.Run([&queue] {
 			Logger::LogError("Calling FindImages: " + to_string(chrono::duration_cast<chrono::nanoseconds>(chrono::system_clock::now().time_since_epoch()).count()));
@@ -954,6 +953,7 @@ void GameData::LoadSources(TaskQueue &queue)
 map<string, shared_ptr<ImageSet>> GameData::FindImages()
 {
 	Logger::LogError("Finding images. Sources contains " + to_string(sources.size()) + " entries.");
+	auto start = chrono::system_clock::now();
 	map<string, shared_ptr<ImageSet>> images;
 	for(const string &source : sources)
 	{
@@ -975,6 +975,8 @@ map<string, shared_ptr<ImageSet>> GameData::FindImages()
 				imageSet->Add(std::move(data));
 			}
 	}
+	auto end = chrono::system_clock::now();
+	Logger::LogError("FindImages took: " + to_string(chrono::duration_cast<chrono::microseconds>(end - start).count()));
 	return images;
 }
 

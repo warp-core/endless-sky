@@ -38,6 +38,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "image/ImageSet.h"
 #include "Interface.h"
 #include "shader/LineShader.h"
+#include "Logger.h"
 #include "image/MaskManager.h"
 #include "Minable.h"
 #include "Mission.h"
@@ -202,7 +203,10 @@ shared_future<void> GameData::BeginLoad(TaskQueue &queue, bool onlyLoadData, boo
 			// Now, read all the images in all the path directories. For each unique
 			// name, only remember one instance, letting things on the higher priority
 			// paths override the default images.
+			auto findImagesStart = chrono::system_clock::now();
 			map<string, shared_ptr<ImageSet>> images = FindImages();
+			auto findImagesEnd = chrono::system_clock::now();
+			Logger::LogError("Found images in: " + to_string(chrono::duration_cast<chrono::microseconds>(findImagesEnd - findImagesStart).count()));
 
 			// From the name, strip out any frame number, plus the extension.
 			for(auto &it : images)
@@ -223,6 +227,8 @@ shared_future<void> GameData::BeginLoad(TaskQueue &queue, bool onlyLoadData, boo
 					++totalSprites;
 				}
 			}
+			auto pushedToImageQueue = chrono::system_clock::now();
+			Logger::LogError("Pushed to image queue in: " + to_string(chrono::duration_cast<chrono::microseconds>(pushedToImageQueue - findImagesEnd).count()));
 
 			// Launch the tasks to actually load the images, making sure not to exceed the amount
 			// of tasks the main thread can handle in a single frame to limit peak memory usage.
@@ -231,6 +237,8 @@ shared_future<void> GameData::BeginLoad(TaskQueue &queue, bool onlyLoadData, boo
 				for(int i = 0; i < TaskQueue::MAX_SYNC_TASKS; ++i)
 					LoadSpriteQueued(queue);
 			}
+			auto startedAllLoadSpriteQueuedThreads = chrono::system_clock::now();
+			Logger::LogError("Started all sprite load queued threads in: " + to_string(chrono::duration_cast<chrono::microseconds>(startedAllLoadSpriteQueuedThreads - pushedToImageQueue).count()));
 
 			// Generate a catalog of music files.
 			Music::Init(sources);
@@ -925,6 +933,7 @@ void GameData::LoadSources(TaskQueue &queue)
 
 map<string, shared_ptr<ImageSet>> GameData::FindImages()
 {
+	auto start = chrono::system_clock::now();
 	map<string, shared_ptr<ImageSet>> images;
 	for(const string &source : sources)
 	{
@@ -936,14 +945,19 @@ map<string, shared_ptr<ImageSet>> GameData::FindImages()
 		for(string &path : imageFiles)
 			if(ImageSet::IsImage(path))
 			{
+				// auto innerStart = chrono::system_clock::now();
 				ImageFileData data(path, directoryPath);
 
 				shared_ptr<ImageSet> &imageSet = images[data.name];
 				if(!imageSet)
 					imageSet.reset(new ImageSet(data.name));
 				imageSet->Add(std::move(data));
+				// auto innerEnd = chrono::system_clock::now();
+				// Logger::LogError("Added to ImageSet in: " + to_string(chrono::duration_cast<chrono::microseconds>(innerEnd - innerStart).count()));
 			}
 	}
+	auto end = chrono::system_clock::now();
+	Logger::LogError("FindImages took: " + to_string(chrono::duration_cast<chrono::microseconds>(end - start).count()));
 	return images;
 }
 

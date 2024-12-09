@@ -204,6 +204,8 @@ mission "FW Southern Recon 1B"
 	autosave
 	source "Trinket"
 	destination "Trinket"
+	mark "Alnasl"
+	mark "Wei"
 	to offer
 		has "FW Southern Recon 1: done"
 	
@@ -232,6 +234,10 @@ mission "FW Southern Recon 1B"
 			names "republic small"
 			variant
 				"Gunboat (Mark II)"
+	on enter Alnasl
+		unmark Alnasl
+	on enter Wei
+		unmark Wei
 	to complete
 		not "FW Southern Recon 1B (Turret): done"
 	to fail
@@ -483,7 +489,7 @@ mission "FW Southern Battle 2"
 				names "republic fighter"
 			variant
 				"Carrier (Mark II)"
-				"Lance" 4
+				"Lance" 8
 				"Combat Drone" 6
 		fleet 3
 			names "republic capital"
@@ -1936,7 +1942,7 @@ mission "FW Rand 1"
 				names "republic fighter"
 			variant
 				"Carrier (Mark II)"
-				"Lance" 4
+				"Lance" 8
 				"Combat Drone" 6
 				"Gunboat (Mark II)"
 	
@@ -2306,7 +2312,7 @@ mission "FW Liberate Delta Sagittarii"
 				names "republic fighter"
 			variant
 				"Carrier (Mark II)"
-				"Lance" 4
+				"Lance" 8
 				"Combat Drone" 6
 				"Gunboat (Mark II)" 4
 		fleet

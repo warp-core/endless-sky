@@ -18,7 +18,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "audio/Audio.h"
 #include "DataNode.h"
 #include "GameData.h"
-#include "SoundSet.h"
+#include "audio/SoundSet.h"
 
 using namespace std;
 

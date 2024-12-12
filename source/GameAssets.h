@@ -13,8 +13,8 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #ifndef GAME_ASSETS_H_
 #define GAME_ASSETS_H_
 
-#include "SoundSet.h"
-#include "SpriteSet.h"
+#include "audio/SoundSet.h"
+#include "image/SpriteSet.h"
 #include "UniverseObjects.h"
 
 #include <atomic>

@@ -161,7 +161,6 @@ private:
 	};
 
 	std::map<const Government *, double, GovSortyByName> attitudeToward;
-	std::vector<double> attitudeToward;
 	double defaultAttitude = 0.;
 	std::set<const Government *> trusted;
 	std::map<const Government *, std::map<int, double>> customPenalties;

@@ -189,8 +189,8 @@ std::enable_if_t<
 	std::size_t tw = TotalWeight();
 	if (tw == 0) return sum;
 
-	for(unsigned index = 0; index < choices.size(); ++index)
-		sum += fn(choices[index]) * weights[index];
+	for(unsigned index = 0; index < items.size(); ++index)
+		sum += fn(items[index].item) * items[index].weight;
 	return sum / tw;
 }
 

@@ -40,7 +40,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "SavedGame.h"
 #include "Ship.h"
 #include "ShipEvent.h"
-#include "SoundSet.h"
+#include "audio/SoundSet.h"
 #include "ShipJumpNavigation.h"
 #include "StartConditions.h"
 #include "StellarObject.h"

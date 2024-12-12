@@ -10,10 +10,9 @@ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 */
 
-#ifndef SOUND_SET_H_
-#define SOUND_SET_H_
+#pragma once
 
-#include "Set.h"
+#include "../Set.h"
 #include "Sound.h"
 
 #include <map>
@@ -47,7 +46,3 @@ private:
 	mutable Set<Sound> sounds;
 	mutable std::mutex modifyMutex;
 };
-
-
-
-#endif

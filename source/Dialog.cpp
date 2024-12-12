@@ -371,9 +371,9 @@ void Dialog::Init(const string &message, Truncate truncate, bool canCancel, bool
 
 	// Now that we know how big we want to render the text, position the text
 	// area and add it to the UI.
-	const Sprite *top = SpriteSet::Get(isWide ? "ui/dialog top wide" : "ui/dialog top");
-	const Sprite *middle = SpriteSet::Get(isWide ? "ui/dialog middle wide" : "ui/dialog middle");
-	const Sprite *bottom = SpriteSet::Get(isWide ? "ui/dialog bottom wide" : "ui/dialog bottom");
+	const Sprite *top = GameData::Sprites().Get(isWide ? "ui/dialog top wide" : "ui/dialog top");
+	const Sprite *middle = GameData::Sprites().Get(isWide ? "ui/dialog middle wide" : "ui/dialog middle");
+	const Sprite *bottom = GameData::Sprites().Get(isWide ? "ui/dialog bottom wide" : "ui/dialog bottom");
 
 	// Get the position of the top of this dialog, and of the text and input.
 	Point pos(0., (top->Height() + height * middle->Height() + bottom->Height()) * -.5f);

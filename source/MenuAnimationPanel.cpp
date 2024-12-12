@@ -19,7 +19,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "audio/Audio.h"
 #include "Color.h"
 #include "PointerShader.h"
-#include "SoundSet.h"
+#include "audio/SoundSet.h"
 #include "UI.h"
 
 

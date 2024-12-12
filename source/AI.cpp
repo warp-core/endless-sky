@@ -40,7 +40,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "Ship.h"
 #include "ship/ShipAICache.h"
 #include "ShipEvent.h"
-#include "SoundSet.h"
+#include "audio/SoundSet.h"
 #include "ShipJumpNavigation.h"
 #include "StellarObject.h"
 #include "System.h"

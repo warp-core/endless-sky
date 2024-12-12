@@ -98,7 +98,7 @@ void Dictionary::Update(const char *key, double diff)
 {
 	auto pos = Search(key, *this);
 	auto it = pos.second ?
-		begin() + pos.first : insert(begin() + pos.first, make_pair(Intern(key), 0.));
+		begin() + pos.first : insert(begin() + pos.first, make_pair(StringInterner::Intern(key), 0.));
 
 	it->second += diff;
 }

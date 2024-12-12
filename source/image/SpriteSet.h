@@ -15,7 +15,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "Set.h"
+#include "../Set.h"
 #include "Sprite.h"
 
 #include <map>
@@ -33,7 +33,6 @@ class SpriteSet {
 public:
 	// Get a pointer to the sprite data with the given name.
 	const Sprite *Get(const std::string &name) const;
-	Sprite *Modify(const std::string &name);
 
 	explicit operator Set<Sprite> &() { return sprites; }
 	explicit operator const Set<Sprite> &() const { return sprites; }

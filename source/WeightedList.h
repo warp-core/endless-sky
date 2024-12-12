@@ -13,8 +13,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef WEIGHTED_LIST_H_
-#define WEIGHTED_LIST_H_
+#pragma once
 
 #include "Random.h"
 
@@ -70,7 +69,11 @@ public:
 
 	// Average the result of the given function by the choices' weights.
 	template <class Callable>
-	auto Average(Callable c) const;
+	std::enable_if_t<
+		std::is_arithmetic_v<std::invoke_result_t<Callable&&, const Type&&>>,
+		// The return type of WeightedList::Average, if the above test passes:
+		std::invoke_result_t<Callable&&, const Type&&>
+	> Average(Callable c) const;
 	// Supplying a callable that does not return an arithmetic value will fail to compile.
 
 	iterator begin() noexcept { return items.begin(); }
@@ -176,16 +179,19 @@ const Type &WeightedList<Type>::Get() const
 
 template <class Type>
 template <class Callable>
-auto WeightedList<Type>::Average(Callable fn) const
+std::enable_if_t<
+	std::is_arithmetic_v<std::invoke_result_t<Callable&&, const Type&&>>,
+	std::invoke_result_t<Callable&&, const Type&&>
+> WeightedList<Type>::Average(Callable fn) const
 {
-	auto sum = std::invoke_result_t<Callable, const Type &>{};
+	auto sum = typename std::invoke_result_t<Callable, const Type &>{};
 
 	std::size_t tw = TotalWeight();
 	if (tw == 0) return sum;
 
-	for(unsigned index = 0; index < items.size(); ++index)
-		sum += std::invoke(fn, items[index].item) * items[index].weight;
-	return static_cast<decltype(sum)>(sum / tw);
+	for(unsigned index = 0; index < choices.size(); ++index)
+		sum += fn(choices[index]) * weights[index];
+	return sum / tw;
 }
 
 
@@ -229,7 +235,3 @@ void WeightedList<Type>::RecalculateWeight()
 {
 	total = std::accumulate(items.begin(), items.end(), 0, [](int lhs, const auto &rhs) { return lhs + rhs.weight; });
 }
-
-
-
-#endif

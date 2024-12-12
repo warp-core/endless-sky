@@ -13,8 +13,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef SET_H_
-#define SET_H_
+#pragma once
 
 #include <map>
 #include <string>
@@ -36,7 +35,7 @@ public:
 	Type *Find(const std::string &name);
 	const Type *Find(const std::string &name) const;
 
-	bool Has(const std::string &name) const { return data.count(name); }
+	bool Has(const std::string &name) const { return data.contains(name); }
 	void Rename(const std::string &name, const std::string &newName) const;
 	void Erase(const std::string &name) const { data[name] = {}; }
 
@@ -135,7 +134,3 @@ void Set<Type>::RevertNoOverwrite(const Set<Type> &other)
 		// reverting to has a name that is not also in this set.
 	}
 }
-
-
-
-#endif

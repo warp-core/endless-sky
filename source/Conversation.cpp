@@ -20,8 +20,8 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "text/Format.h"
 #include "GameData.h"
 #include "Phrase.h"
-#include "Sprite.h"
-#include "SpriteSet.h"
+#include "image/Sprite.h"
+#include "image/SpriteSet.h"
 
 using namespace std;
 
@@ -91,15 +91,15 @@ bool Conversation::RequiresLaunch(int outcome)
 
 
 // Construct and Load() at the same time.
-Conversation::Conversation(const DataNode &node, const string &missionName)
+Conversation::Conversation(const DataNode &node)
 {
-	Load(node, missionName);
+	Load(node);
 }
 
 
 
 // Load a conversation from file.
-void Conversation::Load(const DataNode &node, const string &missionName)
+void Conversation::Load(const DataNode &node)
 {
 	// Make sure this really is a conversation specification.
 	if(node.Token(0) != "conversation")
@@ -187,7 +187,7 @@ void Conversation::Load(const DataNode &node, const string &missionName)
 			// Don't merge "action" nodes with any other nodes. Allow the legacy keyword "apply," too.
 			AddNode();
 			nodes.back().canMergeOnto = false;
-			nodes.back().actions.Load(child, missionName);
+			nodes.back().actions.Load(child);
 		}
 		// Check for common errors such as indenting a goto incorrectly:
 		else if(child.Size() > 1)
@@ -290,7 +290,7 @@ void Conversation::Save(DataWriter &out) const
 					out.Write(line);
 					// If the conditions are the same, output them for each
 					// paragraph. (We currently don't merge paragraphs with
-					// identical ConditionSets, but some day we might.
+					// identical ConditionSets, but some day we might.)
 					if(!it.conditions.IsEmpty())
 					{
 						out.BeginChild();
@@ -564,8 +564,8 @@ bool Conversation::ElementIsValid(int node, int element) const
 
 
 
-// Parse the children of the given node to see if then contain any "gotos," or
-// "to shows." If so, link them up properly. Return true if gotos or
+// Parse the children of the given node to see if then contain any "goto" or
+// "to display" nodes. If so, link them up properly. Return true if gotos or
 // conditions were found.
 bool Conversation::LoadDestinations(const DataNode &node)
 {
@@ -607,7 +607,7 @@ bool Conversation::LoadDestinations(const DataNode &node)
 				}
 			}
 			else
-				child.PrintTrace("Warning: Expected goto, to show, or endpoint in conversation, found this:");
+				child.PrintTrace("Warning: Expected goto, to display, or endpoint in conversation, found this:");
 		}
 	}
 	return hasGoto || hasCondition;
@@ -629,7 +629,7 @@ bool Conversation::HasDisplayRestriction(const DataNode &node)
 // Add a label, pointing to whatever node is created next.
 void Conversation::AddLabel(const string &label, const DataNode &node)
 {
-	if(labels.count(label))
+	if(labels.contains(label))
 	{
 		node.PrintTrace("Error: Conversation: label \"" + label + "\" is used more than once:");
 		return;

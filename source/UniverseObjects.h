@@ -13,8 +13,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef UNIVERSE_OBJECTS_H_
-#define UNIVERSE_OBJECTS_H_
+#pragma once
 
 #include "CategoryTypes.h"
 #include "Sale.h"
@@ -42,13 +41,16 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "Ship.h"
 #include "StartConditions.h"
 #include "System.h"
-#include "Test.h"
-#include "TestData.h"
+#include "test/Test.h"
+#include "test/TestData.h"
 #include "TextReplacements.h"
 #include "Trade.h"
 #include "Wormhole.h"
 
+#include <atomic>
+#include <future>
 #include <map>
+#include <mutex>
 #include <set>
 #include <string>
 #include <vector>
@@ -56,6 +58,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 class Panel;
 class Sprite;
+class TaskQueue;
 
 
 
@@ -155,7 +158,3 @@ private:
 	std::map<std::string, std::string> helpMessages;
 	std::map<std::string, std::set<std::string>> disabled;
 };
-
-
-
-#endif

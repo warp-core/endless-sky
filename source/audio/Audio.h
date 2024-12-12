@@ -1,0 +1,72 @@
+/* Audio.h
+Copyright (c) 2014 by Michael Zahniser
+
+Endless Sky is free software: you can redistribute it and/or modify it under the
+terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later version.
+
+Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program. If not, see <https://www.gnu.org/licenses/>.
+*/
+
+#pragma once
+
+#include "Set.h"
+
+#include <string>
+#include <vector>
+
+class Point;
+class Sound;
+
+
+
+// This class is a collection of global functions for handling audio. A sound
+// can be played from any point in the code, and from any thread, just by
+// specifying the name of the sound to play. Most sounds will come from a
+// "source" at a certain position, and their volume and left / right balance is
+// adjusted based on how far they are from the observer. Sounds that are not
+// marked as looping will play once, then stop; looping sounds continue until
+// their source stops calling the "play" function for them.
+class Audio {
+public:
+	// Begin loading sounds (in a separate thread).
+	static void Init();
+	static void CheckReferences();
+
+	// Get or set the volume (between 0 and 1).
+	static double Volume();
+	static void SetVolume(double level);
+
+	// Set the listener's position, and also update any sounds that have been
+	// added but deferred because they were added from a thread other than the
+	// main one (the one that called Init()).
+	static void Update(const Point &listenerPosition);
+
+	// Play the given sound, at full volume.
+	static void Play(const Sound *sound);
+	static void Play(const std::string &sound);
+
+	// Play the given sound, as if it is at the given distance from the
+	// "listener". This will make it softer and change the left / right balance.
+	static void Play(const Sound *sound, const Point &position);
+	static void Play(const std::string &sound, const Point &position);
+
+	// Play the given music. An empty string means to play nothing.
+	static void PlayMusic(const std::string &name);
+
+	// Begin playing all the sounds that have been added since the last time
+	// this function was called.
+	static void Step();
+
+	// Shut down the audio system (because we're about to quit).
+	static void Quit();
+
+
+private:
+	static bool musicEnabled;
+};

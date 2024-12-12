@@ -13,22 +13,26 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef ENGINE_H_
-#define ENGINE_H_
+#pragma once
 
 #include "AI.h"
+#include "AlertLabel.h"
 #include "AmmoDisplay.h"
 #include "AsteroidField.h"
 #include "BatchDrawList.h"
 #include "CollisionSet.h"
+#include "Color.h"
 #include "Command.h"
 #include "DrawList.h"
 #include "EscortDisplay.h"
 #include "Information.h"
+#include "PlanetLabel.h"
 #include "Point.h"
 #include "Preferences.h"
+#include "Projectile.h"
 #include "Radar.h"
 #include "Rectangle.h"
+#include "TaskQueue.h"
 
 #include <condition_variable>
 #include <list>
@@ -41,21 +45,16 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include <utility>
 #include <vector>
 
-class AlertLabel;
 class Flotsam;
 class Government;
 class NPC;
 class Outfit;
-class PlanetLabel;
 class PlayerInfo;
-class Projectile;
 class Ship;
 class ShipEvent;
 class Sprite;
-class TestContext;
 class Visual;
 class Weather;
-
 
 
 // Class representing the game engine: its job is to track all of the objects in
@@ -84,15 +83,15 @@ public:
 	// Begin the next step of calculations.
 	void Go();
 
+	// Give a command on behalf of the player, used for integration tests.
+	void GiveCommand(const Command &command);
+
 	// Get any special events that happened in this step.
 	// MainPanel::Step will clear this list.
 	std::list<ShipEvent> &Events();
 
 	// Draw a frame.
 	void Draw() const;
-
-	// Set the given TestContext in the next step of the Engine.
-	void SetTestContext(TestContext &newTestContext);
 
 	// Select the object the player clicked on.
 	void Click(const Point &from, const Point &to, bool hasShift, bool hasControl);
@@ -108,7 +107,21 @@ public:
 
 
 private:
-	void EnterSystem(const System *system = nullptr);
+	class Outline {
+	public:
+		constexpr Outline(const Sprite *sprite, const Point &position, const Point &unit,
+			const float frame, const Color &color)
+			: sprite(sprite), position(position), unit(unit), frame(frame), color(color)
+		{
+		}
+
+		const Sprite *sprite;
+		const Point position;
+		const Point unit;
+		const float frame;
+		const Color color;
+	};
+
 	class Target {
 	public:
 		Point center;
@@ -120,10 +133,10 @@ private:
 
 	class Status {
 	public:
-		Status(const Point &position, double outer, double inner,
-			double disabled, double radius, int type, double angle = 0.)
+		constexpr Status(const Point &position, double outer, double inner,
+			double disabled, double radius, int type, float alpha, double angle = 0.)
 			: position(position), outer(outer), inner(inner),
-				disabled(disabled), radius(radius), type(type), angle(angle) {}
+				disabled(disabled), radius(radius), type(type), alpha(alpha), angle(angle) {}
 
 		Point position;
 		double outer;
@@ -131,12 +144,26 @@ private:
 		double disabled;
 		double radius;
 		int type;
+		float alpha;
 		double angle;
+	};
+
+	class Zoom {
+	public:
+		constexpr Zoom() : base(0.) {}
+		explicit constexpr Zoom(double zoom) : base(zoom) {}
+
+		constexpr operator double() const { return base * modifier; }
+
+		double base;
+		double modifier = 1.;
 	};
 
 
 private:
 	void ThreadEntryPoint();
+	void EnterSystem(const System *system = nullptr);
+
 	void CalculateStep();
 
 	void MoveShip(const std::shared_ptr<Ship> &ship);
@@ -158,12 +185,13 @@ private:
 
 	void FillRadar();
 
-	void AddSprites(const Ship &ship);
+	void DrawShipSprites(const Ship &ship);
 
 	void DoGrudge(const std::shared_ptr<Ship> &target, const Government *attacker);
 
 	void CreateStatusOverlays();
-	void EmplaceStatusOverlay(const std::shared_ptr<Ship> &ship, Preferences::OverlayState overlaySetting, int value);
+	void EmplaceStatusOverlay(const std::shared_ptr<Ship> &ship, Preferences::OverlayState overlaySetting,
+		int value, double cloak);
 
 
 private:
@@ -188,8 +216,10 @@ private:
 	std::list<std::shared_ptr<Flotsam>> newFlotsam;
 	std::vector<Visual> newVisuals;
 
-	// Track which ships currently have anti-missiles ready to fire.
+	// Track which ships currently have anti-missiles or
+	// tractor beams ready to fire.
 	std::vector<Ship *> hasAntiMissile;
+	std::vector<Ship *> hasTractorBeam;
 
 	AI ai;
 
@@ -209,6 +239,11 @@ private:
 	DrawList draw[2];
 	BatchDrawList batchDraw[2];
 	Radar radar[2];
+
+	bool wasActive = false;
+	bool isMouseHoldEnabled = false;
+	bool isMouseTurningEnabled = false;
+
 	// Viewport position and velocity.
 	Point center;
 	Point centerVelocity;
@@ -220,15 +255,15 @@ private:
 	int targetSwizzle = -1;
 	EscortDisplay escorts;
 	AmmoDisplay ammoDisplay;
+	std::vector<Outline> outlines;
 	std::vector<Status> statuses;
 	std::vector<PlanetLabel> labels;
 	std::vector<AlertLabel> missileLabels;
 	std::vector<std::pair<const Outfit *, int>> ammo;
 	int jumpCount = 0;
 	const System *jumpInProgress[2] = {nullptr, nullptr};
-	const Sprite *highlightSprite = nullptr;
-	Point highlightUnit;
-	float highlightFrame = 0.f;
+	// Flagship's hyperspace percentage converted to a [0, 1] double.
+	double hyperspacePercentage = 0.;
 
 	int step = 0;
 
@@ -243,6 +278,7 @@ private:
 	int alarmTime = 0;
 	double flash = 0.;
 	bool doFlash = false;
+	bool doEnterLabels = false;
 	bool doEnter = false;
 	bool hadHostiles = false;
 
@@ -270,12 +306,9 @@ private:
 	std::set<std::string> asteroidsScanned;
 	bool isAsteroidCatalogComplete = false;
 
-	// Input, Output and State handling for automated tests.
-	TestContext *testContext = nullptr;
-
-	double zoom = 1.;
+	Zoom zoom;
 	// Tracks the next zoom change so that objects aren't drawn at different zooms in a single frame.
-	double nextZoom = 0.;
+	Zoom nextZoom;
 
 	double load = 0.;
 	int loadCount = 0;
@@ -284,7 +317,3 @@ private:
 	friend class Editor;
 	friend class ArenaControl;
 };
-
-
-
-#endif

@@ -13,8 +13,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef DATA_WRITER_H_
-#define DATA_WRITER_H_
+#pragma once
 
 #include "WeightedList.h"
 
@@ -50,6 +49,8 @@ public:
 
 	// Save the contents to a file.
 	void SaveToPath(const std::string &path);
+	// Get the contents as a string.
+	std::string SaveToString();
 
 	// The Write() function can take any number of arguments. Each argument is
 	// converted to a token. Arguments may be strings or numeric values.
@@ -81,6 +82,9 @@ public:
 	void WriteToken(const A &a);
 	// Write a token of a bool;
 	void WriteToken(bool b);
+
+	// Enclose a string in the correct quotation marks.
+	static std::string Quote(const std::string &text);
 
 
 private:
@@ -124,7 +128,7 @@ void DataWriter::WriteQuoted(const std::string &a, const As &...others)
 template <class A>
 void DataWriter::WriteToken(const A &a)
 {
-	static_assert(std::is_arithmetic<A>::value,
+	static_assert(std::is_arithmetic_v<A>,
 		"DataWriter cannot output anything but strings and arithmetic types.");
 
 	std::ostringstream stream;
@@ -199,7 +203,3 @@ void WriteSorted(const WeightedList<T> &container, A sortFn, B writeFn)
 	for(const auto &sit : sorted)
 		writeFn(*sit);
 }
-
-
-
-#endif

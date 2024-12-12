@@ -13,8 +13,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef STELLAR_OBJECT_H_
-#define STELLAR_OBJECT_H_
+#pragma once
 
 #include "Body.h"
 #include "Hazard.h"
@@ -124,7 +123,3 @@ inline bool operator!=(const StellarObject &lhs, const StellarObject &rhs)
 {
 	return !(lhs == rhs);
 }
-
-
-
-#endif

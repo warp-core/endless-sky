@@ -13,12 +13,9 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef HAZARD_H_
-#define HAZARD_H_
+#pragma once
 
 #include "Weapon.h"
-
-#include "Point.h"
 
 
 // Hazards are environmental effects created within systems. They are able to create
@@ -71,5 +68,3 @@ private:
 
 	friend class HazardEditor;
 };
-
-#endif

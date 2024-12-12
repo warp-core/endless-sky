@@ -25,41 +25,89 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 using namespace std;
 
 namespace {
-	const map<string, int> TOKEN = {
-		{"pacifist", Personality::PACIFIST},
-		{"forbearing", Personality::FORBEARING},
-		{"timid", Personality::TIMID},
-		{"disables", Personality::DISABLES},
-		{"plunders", Personality::PLUNDERS},
-		{"hunting", Personality::HUNTING},
-		{"staying", Personality::STAYING},
-		{"entering", Personality::ENTERING},
-		{"nemesis", Personality::NEMESIS},
-		{"surveillance", Personality::SURVEILLANCE},
-		{"uninterested", Personality::UNINTERESTED},
-		{"waiting", Personality::WAITING},
-		{"derelict", Personality::DERELICT},
-		{"fleeing", Personality::FLEEING},
-		{"escort", Personality::ESCORT},
-		{"frugal", Personality::FRUGAL},
-		{"coward", Personality::COWARD},
-		{"vindictive", Personality::VINDICTIVE},
-		{"swarming", Personality::SWARMING},
-		{"unconstrained", Personality::UNCONSTRAINED},
-		{"mining", Personality::MINING},
-		{"harvests", Personality::HARVESTS},
-		{"appeasing", Personality::APPEASING},
-		{"mute", Personality::MUTE},
-		{"opportunistic", Personality::OPPORTUNISTIC},
-		{"merciful", Personality::MERCIFUL},
-		{"target", Personality::TARGET},
-		{"marked", Personality::MARKED},
-		{"launching", Personality::LAUNCHING},
-		{"lingering", Personality::LINGERING},
-		{"daring", Personality::DARING},
-		{"secretive", Personality::SECRETIVE},
-		{"ramming", Personality::RAMMING},
-		{"decloaked", Personality::DECLOAKED}
+	// Make sure the length of PersonalityTrait matches PERSONALITY_COUNT
+	// or the build will fail.
+	enum PersonalityTrait {
+		PACIFIST,
+		FORBEARING,
+		TIMID,
+		DISABLES,
+		PLUNDERS,
+		HUNTING,
+		STAYING,
+		ENTERING,
+		NEMESIS,
+		SURVEILLANCE,
+		UNINTERESTED,
+		WAITING,
+		DERELICT,
+		FLEEING,
+		ESCORT,
+		FRUGAL,
+		COWARD,
+		VINDICTIVE,
+		SWARMING,
+		UNCONSTRAINED,
+		MINING,
+		HARVESTS,
+		APPEASING,
+		MUTE,
+		OPPORTUNISTIC,
+		MERCIFUL,
+		TARGET,
+		MARKED,
+		LAUNCHING,
+		LINGERING,
+		DARING,
+		SECRETIVE,
+		RAMMING,
+		UNRESTRICTED,
+		RESTRICTED,
+		DECLOAKED,
+		QUIET,
+
+		// This must be last so it can be used for bounds checking.
+		LAST_ITEM_IN_PERSONALITY_TRAIT_ENUM
+	};
+
+	const map<string, PersonalityTrait> TOKEN = {
+		{"pacifist", PACIFIST},
+		{"forbearing", FORBEARING},
+		{"timid", TIMID},
+		{"disables", DISABLES},
+		{"plunders", PLUNDERS},
+		{"hunting", HUNTING},
+		{"staying", STAYING},
+		{"entering", ENTERING},
+		{"nemesis", NEMESIS},
+		{"surveillance", SURVEILLANCE},
+		{"uninterested", UNINTERESTED},
+		{"waiting", WAITING},
+		{"derelict", DERELICT},
+		{"fleeing", FLEEING},
+		{"escort", ESCORT},
+		{"frugal", FRUGAL},
+		{"coward", COWARD},
+		{"vindictive", VINDICTIVE},
+		{"swarming", SWARMING},
+		{"unconstrained", UNCONSTRAINED},
+		{"mining", MINING},
+		{"harvests", HARVESTS},
+		{"appeasing", APPEASING},
+		{"mute", MUTE},
+		{"opportunistic", OPPORTUNISTIC},
+		{"merciful", MERCIFUL},
+		{"target", TARGET},
+		{"marked", MARKED},
+		{"launching", LAUNCHING},
+		{"lingering", LINGERING},
+		{"daring", DARING},
+		{"secretive", SECRETIVE},
+		{"ramming", RAMMING},
+		{"unrestricted", UNRESTRICTED},
+		{"restricted", RESTRICTED},
+		{"decloaked", DECLOAKED},
+		{"quiet", QUIET}
 	};
 
 	// Tokens that combine two or more flags.
@@ -182,7 +230,6 @@ bool Personality::IsDaring() const
 
 
 
-
 bool Personality::IsFrugal() const
 {
 	return flags.test(FRUGAL);
@@ -214,6 +261,20 @@ bool Personality::IsVindictive() const
 bool Personality::IsUnconstrained() const
 {
 	return flags.test(UNCONSTRAINED);
+}
+
+
+
+bool Personality::IsUnrestricted() const
+{
+	return flags.test(UNRESTRICTED);
+}
+
+
+
+bool Personality::IsRestricted() const
+{
+	return flags.test(RESTRICTED);
 }
 
 
@@ -375,6 +436,13 @@ bool Personality::IsMute() const
 bool Personality::IsDecloaked() const
 {
 	return flags.test(DECLOAKED);
+}
+
+
+
+bool Personality::IsQuiet() const
+{
+	return flags.test(QUIET);
 }
 
 

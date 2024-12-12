@@ -16,19 +16,21 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "GameLoadingPanel.h"
 
 #include "Angle.h"
-#include "Audio.h"
+#include "audio/Audio.h"
+#include "Conversation.h"
 #include "ConversationPanel.h"
 #include "GameData.h"
-#include "Information.h"
-#include "Interface.h"
-#include "MaskManager.h"
+#include "image/MaskManager.h"
 #include "MenuAnimationPanel.h"
 #include "MenuPanel.h"
 #include "Point.h"
 #include "PointerShader.h"
 #include "Ship.h"
-#include "SpriteSet.h"
+#include "image/SpriteSet.h"
 #include "StarField.h"
+#include "System.h"
+#include "TaskQueue.h"
+#include "UI.h"
 
 #include "opengl.h"
 
@@ -52,9 +54,6 @@ void GameLoadingPanel::Step()
 		// e.g. due to capitalization errors or other typos.
 		GameData::Sprites().CheckReferences();
 		Audio::CheckReferences();
-		// All sprites with collision masks should also have their 1x scaled versions, so create
-		// any additional scaled masks from the default one.
-		GameData::GetMaskManager().ScaleMasks();
 		// Set the game's initial internal state.
 		GameData::FinishLoading();
 

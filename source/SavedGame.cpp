@@ -20,7 +20,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "Date.h"
 #include "text/Format.h"
 #include "GameData.h"
-#include "SpriteSet.h"
+#include "image/SpriteSet.h"
 
 using namespace std;
 

@@ -13,8 +13,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef GAME_DATA_H_
-#define GAME_DATA_H_
+#pragma once
 
 #include "CategoryTypes.h"
 #include "Sale.h"
@@ -62,6 +61,7 @@ class SpriteSet;
 class StarField;
 class StartConditions;
 class System;
+class TaskQueue;
 class Test;
 class TestData;
 class TextReplacements;
@@ -82,7 +82,8 @@ public:
 	static void FinishLoading();
 	// Check for objects that are referred to but never defined.
 	static void CheckReferences();
-	static void LoadShaders(bool useShaderSwizzle);
+	static void LoadSettings();
+	static void LoadShaders();
 	static double GetProgress();
 	// Whether initial game loading is complete (data, sprites and audio are loaded).
 	static bool IsLoaded();
@@ -187,7 +188,3 @@ public:
 private:
 	static void LoadSources();
 };
-
-
-
-#endif

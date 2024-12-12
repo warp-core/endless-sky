@@ -13,8 +13,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef GAME_LOADING_PANEL_H_
-#define GAME_LOADING_PANEL_H_
+#pragma once
 
 #include "mfunction.h"
 #include "Panel.h"
@@ -23,6 +22,10 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 class Editor;
+class Conversation;
+class PlayerInfo;
+class TaskQueue;
+class UI;
 
 
 
@@ -46,7 +49,3 @@ private:
 	// The current number of ticks to be displayed.
 	int progress = 0;
 };
-
-
-
-#endif

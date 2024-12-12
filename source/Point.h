@@ -13,8 +13,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef POINT_H_
-#define POINT_H_
+#pragma once
 
 #include <cmath>
 
@@ -76,6 +75,8 @@ public:
 
 	double Distance(const Point &point) const;
 	double DistanceSquared(const Point &point) const;
+
+	Point Lerp(const Point &to, const double c) const;
 
 	// Take the absolute value of both coordinates.
 	friend Point abs(const Point &p);
@@ -172,5 +173,3 @@ inline bool operator!=(const Point &lhs, const Point &rhs)
 {
 	return !(lhs == rhs);
 }
-#endif
-

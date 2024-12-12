@@ -15,14 +15,13 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include "GameData.h"
 
-#include "Audio.h"
+#include "audio/Audio.h"
 #include "BatchShader.h"
 #include "CategoryList.h"
 #include "Color.h"
 #include "Command.h"
 #include "ConditionsStore.h"
 #include "Conversation.h"
-#include "DataFile.h"
 #include "DataNode.h"
 #include "DataWriter.h"
 #include "Effect.h"
@@ -37,13 +36,13 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "GameEvent.h"
 #include "Government.h"
 #include "Hazard.h"
-#include "ImageSet.h"
+#include "image/ImageSet.h"
 #include "Interface.h"
 #include "LineShader.h"
-#include "MaskManager.h"
+#include "image/MaskManager.h"
 #include "Minable.h"
 #include "Mission.h"
-#include "Music.h"
+#include "audio/Music.h"
 #include "News.h"
 #include "Outfit.h"
 #include "OutlineShader.h"
@@ -53,22 +52,24 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "Plugins.h"
 #include "PointerShader.h"
 #include "Politics.h"
-#include "Random.h"
+#include "RenderBuffer.h"
 #include "RingShader.h"
 #include "Ship.h"
-#include "Sprite.h"
-#include "SpriteSet.h"
+#include "image/Sprite.h"
+#include "image/SpriteSet.h"
 #include "SpriteShader.h"
 #include "StarField.h"
 #include "StartConditions.h"
 #include "System.h"
 #include "TaskQueue.h"
-#include "Test.h"
-#include "TestData.h"
+#include "test/Test.h"
+#include "test/TestData.h"
 #include "UniverseObjects.h"
 
 #include <algorithm>
+#include <atomic>
 #include <iostream>
+#include <queue>
 #include <utility>
 #include <vector>
 
@@ -87,6 +88,11 @@ namespace {
 	TextReplacements defaultSubstitutions;
 
 	map<string, string> plugins;
+
+	Politics politics;
+
+	StarField background;
+
 	vector<string> sources;
 
 	Politics politics;
@@ -103,8 +109,10 @@ namespace {
 
 future<void> GameData::BeginLoad(int options)
 {
+	preventSpriteUpload = preventUpload;
+
 	// Initialize the list of "source" folders based on any active plugins.
-	LoadSources();
+	LoadSources(queue);
 
 	return assets.Load(sources, options);
 }
@@ -137,14 +145,19 @@ void GameData::CheckReferences()
 
 
 
-void GameData::LoadShaders(bool useShaderSwizzle)
+void GameData::LoadSettings()
 {
-	FontSet::Add(Files::Images() + "font/ubuntu14r.png", 14);
-	FontSet::Add(Files::Images() + "font/ubuntu18r.png", 18);
-
 	// Load the key settings.
 	Command::LoadSettings(Files::Resources() + "keys.txt");
 	Command::LoadSettings(Files::Config() + "keys.txt");
+}
+
+
+
+void GameData::LoadShaders()
+{
+	FontSet::Add(Files::Images() + "font/ubuntu14r.png", 14);
+	FontSet::Add(Files::Images() + "font/ubuntu18r.png", 18);
 
 	FillShader::Init();
 	FogShader::Init();
@@ -152,8 +165,9 @@ void GameData::LoadShaders(bool useShaderSwizzle)
 	OutlineShader::Init();
 	PointerShader::Init();
 	RingShader::Init();
-	SpriteShader::Init(useShaderSwizzle);
+	SpriteShader::Init();
 	BatchShader::Init();
+	RenderBuffer::Init();
 
 	background.Init(16384, 4096);
 }
@@ -756,10 +770,20 @@ const Gamerules &GameData::GetGamerules()
 
 
 
-void GameData::LoadSources()
+void GameData::LoadSources(TaskQueue &queue)
 {
 	sources.clear();
 	sources.push_back(Files::Resources());
+
+	vector<string> globalPlugins = Files::ListDirectories(Files::Resources() + "plugins/");
+	for(const string &path : globalPlugins)
+		if(Plugins::IsPlugin(path))
+			LoadPlugin(queue, path);
+
+	vector<string> localPlugins = Files::ListDirectories(Files::Config() + "plugins/");
+	for(const string &path : localPlugins)
+		if(Plugins::IsPlugin(path))
+			LoadPlugin(queue, path);
 }
 
 

@@ -17,6 +17,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include "../Set.h"
 #include "../Files.h"
+#include "../GameData.h"
 #include "../Logger.h"
 #include "Sprite.h"
 

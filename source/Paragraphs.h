@@ -30,8 +30,7 @@ class DataNode;
 // See the planet and spaceport description code for examples.
 class Paragraphs {
 public:
-	using ConditionalText = std::vector<std::pair<ConditionSet, std::string>>;
-	using ConstIterator = ConditionalText::const_iterator;
+	using const_iterator = std::vector<std::pair<ConditionSet, std::string>>::const_iterator;
 
 
 public:
@@ -55,10 +54,10 @@ public:
 
 	// Iterate over all text. Needed to support PrintData.
 	// These must use standard naming conventions (begin, end) for compatibility with range-based for loops.
-	ConstIterator begin() const;
-	ConstIterator end() const;
+	const_iterator begin() const;
+	const_iterator end() const;
 
 
 private:
-	ConditionalText text;
+	std::vector<std::pair<ConditionSet, std::string>> text;
 };

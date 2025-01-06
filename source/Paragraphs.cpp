@@ -71,14 +71,14 @@ string Paragraphs::ToString(const ConditionsStore &vars) const
 
 
 
-Paragraphs::ConstIterator Paragraphs::begin() const
+Paragraphs::const_iterator Paragraphs::begin() const
 {
 	return text.begin();
 }
 
 
 
-Paragraphs::ConstIterator Paragraphs::end() const
+Paragraphs::const_iterator Paragraphs::end() const
 {
 	return text.end();
 }

@@ -44,6 +44,20 @@ public:
 	// Save a set of conditions.
 	void Save(DataWriter &out) const;
 
+	bool operator==(const ConditionSet &other) const
+	{
+		if(isOr != other.isOr)
+			return false;
+		if(hasAssign != other.hasAssign)
+			return false;
+		if(expressions != other.expressions)
+			return false;
+		if(children != other.children)
+			return false;
+		return true;
+	}
+	bool operator!=(const ConditionSet &other) const { return !(*this == other); }
+
 	// Check if there are any entries in this set.
 	bool IsEmpty() const;
 
@@ -83,6 +97,21 @@ private:
 		Expression(const std::string &left, const std::string &op, const std::string &right);
 
 		void Save(DataWriter &out) const;
+
+		bool operator==(const Expression &other) const
+		{
+			if(op != other.op)
+				return false;
+			if(fun != other.fun)
+				return false;
+			if(left != other.left)
+				return false;
+			if(right != other.right)
+				return false;
+			return true;
+		}
+		bool operator!=(const Expression &other) const { return !(*this == other); }
+
 		// Convert this expression into a string, for traces.
 		std::string ToString() const;
 
@@ -110,6 +139,20 @@ private:
 			explicit SubExpression(const std::vector<std::string> &side);
 			explicit SubExpression(const std::string &side);
 
+			bool operator==(const SubExpression &other) const
+			{
+				if(sequence != other.sequence)
+					return false;
+				if(tokens != other.tokens)
+					return false;
+				if(operators != other.operators)
+					return false;
+				if(operatorCount != other.operatorCount)
+					return false;
+				return true;
+			}
+			bool operator!=(const SubExpression &other) const { return !(*this == other); }
+
 			// Interleave tokens and operators to reproduce the initial string.
 			const std::string ToString() const;
 			// Interleave tokens and operators, but do not combine.
@@ -133,6 +176,18 @@ private:
 			class Operation {
 			public:
 				explicit Operation(const std::string &op, size_t &a, size_t &b);
+
+				bool operator==(const Operation &other) const
+				{
+					if(fun != other.fun)
+						return false;
+					if(a != other.a)
+						return false;
+					if(b != other.b)
+						return false;
+					return true;
+				}
+				bool operator!=(const Operation &other) const { return !(*this == other); }
 
 				int64_t (*fun)(int64_t, int64_t);
 				size_t a;

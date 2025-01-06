@@ -80,7 +80,7 @@ PlanetLabel::PlanetLabel(const vector<PlanetLabel> &labels, const System &system
 		color = *planet.GetWormhole()->GetLinkColor();
 	else if(planet.GetGovernment())
 	{
-		government = "(" + planet.GetGovernment()->GetName() + ")";
+		government = "(" + planet.GetGovernment()->Name() + ")";
 		color = Color::Combine(.5f, planet.GetGovernment()->GetColor(), 1.f, Color(.3f));
 		if(!planet.CanLand())
 			hostility = 3 + 2 * planet.GetGovernment()->IsEnemy();

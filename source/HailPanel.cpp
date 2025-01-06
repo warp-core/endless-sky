@@ -53,7 +53,7 @@ HailPanel::HailPanel(PlayerInfo &player, const shared_ptr<Ship> &ship, function<
 	if(!ship->Name().empty())
 		header = gov->Name() + " " + ship->Noun() + " \"" + ship->Name() + "\":";
 	else
-		header = ship->DisplayModelName() + " (" + gov->GetName() + "):";
+		header = ship->DisplayModelName() + " (" + gov->Name() + "):";
 	// Drones are always unpiloted, so they never respond to hails.
 	bool isMute = ship->GetPersonality().IsMute() || (ship->Attributes().Category() == "Drone");
 	hasLanguage = !isMute && (gov->Language().empty() || player.Conditions().Get("language: " + gov->Language()));

@@ -41,6 +41,9 @@ public:
 	// Discard all description lines.
 	void Clear();
 
+	bool operator==(const Paragraphs &other) const { return text == other.text; }
+	bool operator!=(const Paragraphs &other) const { return !(*this == other); }
+
 	// Is this object totally void of all information?
 	bool IsEmpty() const;
 

@@ -13,10 +13,10 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include "GameAssets.h"
 
 #include "Files.h"
-#include "ImageSet.h"
+#include "image/ImageSet.h"
 #include "Logger.h"
-#include "MaskManager.h"
-#include "Sprite.h"
+#include "image/MaskManager.h"
+#include "image/Sprite.h"
 #include "TaskQueue.h"
 
 #include <map>

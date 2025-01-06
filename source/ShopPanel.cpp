@@ -181,7 +181,7 @@ void ShopPanel::Draw()
 
 void ShopPanel::DrawShip(const Ship &ship, const Point &center, bool isSelected)
 {
-	const Sprite *back = SpriteSet::Get(
+	const Sprite *back = GameData::Sprites().Get(
 		isSelected ? "ui/shipyard selected" : "ui/shipyard unselected");
 	SpriteShader::Draw(back, center);
 
@@ -946,7 +946,7 @@ void ShopPanel::DrawButtons()
 
 	const Point findCenter = Screen::BottomRight() - Point(580, 20);
 	const Sprite *findIcon =
-		hoverButton == 'f' ? SpriteSet::Get("ui/find selected") : SpriteSet::Get("ui/find unselected");
+		hoverButton == 'f' ? GameData::Sprites().Get("ui/find selected") : GameData::Sprites().Get("ui/find unselected");
 	SpriteShader::Draw(findIcon, findCenter);
 	static const string FIND = "_Find";
 

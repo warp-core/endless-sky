@@ -1220,7 +1220,7 @@ void MapPanel::DrawTravelPlan()
 // Display the name of and distance to the selected system.
 void MapPanel::DrawSelectedSystem()
 {
-	const Sprite *sprite = SpriteSet::Get("ui/selected system");
+	const Sprite *sprite = GameData::Sprites().Get("ui/selected system");
 	SpriteShader::Draw(sprite, Point(0. + selectedSystemOffset, Screen::Top() + .5f * sprite->Height()));
 
 	string text;

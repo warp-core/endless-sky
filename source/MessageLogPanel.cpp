@@ -61,7 +61,7 @@ void MessageLogPanel::Draw()
 		Point(width, Screen::Height()),
 		backColor);
 
-	Panel::DrawEdgeSprite(SpriteSet::Get("ui/right edge"), Screen::Left() + width);
+	Panel::DrawEdgeSprite(GameData::Sprites().Get("ui/right edge"), Screen::Left() + width);
 
 	Information info;
 	if(messages.empty())

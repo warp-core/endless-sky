@@ -81,14 +81,6 @@ bool GameWindow::Init(function<void(SDL_Window *, const SDL_GLContext &)> post)
 	setenv("SDL_VIDEO_X11_WMCLASS", "io.github.endless_sky.endless_sky", true);
 #endif
 
-	// When running the integration tests, don't create a window nor an OpenGL context.
-	if(headless)
-#if defined(__linux__) && !SDL_VERSION_ATLEAST(2, 0, 22)
-		setenv("SDL_VIDEODRIVER", "dummy", true);
-#else
-		SDL_SetHint(SDL_HINT_VIDEODRIVER, "dummy");
-#endif
-
 	// This needs to be called before any other SDL commands.
 	if(SDL_Init(SDL_INIT_VIDEO) != 0)
 	{
@@ -141,21 +133,12 @@ bool GameWindow::Init(function<void(SDL_Window *, const SDL_GLContext &)> post)
 
 	// The main window spawns visibly at this point.
 	mainWindow = SDL_CreateWindow("Endless Sky", SDL_WINDOWPOS_UNDEFINED,
-		SDL_WINDOWPOS_UNDEFINED, windowWidth, windowHeight, headless ? 0 : flags);
+		SDL_WINDOWPOS_UNDEFINED, windowWidth, windowHeight, flags);
 
 	if(!mainWindow)
 	{
 		ExitWithError("Unable to create window!");
 		return false;
-	}
-
-	// Bail out early if we are in headless mode; no need to initialize all the OpenGL stuff.
-	if(headless)
-	{
-		width = windowWidth;
-		height = windowHeight;
-		Screen::SetRaw(width, height);
-		return true;
 	}
 
 	// Settings that must be declared before the context creation.

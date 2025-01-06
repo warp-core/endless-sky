@@ -33,6 +33,7 @@ class SpriteSet {
 public:
 	// Get a pointer to the sprite data with the given name.
 	const Sprite *Get(const std::string &name) const;
+	Sprite *Modify(const std::string &name);
 
 	explicit operator Set<Sprite> &() { return sprites; }
 	explicit operator const Set<Sprite> &() const { return sprites; }
@@ -55,5 +56,4 @@ private:
 	mutable std::vector<const Sprite *> planetSprites;
 	mutable std::vector<const Sprite *> starSprites;
 	mutable std::mutex modifyMutex;
-	static Sprite *Modify(const std::string &name);
 };

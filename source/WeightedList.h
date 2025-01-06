@@ -190,7 +190,7 @@ std::enable_if_t<
 	if (tw == 0) return sum;
 
 	for(unsigned index = 0; index < items.size(); ++index)
-		sum += fn(items[index].item) * items[index].weight;
+		sum += std::invoke(fn, items[index].item) * items[index].weight;
 	return sum / tw;
 }
 

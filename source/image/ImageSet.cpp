@@ -323,7 +323,7 @@ void ImageSet::Load() noexcept(false)
 // Create the sprite and optionally upload the image data to the GPU. After this is
 // called, the internal image buffers and mask vector will be cleared, but
 // the paths are saved in case the sprite needs to be loaded again.
-void ImageSet::Upload(Sprite *sprite, bool enableUpload)
+void ImageSet::Upload(Sprite *sprite)
 {
 	// Load the frames (this will clear the buffers).
 	sprite->AddFrames(buffer[0], false, std::move(paths[0]));

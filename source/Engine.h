@@ -240,10 +240,6 @@ private:
 	BatchDrawList batchDraw[2];
 	Radar radar[2];
 
-	bool wasActive = false;
-	bool isMouseHoldEnabled = false;
-	bool isMouseTurningEnabled = false;
-
 	// Viewport position and velocity.
 	Point center;
 	Point centerVelocity;

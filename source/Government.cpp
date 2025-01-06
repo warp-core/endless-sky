@@ -460,10 +460,10 @@ double Government::AttitudeToward(const Government *other) const
 	auto it = attitudeToward.find(other);
 	if(it == attitudeToward.end())
 		return defaultAttitude;
-	else if(isnan(it.second))
+	else if(isnan(it->second))
 		return defaultAttitude;
 	else
-		return it.second;
+		return it->second;
 }
 
 

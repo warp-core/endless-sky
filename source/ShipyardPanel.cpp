@@ -136,12 +136,6 @@ double ShipyardPanel::DrawDetails(const Point &center)
 
 		const Sprite *background = GameData::Sprites().Get("ui/shipyard selected");
 		const Sprite *shipSprite = selectedShip->GetSprite();
-		float spriteScale = shipSprite
-			? min(1.f, (INFOBAR_WIDTH - 20.f) / max(shipSprite->Width(), shipSprite->Height()))
-			: 1.f;
-
-		int swizzle = selectedShip->CustomSwizzle() >= 0
-			? selectedShip->CustomSwizzle() : GameData::PlayerGovernment()->GetSwizzle();
 
 		Point spriteCenter(center.X(), center.Y() + 20 + TileSize() / 2);
 		Point startPoint(center.X() - INFOBAR_WIDTH / 2 + 20, center.Y() + 20 + TileSize());
@@ -183,7 +177,6 @@ double ShipyardPanel::DrawDetails(const Point &center)
 
 		SpriteShader::Draw(background, spriteCenter);
 
-		const Sprite *shipSprite = selectedShip->GetSprite();
 		if(shipSprite)
 		{
 			const float spriteScale = min(1.f, (INFOBAR_WIDTH - 60.f) / max(shipSprite->Width(), shipSprite->Height()));
@@ -193,8 +186,6 @@ double ShipyardPanel::DrawDetails(const Point &center)
 		}
 
 		const bool hasDescription = shipInfo.DescriptionHeight();
-
-		double descriptionOffset = hasDescription ? 40. : 0.;
 
 		if(hasDescription)
 		{
@@ -228,7 +219,6 @@ double ShipyardPanel::DrawDetails(const Point &center)
 	}
 
 	// Draw this string representing the selected ship (if any), centered in the details side panel
-	const Color &bright = *GameData::Colors().Get("bright");
 	const Point selectedPoint(center.X() - INFOBAR_WIDTH / 2, center.Y());
 	font.Draw({selectedItem, {INFOBAR_WIDTH, Alignment::CENTER, Truncate::MIDDLE}},
 		selectedPoint, bright);

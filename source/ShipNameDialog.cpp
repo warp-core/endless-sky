@@ -32,7 +32,7 @@ void ShipNameDialog::Draw()
 	Dialog::Draw();
 
 	randomPos = cancelPos - Point(100., 0.);
-	SpriteShader::Draw(SpriteSet::Get("ui/dialog cancel"), randomPos);
+	SpriteShader::Draw(GameData::Sprites().Get("ui/dialog cancel"), randomPos);
 
 	const Font &font = FontSet::Get(14);
 	static const string RANDOM = "Random";

@@ -95,8 +95,6 @@ namespace {
 
 	vector<string> sources;
 
-	Politics politics;
-	StarField background;
 	MaskManager maskManager;
 
 	const Government *playerGovernment = nullptr;
@@ -109,10 +107,8 @@ namespace {
 
 future<void> GameData::BeginLoad(int options)
 {
-	preventSpriteUpload = preventUpload;
-
 	// Initialize the list of "source" folders based on any active plugins.
-	LoadSources(queue);
+	LoadSources();
 
 	return assets.Load(sources, options);
 }
@@ -770,20 +766,10 @@ const Gamerules &GameData::GetGamerules()
 
 
 
-void GameData::LoadSources(TaskQueue &queue)
+void GameData::LoadSources()
 {
 	sources.clear();
 	sources.push_back(Files::Resources());
-
-	vector<string> globalPlugins = Files::ListDirectories(Files::Resources() + "plugins/");
-	for(const string &path : globalPlugins)
-		if(Plugins::IsPlugin(path))
-			LoadPlugin(queue, path);
-
-	vector<string> localPlugins = Files::ListDirectories(Files::Config() + "plugins/");
-	for(const string &path : localPlugins)
-		if(Plugins::IsPlugin(path))
-			LoadPlugin(queue, path);
 }
 
 

@@ -32,9 +32,20 @@ public:
 	double MinAttraction() const;
 	double MaxAttraction() const;
 
+	bool operator==(const RaidFleet &other) const
+	{
+		return fleet == other.fleet && minAttraction == other.minAttraction && maxAttraction == other.maxAttraction;
+	}
+	bool operator!=(const RaidFleet &other) const
+	{
+		return !(*this == other);
+	}
+
 
 private:
 	const Fleet *fleet = nullptr;
 	double minAttraction;
 	double maxAttraction;
+
+	friend class GovernmentEditor;
 };

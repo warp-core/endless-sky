@@ -20,11 +20,11 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "Files.h"
 #include "text/FontSet.h"
 #include "GameData.h"
-#include "ImageSet.h"
+#include "image/ImageSet.h"
 #include "Information.h"
 #include "Logger.h"
-#include "MaskManager.h"
-#include "Music.h"
+#include "image/MaskManager.h"
+#include "audio/Music.h"
 #include "PlayerInfo.h"
 #include "Politics.h"
 #include "Random.h"
@@ -54,12 +54,8 @@ namespace {
 
 
 namespace {
-	// TODO (C++14): make these 3 methods generic lambdas visible only to the CheckReferences method.
+	// TODO (C++14): make these 2 methods generic lambdas visible only to the CheckReferences method.
 	// Log a warning for an "undefined" class object that was never loaded from disk.
-	void Warn(const string &noun, const string &name)
-	{
-		Logger::LogError("Warning: " + noun + " \"" + name + "\" is referred to, but not fully defined.");
-	}
 	// Class objects with a deferred definition should still get named when content is loaded.
 	template <class Type>
 	bool NameIfDeferred(const set<string> &deferred, pair<const string, Type> &it)

@@ -250,8 +250,6 @@ double OutfitterPanel::DrawDetails(const Point &center)
 	string selectedItem = "Nothing Selected";
 	const Font &font = FontSet::Get(14);
 	const Color &bright = *GameData::Colors().Get("bright");
-	const Color &dim = *GameData::Colors().Get("medium");
-	const Sprite *collapsedArrow = GameData::Sprites().Get("ui/collapsed");
 
 	double heightOffset = 20.;
 
@@ -269,7 +267,6 @@ double OutfitterPanel::DrawDetails(const Point &center)
 		const Point thumbnailCenter(center.X(), center.Y() + 20 + static_cast<int>(tileSize / 2));
 		const Point startPoint(center.X() - INFOBAR_WIDTH / 2 + 20, center.Y() + 20 + tileSize);
 
-		const Sprite *background = SpriteSet::Get("ui/outfitter selected");
 		SpriteShader::Draw(background, thumbnailCenter);
 		if(thumbnail)
 			SpriteShader::Draw(thumbnail, thumbnailCenter);
@@ -310,7 +307,6 @@ double OutfitterPanel::DrawDetails(const Point &center)
 	}
 
 	// Draw this string representing the selected item (if any), centered in the details side panel
-	const Color &bright = *GameData::Colors().Get("bright");
 	Point selectedPoint(center.X() - INFOBAR_WIDTH / 2, center.Y());
 	font.Draw({selectedItem, {INFOBAR_WIDTH, Alignment::CENTER, Truncate::MIDDLE}},
 		selectedPoint, bright);

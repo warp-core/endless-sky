@@ -197,13 +197,6 @@ bool MainPanel::AllowsFastForward() const noexcept
 
 
 
-Engine &MainPanel::GetEngine()
-{
-	return engine;
-}
-
-
-
 // Only override the ones you need; the default action is to return false.
 bool MainPanel::KeyDown(SDL_Keycode key, Uint16 mod, const Command &command, bool isNewPress)
 {

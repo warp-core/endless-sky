@@ -64,6 +64,24 @@ public:
 	void LoadDefaultSpaceport();
 	void LoadUninhabitedSpaceport();
 
+	bool operator==(const Port &other) const
+	{
+		if(loaded != other.loaded)
+			return false;
+		if(name != other.name)
+			return false;
+		if(description != other.description)
+			return false;
+		if(recharge != other.recharge)
+			return false;
+		if(services != other.services)
+			return false;
+		if(hasNews != other.hasNews)
+			return false;
+		return true;
+	}
+	bool operator!=(const Port &other) const { return !(*this == other); }
+
 	// Load a port's description text paragraphs from the planet spaceport description.
 	void LoadDescription(const DataNode &node);
 
@@ -106,4 +124,6 @@ private:
 
 	// Whether this port has news.
 	bool hasNews = false;
+
+	friend class PlanetEditor;
 };

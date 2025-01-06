@@ -50,7 +50,7 @@ public:
 
 	// Get the name of the sprite for this image set.
 	const std::string &Name() const;
-	const std::vector<std::string> &Path(bool is2x) const;
+	const std::vector<std::filesystem::path> &Path(bool is2x) const;
 	// Whether this image set is empty, i.e. has no images.
 	bool IsEmpty() const;
 	// Add a single image to this set. Assume the name of the image has already

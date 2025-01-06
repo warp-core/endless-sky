@@ -20,6 +20,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include <array>
 #include <cstdint>
+#include <filesystem>
 #include <string>
 #include <vector>
 
@@ -36,11 +37,11 @@ public:
 	const std::string &Name() const;
 
 	// Add the given frames, optionally uploading them. The given buffer will be cleared afterwards.
-	void AddFrames(ImageBuffer &buffer, bool is2x, std::vector<std::string> path);
+	void AddFrames(ImageBuffer &buffer, bool is2x, std::vector<std::filesystem::path> path);
 	void AddSwizzleMaskFrames(ImageBuffer &buffer, bool is2x);
 	// Free up all textures loaded for this sprite.
 	void Unload();
-	const std::vector<std::string> &Path(bool is2x) const;
+	const std::vector<std::filesystem::path> &Path(bool is2x) const;
 
 	// Image dimensions, in pixels.
 	float Width() const;
@@ -63,7 +64,7 @@ public:
 
 private:
 	std::string name;
-	std::array<std::vector<std::string>, 2> paths;
+	std::array<std::vector<std::filesystem::path>, 2> paths;
 	bool isLoaded = false;
 
 	uint32_t texture[2] = {0, 0};

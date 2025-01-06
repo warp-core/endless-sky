@@ -163,7 +163,7 @@ string ImageSet::Name(const filesystem::path &path)
 
 
 
-const vector<string> &ImageSet::Path(bool is2x) const
+const vector<filesystem::path> &ImageSet::Path(bool is2x) const
 {
 	return paths[is2x];
 }

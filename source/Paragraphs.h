@@ -16,12 +16,12 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
 #include "ConditionSet.h"
+#include "ConditionsStore.h"
 
 #include <string>
 #include <utility>
 #include <vector>
 
-class ConditionsStore;
 class DataNode;
 
 
@@ -50,7 +50,7 @@ public:
 	bool IsEmptyFor(const ConditionsStore &vars) const;
 
 	// Concatenate all lines which match these vars.
-	std::string ToString(const ConditionsStore &vars) const;
+	std::string ToString(const ConditionsStore &vars = {}) const;
 
 	// Iterate over all text. Needed to support PrintData.
 	// These must use standard naming conventions (begin, end) for compatibility with range-based for loops.

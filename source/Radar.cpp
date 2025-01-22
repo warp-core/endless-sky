@@ -136,23 +136,23 @@ void Radar::Draw(const Point &center, double scale, double radius, double pointe
 
 const Color &Radar::GetColor(int type)
 {
-	static const vector<Color> color = {
-		*GameData::Colors().Get("radar player"),
-		*GameData::Colors().Get("radar friendly"),
-		*GameData::Colors().Get("radar unfriendly"),
-		*GameData::Colors().Get("radar hostile"),
-		*GameData::Colors().Get("radar inactive"),
-		*GameData::Colors().Get("radar special"),
-		*GameData::Colors().Get("radar anomalous"),
-		*GameData::Colors().Get("radar blink"),
-		*GameData::Colors().Get("radar viewport"),
-		*GameData::Colors().Get("radar star")
+	static const vector<const Color *> color = {
+		GameData::Colors().Get("radar player"),
+		GameData::Colors().Get("radar friendly"),
+		GameData::Colors().Get("radar unfriendly"),
+		GameData::Colors().Get("radar hostile"),
+		GameData::Colors().Get("radar inactive"),
+		GameData::Colors().Get("radar special"),
+		GameData::Colors().Get("radar anomalous"),
+		GameData::Colors().Get("radar blink"),
+		GameData::Colors().Get("radar viewport"),
+		GameData::Colors().Get("radar star")
 	};
 
 	if(static_cast<size_t>(type) >= color.size())
 		type = INACTIVE;
 
-	return color[type];
+	return *(color[type]);
 }
 
 

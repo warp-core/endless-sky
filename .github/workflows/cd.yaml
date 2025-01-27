@@ -120,6 +120,9 @@ jobs:
         with:
           platform: x86
           version: 12.2.0
+      - name: Adjust version strings
+        run: ./utils/cd_update_versions.sh
+        shell: bash
       - uses: lukka/get-cmake@latest
       - uses: lukka/run-vcpkg@v11
         with:

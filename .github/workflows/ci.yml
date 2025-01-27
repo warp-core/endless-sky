@@ -181,7 +181,7 @@ jobs:
     - name: Setup sccache
       uses: Mozilla-Actions/sccache-action@v0.0.5
     - name: Set up MinGW
-      uses: egor-tensin/setup-mingw@v2
+      uses: ocbnet/setup-mingw@master
       with:
         platform: x86
         version: 12.2.0

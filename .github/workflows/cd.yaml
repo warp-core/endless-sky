@@ -123,9 +123,9 @@ jobs:
           Remove-Item (Join-Path C: ProgramData mingw64 mingw32 i686-w64-mingw32 lib 'libwinpthread.dll.a')
           New-Item -ItemType HardLink -Path (Join-Path C: ProgramData mingw64 mingw32 bin 'c++.exe') -Value (Join-Path C: ProgramData mingw64 mingw32 bin 'i686-w64-mingw32-g++.exe') -Force
       - name: Testing
-          run: |
-            echo $env:path
-            get-childitem env:path | Format-List *
+        run: |
+          echo $env:path
+          get-childitem env:path | Format-List *
       - name: Adjust version strings
         run: ./utils/cd_update_versions.sh
         shell: bash

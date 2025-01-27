@@ -194,7 +194,7 @@ jobs:
         configurePreset: 'mingw32'
         buildPreset: 'mingw32-release'
     - name: Run Benchmarks
-      run: ctest --preset mingw32-benchmark
+      run: ctest --preset mingw32-ci-benchmark
 
 
   build_windows_clang:

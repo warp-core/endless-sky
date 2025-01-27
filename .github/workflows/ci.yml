@@ -183,8 +183,7 @@ jobs:
     - name: Install x86 MinGW
       run: |
         choco install mingw --forcex86 --force
-        echo Join-Path C: ProgramData mingw64 mingw32 bin >> $env:GITHUB_PATH
-          New-Item -ItemType HardLink -Path (Join-Path C: ProgramData mingw64 mingw32 bin 'c++.exe') -Value (Join-Path C: ProgramData mingw64 mingw32 bin 'i686-w64-mingw32-g++.exe') -Force
+        echo (Join-Path C: ProgramData mingw64 mingw32 bin) >> $env:GITHUB_PATH
     - uses: lukka/get-cmake@latest
     - uses: lukka/run-vcpkg@v11
       with:

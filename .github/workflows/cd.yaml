@@ -118,7 +118,7 @@ jobs:
       - name: Install x86 MinGW
         run: |
           choco install mingw --x86
-          echo Join-Path C: ProgramData mingw64 mingw32 bin >> $env:GITHUB_PATH
+          echo (Join-Path C: ProgramData mingw64 mingw32 bin) >> $env:GITHUB_PATH
           Remove-Item (Join-Path C: ProgramData mingw64 mingw32 i686-w64-mingw32 lib 'libpthread.dll.a')
           Remove-Item (Join-Path C: ProgramData mingw64 mingw32 i686-w64-mingw32 lib 'libwinpthread.dll.a')
           New-Item -ItemType HardLink -Path (Join-Path C: ProgramData mingw64 mingw32 bin 'c++.exe') -Value (Join-Path C: ProgramData mingw64 mingw32 bin 'i686-w64-mingw32-g++.exe') -Force

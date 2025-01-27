@@ -117,7 +117,7 @@ jobs:
         uses: Mozilla-Actions/sccache-action@v0.0.5
       - name: Install x86 MinGW
         run: |
-          choco install mingw --forcex86 --force
+          choco install mingw --x86
           echo Join-Path C: ProgramData mingw64 mingw32 bin >> $env:GITHUB_PATH
           Remove-Item (Join-Path C: ProgramData mingw64 mingw32 i686-w64-mingw32 lib 'libpthread.dll.a')
           Remove-Item (Join-Path C: ProgramData mingw64 mingw32 i686-w64-mingw32 lib 'libwinpthread.dll.a')

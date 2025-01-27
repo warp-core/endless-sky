@@ -160,6 +160,39 @@ jobs:
         path: ./build/ci/*.dll
 
 
+  build_windows_x86:
+    name: Windows x86
+    needs: changed
+    if: ${{ needs.changed.outputs.game_code == 'true' || needs.changed.outputs.unit_tests == 'true' || needs.changed.outputs.cmake_files == 'true' || needs.changed.outputs.ci_config == 'true' }}
+    runs-on: windows-2025
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        show-progress: false
+    - name: Setup cached directories
+      uses: actions/cache@v4
+      with:
+        path: C:\Users\runneradmin\AppData\Local\Mozilla\sccache\cache
+        key: ${{ runner.os }}-${{ runner.arch }}-ci-sccache-${{ github.ref }}
+        restore-keys: |
+          ${{ runner.os }}-${{ runner.arch }}-ci-sccache-refs/heads/master
+    - name: Setup sccache
+      uses: Mozilla-Actions/sccache-action@v0.0.5
+    - uses: lukka/get-cmake@latest
+    - uses: lukka/run-vcpkg@v11
+      with:
+        vcpkgGitCommitId: 'c82f74667287d3dc386bce81e44964370c91a289'
+    - uses: lukka/run-cmake@v10
+      with:
+        configurePreset: 'mingw32-ci'
+        buildPreset: 'mingw32-ci'
+        testPreset: 'mingw32-ci'
+    - name: Run Benchmarks
+      run: ctest --preset mingw32-ci-benchmark
+
+
   build_windows_clang:
     name: Windows Clang
     needs: changed

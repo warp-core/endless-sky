@@ -180,6 +180,10 @@ jobs:
           ${{ runner.os }}-${{ runner.arch }}-ci-sccache-refs/heads/master
     - name: Setup sccache
       uses: Mozilla-Actions/sccache-action@v0.0.5
+    - name: Set up MinGW
+      uses: egor-tensin/setup-mingw@v2
+      with:
+        platform: x86
     - uses: lukka/get-cmake@latest
     - uses: lukka/run-vcpkg@v11
       with:

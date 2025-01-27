@@ -96,6 +96,50 @@ jobs:
           name: ${{ env.OUTPUT }}
           path: ${{ env.OUTPUT }}
 
+  cd_windows_x86:
+    name: Windows x86
+    runs-on: windows-2025
+    env:
+      OUTPUT: EndlessSky-win32-continuous.zip
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
+      - name: Setup cached directories
+        uses: actions/cache@v4
+        with:
+          path: C:\Users\runneradmin\AppData\Local\Mozilla\sccache\cache
+          key: ${{ runner.os }}-cd-sccache-${{ github.ref }}
+          restore-keys: |
+            ${{ runner.os }}-cd-sccache-refs/heads/master
+      - name: Setup sccache
+        uses: Mozilla-Actions/sccache-action@v0.0.5
+      - name: Install x86 MinGW
+        run: |
+          choco install mingw --x86
+          echo (Join-Path C: ProgramData mingw64 mingw32 bin) >> $env:GITHUB_PATH
+      - name: Adjust version strings
+        run: ./utils/cd_update_versions.sh
+        shell: bash
+      - uses: lukka/get-cmake@latest
+      - uses: lukka/run-vcpkg@v11
+        with:
+          vcpkgGitCommitId: 'c82f74667287d3dc386bce81e44964370c91a289'
+      - uses: lukka/run-cmake@v10
+        with:
+          configurePreset: 'mingw32-release'
+          buildPreset: 'mingw32-ci-release'
+      - name: Package Application
+        run: |
+          cmake --install build/release
+          7z a ${{ env.OUTPUT }} "./install/release/*"
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.OUTPUT }}
+          path: ${{ env.OUTPUT }}
+
   cd_macos_x64:
     name: MacOS
     runs-on: macos-13

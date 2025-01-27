@@ -180,11 +180,8 @@ jobs:
           ${{ runner.os }}-${{ runner.arch }}-ci-sccache-refs/heads/master
     - name: Setup sccache
       uses: Mozilla-Actions/sccache-action@v0.0.5
-    - name: Set up MinGW
-      uses: ocbnet/setup-mingw@master
-      with:
-        platform: x86
-        version: 12.2.0
+    - name: Install x86 MinGW
+      run: choco install mingw --forcex86 --force
     - uses: lukka/get-cmake@latest
     - uses: lukka/run-vcpkg@v11
       with:

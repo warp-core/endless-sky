@@ -191,8 +191,9 @@ jobs:
         vcpkgGitCommitId: 'c82f74667287d3dc386bce81e44964370c91a289'
     - uses: lukka/run-cmake@v10
       with:
-        configurePreset: 'mingw32'
-        buildPreset: 'mingw32-release'
+        configurePreset: 'mingw3-ci'
+        buildPreset: 'mingw32-ci'
+        testPreset: 'mingw32-ci'
     - name: Run Benchmarks
       run: ctest --preset mingw32-ci-benchmark
 

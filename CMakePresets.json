@@ -262,7 +262,7 @@
 			"description": "Builds with MinGW32 for CI purposes",
 			"inherits": "ci",
 			"cacheVariables": {
-				"CMAKE_CSS_COMPILER": "i686-w64-mingw32-g++",
+				"CMAKE_CXX_COMPILER": "i686-w64-mingw32-g++",
 				"CMAKE_RC_COMPILER": "windres",
 				"VCPKG_HOST_TRIPLET": "win32-release",
 				"VCPKG_TARGET_TRIPLET": "win32-release"

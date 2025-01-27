@@ -119,7 +119,7 @@ jobs:
         run: |
           choco install mingw --forcex86 --force
           echo Join-Path C: ProgramData mingw64 mingw32 bin >> $env:GITHUB_PATH
-          New-Item -ItemType HardLink -Path (Join-Path C: ProgramData mingw64 mingw32 bin 'c++.exe') -Value (Join-Path C: ProgramData mingw64 mingw36 bin 'i686-w64-mingw32-g++.exe') -Force
+          New-Item -ItemType HardLink -Path (Join-Path C: ProgramData mingw64 mingw32 bin 'c++.exe') -Value (Join-Path C: ProgramData mingw64 mingw32 bin 'i686-w64-mingw32-g++.exe') -Force
       - name: Adjust version strings
         run: ./utils/cd_update_versions.sh
         shell: bash

@@ -4309,9 +4309,25 @@ void PlayerInfo::Save(DataWriter &out) const
 	if(previousSystem)
 		out.Write("previous system", previousSystem->TrueName());
 	if(system)
+	{
 		out.Write("system", system->TrueName());
+		if(system->DisplayName() != system->TrueName())
+		{
+			out.BeginChild();
+			out.Write("display name", system->DisplayName());
+			out.EndChild();
+		}
+	}
 	if(planet)
+	{
 		out.Write("planet", planet->TrueName());
+		if(planet->DisplayName() != planet->TrueName())
+		{
+			out.BeginChild();
+			out.Write("display name", planet->DisplayName());
+			out.EndChild();
+		}
+	}
 	if(planet && planet->CanUseServices())
 		out.Write("clearance");
 	out.Write("playtime", playTime);

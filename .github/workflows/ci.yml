@@ -213,6 +213,14 @@ jobs:
             ${{ runner.os }}-${{ runner.arch }}-ci-sccache-refs/heads/master
       - name: Setup sccache
         uses: Mozilla-Actions/sccache-action@v0.0.5
+      - name: Testing
+        run: |
+          cd C:\mingw32
+          dir
+          cd bin
+          dir
+          gcc --version
+          g++ --version
       - name: Install x86 MinGW
         run: |
           Invoke-WebRequest ${{ env.MINGW_URL }} -OutFile (Join-Path C: mingw.7z)

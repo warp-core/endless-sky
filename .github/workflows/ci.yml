@@ -223,7 +223,7 @@ jobs:
           g++ --version
       - name: Update PATH >> $env:GITHUB_PATH
         run: |
-          echo (Join-Path C: mingw32 bin) >>
+          echo (Join-Path C: mingw32 bin) >> $env:GITHUB_PATH
       - uses: lukka/get-cmake@latest
       - uses: lukka/run-vcpkg@v11
         with:

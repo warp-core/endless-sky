@@ -49,9 +49,19 @@ void SavedGame::Load(const filesystem::path &path)
 		else if(node.Token(0) == "date" && node.Size() >= 4)
 			date = Date(node.Value(1), node.Value(2), node.Value(3)).ToString();
 		else if(node.Token(0) == "system" && node.Size() >= 2)
+		{
 			system = node.Token(1);
+			for(const DataNode &child : node)
+				if(child.Token(0) == "display name" && child.Size() >= 2)
+					system = child.Token(1);
+		}
 		else if(node.Token(0) == "planet" && node.Size() >= 2)
+		{
 			planet = node.Token(1);
+			for(const DataNode &child : node)
+				if(child.Token(0) == "display name" && child.Size() >= 2)
+					planet = child.Token(1);
+		}
 		else if(node.Token(0) == "playtime" && node.Size() >= 2)
 			playTime = Format::PlayTime(node.Value(1));
 		else if(node.Token(0) == "flagship index" && node.Size() >= 2)

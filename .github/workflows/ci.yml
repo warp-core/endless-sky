@@ -221,6 +221,8 @@ jobs:
           dir
           gcc --version
           g++ --version
+      - name: Update PATH >> $env:GITHUB_PATH
+        run: echo (Join-Path C: mingw32 bin) >>
       - uses: lukka/get-cmake@latest
       - uses: lukka/run-vcpkg@v11
         with:

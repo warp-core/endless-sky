@@ -3350,14 +3350,13 @@ system Albireo
 
 
 system Alcor
-	pos -554 156
+	pos -1000 -1000
 	government Republic
 	attributes "bright star" "dirt belt" "notable star"
 	habitable 3208.255
 	arrival 3208.255
 	belt 1615 10
 	belt 1795 9
-	link Mizar
 	asteroids "medium rock" 6 2.064
 	asteroids "large rock" 1 1.602
 	asteroids "small metal" 2 2.741
@@ -3998,8 +3997,8 @@ system Algorel
 	belt 1993
 	haze _menu/haze-67
 	link "Cor Caroli"
-	link Ipsing
 	link Mizar
+	link Phecda
 	link Turais
 	asteroids "small rock" 2 3.094
 	asteroids "medium rock" 5 2.142
@@ -13830,15 +13829,16 @@ system "Fah Soom"
 			period 22.2216
 
 system Fala
-	pos -674 52
+	pos -704 30
 	government Republic
 	attributes "dirt belt"
 	arrival 1250
 	habitable 1250
 	belt 1264
 	link "Delta Velorum"
-	link Ipsing
+	link Mora
 	link Muscida
+	link "Tania Australis"
 	asteroids "small rock" 2 3.0464
 	asteroids "medium rock" 91 2.8672
 	asteroids "large rock" 2 2.0832
@@ -13868,9 +13868,8 @@ system Fala
 	object
 		sprite star/g5-old
 		period 10
-	object "Basilisk Station"
-		sprite planet/station19
-			scale 0.5
+	object
+		sprite planet/desert1-b
 		distance 226.84
 		period 38.6531
 	object
@@ -18503,17 +18502,14 @@ system "Io Mann"
 			period 24.0584
 
 system Ipsing
-	pos -639 99
+	pos -549 160
 	government Republic
 	attributes "dirt belt"
 	arrival 2585
 	habitable 2585
 	belt 1107
 	haze _menu/haze-67
-	link Algorel
-	link Fala
-	link Phecda
-	link Turais
+	link Mizar
 	asteroids "large metal" 1 1.1424
 	trade Clothing 231
 	trade Electronics 712
@@ -18525,12 +18521,7 @@ system Ipsing
 	trade Medical 697
 	trade Metal 388
 	trade Plastic 416
-	fleet "Small Southern Merchants" 600
-	fleet "Small Northern Merchants" 800
-	fleet "Large Southern Merchants" 2000
-	fleet "Large Northern Merchants" 1500
-	fleet "Small Republic" 2000
-	fleet "Large Republic" 4000
+	fleet "Small Southern Merchants" 2000
 	fleet "Small Southern Pirates" 3000
 	fleet "Derelict Northern" 10000
 	object
@@ -24913,10 +24904,10 @@ system Mizar
 	habitable 1080
 	belt 1876
 	haze _menu/haze-67
-	link Alcor
 	link Algorel
 	link Arcturus
 	link "Cor Caroli"
+	link Ipsing
 	asteroids "large metal" 1 2.6304
 	trade Clothing 187
 	trade Electronics 784
@@ -25147,9 +25138,9 @@ system Mora
 	belt 1176
 	haze _menu/haze-67
 	link Aniara
+	link Fala
 	link Limen
 	link Megrez
-	link Muscida
 	asteroids "medium rock" 54 1.9305
 	asteroids "large rock" 33 1.9877
 	asteroids "medium metal" 3 1.287
@@ -25396,7 +25387,7 @@ system Muphrid
 		period 1191.15
 		
 system Muscida
-	pos -704 30
+	pos -674 52
 	government Republic
 	attributes "dirt belt"
 	habitable 1250
@@ -25406,8 +25397,6 @@ system Muscida
 	belt 2512 5
 	link "Delta Velorum"
 	link Fala
-	link Mora
-	link "Tania Australis"
 	asteroids "small rock" 1 4.352
 	asteroids "medium rock" 3 5.189
 	asteroids "large rock" 8 8.37
@@ -27963,14 +27952,14 @@ system Phact
 		period 1691.25
 
 system Phecda
-	pos -600 69
+	pos -607 88
 	government Republic
 	attributes "dirt belt"
 	arrival 500
 	habitable 370
 	belt 1375
+	link Algorel
 	link Intercrus
-	link Ipsing
 	link Merak
 	asteroids "small rock" 182 3.2
 	asteroids "medium rock" 57 6.95
@@ -33871,9 +33860,9 @@ system "Tania Australis"
 	habitable 1080
 	belt 1738
 	link Aniara
+	link Fala
 	link Intercrus
 	link Lolami
-	link Muscida
 	link "Tania Borealis"
 	asteroids "medium rock" 4 4.6656
 	asteroids "large rock" 13 5.2704
@@ -34628,7 +34617,6 @@ system Turais
 	link Algorel
 	link "Delta Velorum"
 	link Gacrux
-	link Ipsing
 	asteroids "small rock" 16 3.075
 	asteroids "medium rock" 37 4.2
 	asteroids "large rock" 7 4.35

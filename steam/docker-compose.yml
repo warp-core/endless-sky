@@ -11,7 +11,7 @@ services:
       - |
         mkdir -p build/steam-x64
         cd build/steam-x64
-        cmake ../../ -GNinja -DES_STEAM=ON -DCMAKE_BUILD_TYPE=Release -DVCPKG_TARGET_TRIPLET=linux-x64-release-static -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+        cmake ../../ -GNinja -DES_STEAM=ON -DCMAKE_BUILD_TYPE=Release -DVCPKG_TARGET_TRIPLET=linux-x64-release-static
         ninja EndlessSky
 
 

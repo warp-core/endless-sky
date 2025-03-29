@@ -26,6 +26,7 @@
 include_guard(GLOBAL)
 
 function(x_vcpkg_bootstrap)
+    set(VCPKG_CMAKE_CONFIGURE_OPTIONS -DCMAKE_POLICY_VERSION_MINIMUM=3.5)
     if(NOT GIT_EXECUTABLE)
         find_package(Git REQUIRED)
     endif()

@@ -28,7 +28,6 @@ set(CMAKE_BUILD_RPATH_USE_ORIGIN ON)
 
 # Setup vcpkg.
 if(ES_USE_VCPKG)
-	set(VCPKG_CMAKE_CONFIGURE_OPTIONS -DCMAKE_POLICY_VERSION_MINIMUM=3.5)
 	set(CMAKE_TOOLCHAIN_FILE "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake"
 		CACHE STRING "Vcpkg toolchain file")
 	# No need to bootstrap vcpkg if the toolchain file is explictly provided.

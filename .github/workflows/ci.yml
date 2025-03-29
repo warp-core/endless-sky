@@ -54,7 +54,6 @@ jobs:
         opengl: [GL, GLES]
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      CMAKE_POLICY_VERSION_MINIMUM: 3.5
     steps:
     - uses: actions/checkout@v4
       with:
@@ -95,7 +94,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      CMAKE_POLICY_VERSION_MINIMUM: 3.5
     steps:
       - uses: actions/checkout@v4
         with:
@@ -126,7 +124,6 @@ jobs:
     runs-on: windows-2025
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      CMAKE_POLICY_VERSION_MINIMUM: 3.5
     steps:
     - uses: actions/checkout@v4
       with:
@@ -170,7 +167,6 @@ jobs:
     runs-on: windows-2025
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      CMAKE_POLICY_VERSION_MINIMUM: 3.5
     steps:
     - uses: actions/checkout@v4
       with:
@@ -204,7 +200,6 @@ jobs:
     runs-on: macos-13
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      CMAKE_POLICY_VERSION_MINIMUM: 3.5
     steps:
     - uses: actions/checkout@v4
       with:
@@ -241,7 +236,6 @@ jobs:
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       OUTPUT: "Endless Sky ARM CI Test"
-      CMAKE_POLICY_VERSION_MINIMUM: 3.5
     steps:
     - uses: actions/checkout@v4
       with:

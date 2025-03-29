@@ -47,7 +47,6 @@ jobs:
       - uses: lukka/run-cmake@v10
         with:
           configurePreset: 'linux-release'
-          configurePresetAdditionalArgs: "['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']"
           buildPreset: 'linux-ci-release'
       - name: Package Application
         run: ./utils/build_appimage.sh build/release
@@ -86,7 +85,6 @@ jobs:
       - uses: lukka/run-cmake@v10
         with:
           configurePreset: 'mingw-release'
-          configurePresetAdditionalArgs: "['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']"
           buildPreset: 'mingw-ci-release'
       - name: Package Application
         run: |
@@ -126,7 +124,6 @@ jobs:
       - uses: lukka/run-cmake@v10
         with:
           configurePreset: 'macos-release'
-          configurePresetAdditionalArgs: "['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']"
           buildPreset: 'macos-ci-release'
       - name: Package Application
         run: |

@@ -31,8 +31,7 @@
 				"CMAKE_CXX_COMPILER_LAUNCHER": "sccache",
 				"CMAKE_COMPILE_WARNING_AS_ERROR": "ON",
 				"ES_USE_VCPKG": "ON",
-				"ES_USE_SYSTEM_LIBRARIES": "OFF",
-				"CMAKE_POLICY_VERSION_MINIMUM": "3.5"
+				"ES_USE_SYSTEM_LIBRARIES": "OFF"
 			},
 			"condition": {
 				"type": "equals",
@@ -55,8 +54,7 @@
 				"CMAKE_COMPILE_WARNING_AS_ERROR": "ON",
 				"ES_USE_VCPKG": "ON",
 				"ES_USE_SYSTEM_LIBRARIES": "OFF",
-				"BUILD_TESTING": "OFF",
-				"CMAKE_POLICY_VERSION_MINIMUM": "3.5"
+				"BUILD_TESTING": "OFF"
 			},
 			"condition": {
 				"type": "equals",

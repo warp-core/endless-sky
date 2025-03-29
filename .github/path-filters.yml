@@ -36,6 +36,7 @@ code_style_check:
 
 cmake_files:
   - CMakeLists.txt
+  - overlays/**
   - source/CMakeLists.txt
   - tests/CMakeLists.txt
   - tests/integration/IntegrationTests.cmake

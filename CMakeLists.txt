@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.16...3.29)
 
+set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
+
 include(CMakeDependentOption)
 if(UNIX AND NOT APPLE AND NOT ES_STEAM)
 	option(ES_USE_VCPKG "Use vcpkg to get dependencies." OFF)

@@ -15,6 +15,7 @@ jobs:
       ARCH: x86_64
       OUTPUT: Endless_Sky-${{ inputs.release_version  }}-x86_64.AppImage
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      CMAKE_POLICY_VERSION_MINIMUM: 3.5
     steps:
       - uses: actions/checkout@v4
         with:
@@ -48,6 +49,7 @@ jobs:
     env:
       OUTPUT: EndlessSky-win64-${{ inputs.release_version }}.zip
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      CMAKE_POLICY_VERSION_MINIMUM: 3.5
     steps:
       - uses: actions/checkout@v4
         with:
@@ -86,6 +88,7 @@ jobs:
     env:
       OUTPUT: EndlessSky-win32-${{ inputs.release_version }}.zip
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      CMAKE_POLICY_VERSION_MINIMUM: 3.5
     steps:
       - uses: actions/checkout@v4
         with:
@@ -127,6 +130,7 @@ jobs:
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       OUTPUT: Endless-Sky-${{ inputs.release_version }}
+      CMAKE_POLICY_VERSION_MINIMUM: 3.5
     steps:
       - uses: actions/checkout@v4
         with:

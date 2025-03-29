@@ -81,7 +81,7 @@ jobs:
     - uses: lukka/run-cmake@v10
       with:
         configurePreset: ${{ matrix.opengl == 'GL' && 'linux-ci' || 'linux-gles-ci' }}
-        configurePresetAdditionalArgs: ['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']
+        configurePresetAdditionalArgs: "['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']"
         buildPreset: ${{ matrix.opengl == 'GL' && 'linux-ci' || 'linux-gles-ci' }}
         testPreset: ${{ matrix.opengl == 'GL' && 'linux-ci' || 'linux-gles-ci' }}
     - name: Run Benchmarks
@@ -145,7 +145,7 @@ jobs:
     - uses: lukka/run-cmake@v10
       with:
         configurePreset: 'mingw-ci'
-        configurePresetAdditionalArgs: ['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']
+        configurePresetAdditionalArgs: "['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']"
         buildPreset: 'mingw-ci'
         testPreset: 'mingw-ci'
     - name: Run Benchmarks
@@ -189,7 +189,7 @@ jobs:
     - uses: lukka/run-cmake@v10
       with:
         configurePreset: 'clang-cl-ci'
-        configurePresetAdditionalArgs: ['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']
+        configurePresetAdditionalArgs: "['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']"
         buildPreset: 'clang-cl-ci'
         testPreset: 'clang-cl-ci'
     - name: Run Benchmarks
@@ -225,7 +225,7 @@ jobs:
     - uses: lukka/run-cmake@v10
       with:
         configurePreset: 'macos-ci'
-        configurePresetAdditionalArgs: ['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']
+        configurePresetAdditionalArgs: "['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']"
         buildPreset: 'macos-ci'
         testPreset: 'macos-ci'
     - name: Run Benchmarks
@@ -262,7 +262,7 @@ jobs:
     - uses: lukka/run-cmake@v10
       with:
         configurePreset: 'macos-arm-ci'
-        configurePresetAdditionalArgs: ['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']
+        configurePresetAdditionalArgs: "['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']"
         buildPreset: 'macos-arm-ci'
         testPreset: 'macos-arm-ci'
     - name: Run Benchmarks

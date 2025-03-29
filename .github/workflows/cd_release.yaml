@@ -34,6 +34,7 @@ jobs:
           configurePreset: 'linux-release'
           configurePresetAdditionalArgs: "['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']"
           buildPreset: 'linux-ci-release'
+          buildPresetAdditionalArgs: "['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']"
       - name: Package Application
         run: ./utils/build_appimage.sh build/release
       - name: Upload artifact
@@ -64,6 +65,7 @@ jobs:
           configurePreset: 'mingw-release'
           configurePresetAdditionalArgs: "['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']"
           buildPreset: 'mingw-ci-release'
+          buildPresetAdditionalArgs: "['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']"
       - name: Package Application
         run: |
           cmake --install build/release
@@ -106,6 +108,7 @@ jobs:
           configurePreset: 'mingw32-release'
           configurePresetAdditionalArgs: "['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']"
           buildPreset: 'mingw32-ci-release'
+          buildPresetAdditionalArgs: "['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']"
       - name: Package Application
         run: |
           cmake --install build/release
@@ -147,6 +150,7 @@ jobs:
           configurePreset: 'macos-arm-release'
           configurePresetAdditionalArgs: "['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']"
           buildPreset: 'macos-arm-ci-release'
+          buildPresetAdditionalArgs: "['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']"
       - name: Prepare for x64 app bundle
         run: |
           mv "build/release/Endless Sky.app" "Endless Sky.app.arm"
@@ -156,6 +160,7 @@ jobs:
           configurePreset: 'macos-release'
           configurePresetAdditionalArgs: "['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']"
           buildPreset: 'macos-ci-release'
+          buildPresetAdditionalArgs: "['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']"
       - name: Create universal binary
         run: |
           mv "build/release/Endless Sky.app" "Endless Sky.app.x64"

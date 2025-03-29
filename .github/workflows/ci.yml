@@ -83,6 +83,7 @@ jobs:
         configurePreset: ${{ matrix.opengl == 'GL' && 'linux-ci' || 'linux-gles-ci' }}
         configurePresetAdditionalArgs: "['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']"
         buildPreset: ${{ matrix.opengl == 'GL' && 'linux-ci' || 'linux-gles-ci' }}
+        buildPresetAdditionalArgs: "['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']"
         testPreset: ${{ matrix.opengl == 'GL' && 'linux-ci' || 'linux-gles-ci' }}
     - name: Run Benchmarks
       run: ctest --preset ${{ matrix.opengl == 'GL' && 'linux-ci-benchmark' || 'linux-gles-ci-benchmark' }}
@@ -147,6 +148,7 @@ jobs:
         configurePreset: 'mingw-ci'
         configurePresetAdditionalArgs: "['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']"
         buildPreset: 'mingw-ci'
+        buildPresetAdditionalArgs: "['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']"
         testPreset: 'mingw-ci'
     - name: Run Benchmarks
       run: ctest --preset mingw-ci-benchmark
@@ -191,6 +193,7 @@ jobs:
         configurePreset: 'clang-cl-ci'
         configurePresetAdditionalArgs: "['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']"
         buildPreset: 'clang-cl-ci'
+        buildPresetAdditionalArgs: "['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']"
         testPreset: 'clang-cl-ci'
     - name: Run Benchmarks
       run: ctest --preset clang-cl-ci-benchmark
@@ -227,6 +230,7 @@ jobs:
         configurePreset: 'macos-ci'
         configurePresetAdditionalArgs: "['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']"
         buildPreset: 'macos-ci'
+        buildPresetAdditionalArgs: "['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']"
         testPreset: 'macos-ci'
     - name: Run Benchmarks
       run: ctest --preset macos-ci-benchmark
@@ -264,6 +268,7 @@ jobs:
         configurePreset: 'macos-arm-ci'
         configurePresetAdditionalArgs: "['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']"
         buildPreset: 'macos-arm-ci'
+        buildPresetAdditionalArgs: "['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']"
         testPreset: 'macos-arm-ci'
     - name: Run Benchmarks
       run: ctest --preset macos-arm-ci-benchmark

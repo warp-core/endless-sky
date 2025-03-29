@@ -49,7 +49,6 @@ jobs:
           configurePreset: 'linux-release'
           configurePresetAdditionalArgs: "['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']"
           buildPreset: 'linux-ci-release'
-          buildPresetAdditionalArgs: "['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']"
       - name: Package Application
         run: ./utils/build_appimage.sh build/release
       - name: Upload artifact
@@ -89,7 +88,6 @@ jobs:
           configurePreset: 'mingw-release'
           configurePresetAdditionalArgs: "['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']"
           buildPreset: 'mingw-ci-release'
-          buildPresetAdditionalArgs: "['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']"
       - name: Package Application
         run: |
           cmake --install build/release
@@ -130,7 +128,6 @@ jobs:
           configurePreset: 'macos-release'
           configurePresetAdditionalArgs: "['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']"
           buildPreset: 'macos-ci-release'
-          buildPresetAdditionalArgs: "['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']"
       - name: Package Application
         run: |
           cmake --install build/release

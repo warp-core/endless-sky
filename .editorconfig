@@ -22,6 +22,11 @@ cpp_space_after_keywords_in_control_flow_statements = false
 indent_style = space
 indent_size = 2
 
+# clang-format file
+[.clang-format]
+indent_style = space
+indent_size = 2
+
 # Copyright file
 [copyright]
 indent_style = space

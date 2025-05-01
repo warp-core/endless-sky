@@ -39,6 +39,8 @@ public:
 	// conditionsStore to set prefix providers.
 	ConditionEntry(ConditionEntry &) = delete;
 	ConditionEntry &operator=(const ConditionEntry &) = delete;
+	ConditionEntry(ConditionEntry &&) = delete;
+	ConditionEntry &operator=(ConditionEntry &&) = delete;
 
 	void Clear();
 

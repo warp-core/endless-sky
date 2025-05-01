@@ -83,6 +83,10 @@ private:
 		///
 		/// @param mainEntry is nullptr for named providers, and the prefixed entry for prefix providers.
 		DerivedProvider(ConditionEntry *mainEntry);
+		DerivedProvider(const DerivedProvider &) = delete;
+		DerivedProvider &operator=(const DerivedProvider &) = delete;
+		DerivedProvider(DerivedProvider &&) = delete;
+		DerivedProvider &operator=(DerivedProvider &&) = delete;
 
 
 	public:

@@ -403,7 +403,9 @@ void Audio::Step(bool isFastForward)
 
 	vector<Source> newSources;
 	// For each sound that is looping, see if it is going to continue. For other
-	// sounds, check if they are done playing.
+	// sounds, check if they are done playing. Paused sounds are treated as though
+	// they will continue if they have not already been marked for removal
+	// at the end of this loop.
 	for(const Source &source : sources)
 	{
 		if(source.GetSound()->IsLooping())
@@ -417,8 +419,15 @@ void Audio::Step(bool isFastForward)
 			}
 			else
 			{
-				alSourcei(source.ID(), AL_LOOPING, false);
-				endingSources.push_back(source.ID());
+				ALint state;
+				alGetSourcei(source.ID(), AL_SOURCE_STATE, &state);
+				if(state == AL_PAUSED)
+					newSources.push_back(source);
+				else
+				{
+					alSourcei(source.ID(), AL_LOOPING, false);
+					endingSources.push_back(source.ID());
+				}
 			}
 		}
 		else

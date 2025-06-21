@@ -223,11 +223,10 @@ void StarField::Draw(const Point &blur, const System *system) const
 			double borderX = fabs(blur.X()) + 1.;
 			double borderY = fabs(blur.Y()) + 1.;
 			// Find the absolute bounds of the star field we must draw.
-			float shove = pow(-5., pass);
-			int minX = pos.X() + (Screen::Left() - borderX) / zoom - shove;
-			int minY = pos.Y() + (Screen::Top() - borderY) / zoom - shove;
-			int maxX = pos.X() + (Screen::Right() + borderX) / zoom - shove;
-			int maxY = pos.Y() + (Screen::Bottom() + borderY) / zoom - shove;
+			int minX = pos.X() + (Screen::Left() - borderX) / zoom;
+			int minY = pos.Y() + (Screen::Top() - borderY) / zoom;
+			int maxX = pos.X() + (Screen::Right() + borderX) / zoom;
+			int maxY = pos.Y() + (Screen::Bottom() + borderY) / zoom;
 			// Round down to the start of the nearest tile.
 			minX &= ~(TILE_SIZE - 1l);
 			minY &= ~(TILE_SIZE - 1l);
@@ -236,7 +235,7 @@ void StarField::Draw(const Point &blur, const System *system) const
 			{
 				for(int gx = minX; gx < maxX; gx += TILE_SIZE)
 				{
-					Point off = Point(gx + shove, gy + shove) - pos;
+					Point off = Point(gx, gy) - pos;
 					GLfloat translate[2] = {
 						static_cast<float>(off.X()),
 						static_cast<float>(off.Y())
@@ -244,9 +243,9 @@ void StarField::Draw(const Point &blur, const System *system) const
 					glUniform2fv(translateI, 1, translate);
 
 					int index = (gx & widthMod) / TILE_SIZE + ((gy & widthMod) / TILE_SIZE) * tileCols;
-					int first = 6 * tileIndex[index];
-					int count = 6 * tileIndex[index + 1] - first;
-					glDrawArrays(GL_TRIANGLES, first, density * count / (pass * layers));
+					int first = tileIndex[index];
+					int count = (tileIndex[index + 1] - first) * density / layers;
+					glDrawArrays(GL_TRIANGLES, 6 * (first + (pass - 1) * count), 6 * (count / pass));
 				}
 			}
 		}
@@ -271,14 +270,11 @@ void StarField::Draw(const Point &blur, const System *system) const
 	else
 		transparency = 0.;
 
-	// Set zoom to a higher level than stars to avoid premature culling.
-	zoom = min(.25, zoom / 1.4);
-
 	// Any object within this range must be drawn. Some haze sprites may repeat
 	// more than once if the view covers a very large area.
 	Point size = Point(1., 1.) * haze[0].front().Radius();
-	Point topLeft = pos + (Screen::TopLeft() - size) / zoom;
-	Point bottomRight = pos + (Screen::BottomRight() + size) / zoom;
+	Point topLeft = pos + Screen::TopLeft() / zoom - size;
+	Point bottomRight = pos + Screen::BottomRight() / zoom + size;
 	if(transparency > 0.)
 		AddHaze(drawList, haze[1], topLeft, bottomRight, 1 - transparency);
 	AddHaze(drawList, haze[0], topLeft, bottomRight, transparency);

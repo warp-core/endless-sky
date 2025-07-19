@@ -17,6 +17,8 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include "Panel.h"
 
+#include "Color.h"
+
 #include <string>
 #include <vector>
 
@@ -45,10 +47,21 @@ protected:
 
 
 private:
+	class Node {
+	public:
+		Point pos;
+		Color color;
+	};
+
+
+private:
 	void DrawCredits() const;
 
 
 private:
+	std::vector<Node> nodes;
+	int step = 0;
+
 	PlayerInfo &player;
 	UI &gamePanels;
 

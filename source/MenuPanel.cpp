@@ -32,6 +32,8 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "PlayerInfo.h"
 #include "Point.h"
 #include "PreferencesPanel.h"
+#include "shader/RingShader.h"
+#include "Screen.h"
 #include "Ship.h"
 #include "image/Sprite.h"
 #include "shader/StarField.h"
@@ -180,6 +182,14 @@ void MenuPanel::Draw()
 
 	if(!credits.empty())
 		DrawCredits();
+
+	Logger::LogError("Main menu step: " + to_string(++step));
+	double x = (Random::Real() - .5) * Screen::Width();
+	double y = (Random::Real() - .5) * Screen::Height();
+	Color color(Random::Real(), Random::Real(), Random::Real(), .5f);
+	nodes.emplace_back(Point(x, y), std::move(color));
+	for(const Node &node : nodes)
+		RingShader::Draw(node.pos, 6.f, 3.5f, node.color);
 }
 
 

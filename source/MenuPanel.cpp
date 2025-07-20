@@ -24,6 +24,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "GameData.h"
 #include "Information.h"
 #include "Interface.h"
+#include "shader/LineShader.h"
 #include "LoadPanel.h"
 #include "Logger.h"
 #include "MainPanel.h"
@@ -32,6 +33,8 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "PlayerInfo.h"
 #include "Point.h"
 #include "PreferencesPanel.h"
+#include "shader/RingShader.h"
+#include "Screen.h"
 #include "Ship.h"
 #include "image/Sprite.h"
 #include "shader/StarField.h"
@@ -180,6 +183,43 @@ void MenuPanel::Draw()
 
 	if(!credits.empty())
 		DrawCredits();
+
+	Logger::LogError("Drawing " + to_string(step) + " rings, lines, and strings.");
+	auto RandomCoordinate = []() -> Point {
+		double x = (Random::Real() - .5) * Screen::Width();
+		double y = (Random::Real() - .5) * Screen::Height();
+		return Point(x, y);
+	};
+	auto RandomColor = []() -> Color {
+		return Color(Random::Real(), Random::Real(), Random::Real(), .05f);
+	};
+	nodes.emplace_back(RandomCoordinate(), RandomColor());
+	Point start = RandomCoordinate();
+	Point end = start + (Angle::Random().Unit() * 100.);
+	arcs.emplace_back(start, end, RandomColor());
+	auto RandomAlphenumeric = []() -> char {
+		int val = Random::Int(61);
+		if(val < 10)
+			return '0' + val;
+		val -= 10;
+		if(val < 26)
+			return 'A' + val;
+		return 'a' + val - 26;
+	};
+	int length = 3 + Random::Int(11);
+	string word;
+	word.reserve(length);
+	for(int i = 0; i < length; ++i)
+		word += RandomAlphenumeric();
+	names.emplace_back(RandomCoordinate(), std::move(word), RandomColor());
+
+	for(const Arc &arc : arcs)
+		LineShader::Draw(arc.start, arc.end, 1.2f, arc.color);
+	for(const Node &node : nodes)
+		RingShader::Draw(node.centre, 6.f, 3.5f, node.color);
+	const Font &font = FontSet::Get(14);
+	for(const Name &name : names)
+		font.Draw(name.word, name.start, name.color);
 }
 
 

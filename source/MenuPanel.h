@@ -17,6 +17,8 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include "Panel.h"
 
+#include "Color.h"
+
 #include <string>
 #include <vector>
 
@@ -45,10 +47,22 @@ protected:
 
 
 private:
+	class Arc {
+	public:
+		Point start;
+		Point end;
+		Color color;
+	};
+
+
+private:
 	void DrawCredits() const;
 
 
 private:
+	int step = 0;
+	std::vector<Arc> arcs;
+
 	PlayerInfo &player;
 	UI &gamePanels;
 

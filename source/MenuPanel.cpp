@@ -24,6 +24,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "GameData.h"
 #include "Information.h"
 #include "Interface.h"
+#include "shader/LineShader.h"
 #include "LoadPanel.h"
 #include "Logger.h"
 #include "MainPanel.h"
@@ -32,6 +33,7 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 #include "PlayerInfo.h"
 #include "Point.h"
 #include "PreferencesPanel.h"
+#include "Screen.h"
 #include "Ship.h"
 #include "image/Sprite.h"
 #include "shader/StarField.h"
@@ -180,6 +182,17 @@ void MenuPanel::Draw()
 
 	if(!credits.empty())
 		DrawCredits();
+
+	Logger::LogError("Drawing: "+ to_string(++step) + " lines.");
+	auto RandomScreenCoordinate = []() -> Point {
+		double x = (Random::Real() - .5) * Screen::Width();
+		double y = (Random::Real() - .5) * Screen::Height();
+		return Point(x, y);
+	};
+	Color color(Random::Real(), Random::Real(), Random::Real(), .5f);
+	arcs.emplace_back(RandomScreenCoordinate(), RandomScreenCoordinate(), color);
+	for(const Arc &arc : arcs)
+		LineShader::Draw(arc.start, arc.end, 2.f, arc.color, false);
 }
 
 

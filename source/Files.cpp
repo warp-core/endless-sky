@@ -69,7 +69,7 @@ namespace {
 	shared_ptr<ZipFile> GetZipFile(const filesystem::path &filePath)
 	{
 		/// Check if this zip is already open on this thread.
-		for(auto &[zipPath, file] : OPEN_ZIP_FILES)
+		for(auto & [zipPath, file] : OPEN_ZIP_FILES)
 			if(Files::IsParent(zipPath, filePath))
 				return file;
 

@@ -21,6 +21,10 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 using namespace std;
 
+namespace {
+	const Gamerules defaults;
+};
+
 
 
 // Load a gamerules node.
@@ -35,29 +39,32 @@ void Gamerules::Load(const DataNode &node)
 		}
 
 		const string &key = child.Token(0);
+		const bool resetToDefault = child.Token(1) == "default";
 
 		if(key == "universal ramscoop")
-			universalRamscoop = child.BoolValue(1);
+			universalRamscoop = resetToDefault ? defaults.universalRamscoop : child.BoolValue(1);
 		else if(key == "person spawn period")
-			personSpawnPeriod = max<int>(1, child.Value(1));
+			personSpawnPeriod = resetToDefault ? defaults.personSpawnPeriod : max<int>(1, child.Value(1));
 		else if(key == "no person spawn weight")
-			noPersonSpawnWeight = max<int>(0, child.Value(1));
+			noPersonSpawnWeight = resetToDefault ? defaults.noPersonSpawnWeight : max<int>(0, child.Value(1));
 		else if(key == "npc max mining time")
-			npcMaxMiningTime = max<int>(0, child.Value(1));
+			npcMaxMiningTime = resetToDefault ? defaults.npcMaxMiningTime : max<int>(0, child.Value(1));
 		else if(key == "universal frugal threshold")
-			universalFrugalThreshold = min<double>(1., max<double>(0., child.Value(1)));
+			universalFrugalThreshold = resetToDefault ? defaults.universalFrugalThreshold : min<double>(1., max<double>(0., child.Value(1)));
 		else if(key == "depreciation min")
-			depreciationMin = min<double>(1., max<double>(0., child.Value(1)));
+			depreciationMin = resetToDefault ? defaults.depreciationMin : min<double>(1., max<double>(0., child.Value(1)));
 		else if(key == "depreciation daily")
-			depreciationDaily = min<double>(1., max<double>(0., child.Value(1)));
+			depreciationDaily = resetToDefault ? defaults.depreciationDaily : min<double>(1., max<double>(0., child.Value(1)));
 		else if(key == "depreciation grace period")
-			depreciationGracePeriod = max<int>(0, child.Value(1));
+			depreciationGracePeriod = resetToDefault ? defaults.depreciationGracePeriod : max<int>(0, child.Value(1));
 		else if(key == "depreciation max age")
-			depreciationMaxAge = max<int>(0, child.Value(1));
+			depreciationMaxAge = resetToDefault ? defaults.depreciationMaxAge : max<int>(0, child.Value(1));
 		else if(key == "disabled fighters avoid projectiles")
 		{
 			const string &value = child.Token(1);
-			if(value == "all")
+			if(resetToDefault)
+				fighterHitPolicy = defaults.fighterHitPolicy;
+			else if(value == "all")
 				fighterHitPolicy = FighterDodgePolicy::ALL;
 			else if(value == "none")
 				fighterHitPolicy = FighterDodgePolicy::NONE;
@@ -67,11 +74,11 @@ void Gamerules::Load(const DataNode &node)
 				child.PrintTrace("Skipping unrecognized value for gamerule:");
 		}
 		else if(key == "system departure min")
-			systemDepartureMin = max<double>(0., child.Value(1));
+			systemDepartureMin = resetToDefault ? defaults.systemDepartureMin : max<double>(0., child.Value(1));
 		else if(key == "system arrival min")
-			systemArrivalMin = max<double>(0., child.Value(1));
+			systemArrivalMin = resetToDefault ? defaults.systemArrivalMin : max<double>(0., child.Value(1));
 		else if(key == "fleet multiplier")
-			fleetMultiplier = max<double>(0., child.Value(1));
+			fleetMultiplier = resetToDefault ? defaults.fleetMultiplier : max<double>(0., child.Value(1));
 		else
 			child.PrintTrace("Skipping unrecognized gamerule:");
 	}

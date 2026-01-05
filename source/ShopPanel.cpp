@@ -710,10 +710,21 @@ void ShopPanel::DrawShipsSidebar()
 
 	const Planet *here = player.GetPlanet();
 	int shipsHere = 0;
+	// If the selected ship pointer is already null, it is in a valid state.
+	bool playerShipValid = !playerShip;
 	for(const shared_ptr<Ship> &ship : player.Ships())
+	{
 		shipsHere += CanShowInSidebar(*ship, here);
+		if(!playerShipValid && ship.get() == playerShip)
+			playerShipValid = true;
+	}
 	if(shipsHere < 4)
 		point.X() += .5 * ICON_TILE * (4 - shipsHere);
+	if(!playerShipValid)
+	{
+		playerShips.erase(playerShip);
+		playerShip = nullptr;
+	}
 
 	// Check whether flight check tooltips should be shown.
 	const auto flightChecks = player.FlightCheck();
@@ -729,6 +740,12 @@ void ShopPanel::DrawShipsSidebar()
 		// Skip any ships that are "absent" for whatever reason.
 		if(!CanShowInSidebar(*ship, here))
 			continue;
+
+		if(!playerShip && !playerShipValid)
+		{
+			playerShip = ship.get();
+			playerShips.insert(playerShip);
+		}
 
 		if(point.X() > Screen::Right())
 		{

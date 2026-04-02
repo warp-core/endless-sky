@@ -82,6 +82,8 @@ jobs:
       with:
         show-progress: false
     - uses: editorconfig-checker/action-editorconfig-checker@main
+      with:
+        version: v3.4.1
     - run: editorconfig-checker
 
 

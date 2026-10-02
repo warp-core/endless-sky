@@ -5664,7 +5664,7 @@ void Ship::StepTargeting()
 				{
 					isBoarding = false;
 					bool isEnemy = government->IsEnemy(target->government);
-					if(isEnemy && Random::Real() < target->cache.selfDestruct)
+					if(false && isEnemy && Random::Real() < target->cache.selfDestruct)
 					{
 						Messages::Add({"The " + target->DisplayModelName() + " \"" + target->GivenName()
 							+ "\" has activated its self-destruct mechanism.",
